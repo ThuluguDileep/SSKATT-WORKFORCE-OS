@@ -1,0 +1,3738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSKATT — Workforce Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --navy: #0b1730;
+  --navy-light: #182848;
+  --blue: #2563eb;
+  --blue-hover: #1d4ed8;
+  --purple: #7e22ce;
+  --purple-hover: #6b21a8;
+  --bg: #f5f7fb;
+  --card: #fff;
+  --text: #172033;
+  --muted: #687386;
+  --line: #e6eaf0;
+  --green: #16a34a;
+  --amber: #d97706;
+  --red: #dc2626;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; }
+.hidden { display: none !important; }
+
+/* Topbar */
+.topbar {
+  height: 72px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.logo span { color: var(--blue); }
+.top-actions { display: flex; align-items: center; gap: 12px; }
+.pill {
+  background: #eef4ff;
+  color: #2454b7;
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.pill-purple {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+  border-radius: 20px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(120deg, #09162f, #12326b 55%, #0e7490);
+  color: #fff;
+  padding: 64px 7vw 58px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 440px;
+  height: 440px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 50%;
+  right: -80px;
+  top: -160px;
+  pointer-events: none;
+}
+.hero h1 {
+  font-size: 44px;
+  max-width: 760px;
+  margin: 14px 0 18px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+.hero p {
+  max-width: 700px;
+  color: #dce7fb;
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0;
+}
+.hero .buttons { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+.btn {
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn:hover { filter: brightness(0.96); }
+.btn-primary { background: #fff; color: #12326b; font-weight: 700; }
+.btn-outline { background: transparent; border: 1px solid rgba(255, 255, 255, .4); color: #fff; }
+.btn-outline:hover { background: rgba(255, 255, 255, 0.08); }
+.btn-blue { background: var(--blue); color: #fff; }
+.btn-blue:hover { background: var(--blue-hover); }
+.btn-purple { background: var(--purple); color: #fff; }
+.btn-purple:hover { background: var(--purple-hover); }
+
+/* Landing Container */
+.container { max-width: 1220px; margin: auto; padding: 42px 24px; }
+.section-title { margin-bottom: 22px; }
+.section-title h2 { margin: 0; font-size: 26px; color: var(--navy); font-weight: 800; }
+.section-title p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+.sectors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.sector {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, .03);
+  display: flex;
+  flex-direction: column;
+}
+.sector:hover {
+  transform: translateY(-3px);
+  border-color: #bfd0f8;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .08);
+}
+.sector-icon { font-size: 32px; margin-bottom: 12px; }
+.sector h3 { margin: 0 0 8px; font-size: 18px; color: var(--navy); }
+.sector p { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 18px; flex-grow: 1; }
+.sector .access { font-size: 13px; color: var(--blue); font-weight: 700; }
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
+.feature { padding: 22px; background: #fff; border: 1px solid var(--line); border-radius: 14px; }
+.feature b { display: block; margin-bottom: 8px; font-size: 15px; color: var(--navy); }
+.feature span { color: var(--muted); font-size: 13px; line-height: 1.55; }
+.footer { padding: 30px 7vw; background: #09162f; color: #9fb0cf; font-size: 12px; line-height: 1.6; }
+
+/* Modals & Dialogs */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 12, 27, .65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  backdrop-filter: blur(3px);
+}
+.login-card, .dialog-card {
+  background: #fff;
+  width: min(540px, 100%);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, .25);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.login-card h2, .dialog-card h3 { margin: 0 0 6px; font-size: 20px; color: var(--navy); }
+.login-card label, .dialog-card label { display: block; font-size: 12px; font-weight: 700; margin: 14px 0 6px; color: var(--navy); }
+.login-card input, .login-card select,
+.dialog-card input, .dialog-card select, .dialog-card textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d9dee8;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  font-size: 13px;
+}
+.login-card input:focus, .login-card select:focus,
+.dialog-card input:focus, .dialog-card select:focus, .dialog-card textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+.demo-note { background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; border-radius: 10px; padding: 12px; margin-top: 16px; font-size: 11px; line-height: 1.6; }
+
+/* Clock & Check-in Card */
+.clock-display {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+.clock-card {
+  background: linear-gradient(135deg, #0b1730 0%, #1e3a8a 100%);
+  color: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(11, 23, 48, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Dashboard Layout */
+.dashboard { min-height: 100vh; background: #f6f8fc; }
+.dash-layout { display: flex; position: relative; }
+.sidebar {
+  width: 250px;
+  background: #0b1730;
+  color: #c9d4e8;
+  min-height: calc(100vh - 72px);
+  padding: 20px 12px;
+  position: fixed;
+  top: 72px;
+  bottom: 0;
+  overflow-y: auto;
+}
+.side-brand {
+  padding: 6px 12px 14px;
+  color: #7d93b8;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.side-item {
+  padding: 11px 13px;
+  border-radius: 9px;
+  margin: 3px 0;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.15s ease;
+  color: #b7c6e0;
+  user-select: none;
+}
+.side-item.active, .side-item:hover {
+  background: #18345f;
+  color: #fff;
+  font-weight: 600;
+}
+.side-item.active-purple, .side-item.active-purple:hover {
+  background: var(--purple);
+  color: #fff;
+  font-weight: 600;
+}
+.dash-main {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  padding: 28px 34px 60px;
+}
+.dash-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.dash-head h1 { margin: 0; font-size: 24px; color: var(--navy); font-weight: 800; }
+.sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.profile { display: flex; align-items: center; gap: 10px; }
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1d4ed8;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+.avatar-purple {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+/* KPI Cards */
+.kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+.kpi {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+}
+.kpi .label { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 0.04em; }
+.kpi .value { font-size: 26px; font-weight: 800; margin-top: 6px; color: var(--navy); }
+.kpi .trend { font-size: 11px; margin-top: 6px; color: var(--green); font-weight: 600; }
+
+/* Grids & Panels */
+.grid2 { display: grid; grid-template-columns: 1.55fr 1fr; gap: 18px; margin-bottom: 18px; }
+.panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+}
+.panel h3 { margin: 0 0 16px; font-size: 15px; color: var(--navy); font-weight: 700; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.table th { color: #64748b; text-align: left; font-weight: 700; background: #fafbfc; padding: 12px 10px; }
+.table td { padding: 12px 10px; border-bottom: 1px solid #f1f4f8; white-space: nowrap; }
+.status {
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-block;
+}
+.present, .completed, .paid, .resolved { background: #e9f8ef; color: #16803d; }
+.late, .in-progress, .generated, .in-review { background: #fff4df; color: #a65a00; }
+.absent, .blocked, .rejected, .open-status { background: #ffeaea; color: #b42318; }
+.action {
+  border: 1px solid #dbe1eb;
+  background: #fff;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.action:hover { background: #f8fafc; border-color: #cbd5e1; }
+.action-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.action-primary:hover { background: var(--blue-hover); }
+.action-purple { background: var(--purple); color: #fff; border-color: var(--purple); }
+.action-purple:hover { background: var(--purple-hover); }
+
+/* Activity Feed */
+.activity { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid #f1f4f8; }
+.activity:last-child { border-bottom: none; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); margin-top: 5px; flex-shrink: 0; }
+.activity b { font-size: 12px; color: var(--navy); }
+.activity small { display: block; color: var(--muted); margin-top: 3px; font-size: 11px; }
+
+/* Tabs & Filters */
+.section-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.tab {
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.tab.active { background: #eaf1ff; color: #2054bd; border-color: #cbdcff; font-weight: 700; }
+.chart-box { height: 230px; position: relative; }
+.progress-bg { background: #e2e8f0; border-radius: 6px; height: 7px; width: 100px; overflow: hidden; display: inline-block; vertical-align: middle; }
+.progress-fill { background: var(--blue); height: 100%; }
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0f172a;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 200;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+
+/* Payslip Print Sheet */
+.payslip-paper {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 24px;
+  background: #fff;
+  font-size: 12px;
+}
+.slip-header { border-bottom: 2px solid var(--navy); padding-bottom: 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start; }
+
+@media (max-width: 1024px) {
+  .sectors { grid-template-columns: repeat(2, 1fr); }
+  .kpis { grid-template-columns: repeat(3, 1fr); }
+  .grid2 { grid-template-columns: 1fr; }
+  .sidebar { width: 210px; }
+  .dash-main { margin-left: 210px; width: calc(100% - 210px); padding: 22px; }
+}
+@media (max-width: 768px) {
+  .hero h1 { font-size: 30px; }
+  .sectors, .features { grid-template-columns: 1fr; }
+  .topbar { padding: 0 16px; }
+  .sidebar {
+    width: 100%;
+    position: static;
+    min-height: auto;
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+  }
+  .side-brand { display: none; }
+  .side-item { white-space: nowrap; margin: 0 3px; font-size: 12px; padding: 8px 10px; }
+  .dash-layout { flex-direction: column; }
+  .dash-main { margin-left: 0; width: 100%; padding: 16px; }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. PUBLIC LANDING PAGE -->
+<div id="landing">
+  <header class="topbar">
+    <div class="logo" onclick="location.reload()">
+      SS<span>KATT</span>
+      <small style="font-size:10px;color:#8792a6;margin-left:6px;letter-spacing:0.05em">WORKFORCE OS</small>
+    </div>
+    <div class="top-actions">
+      <span class="pill">Enterprise Workforce Intelligence</span>
+      <button class="btn" style="background:#0b1730;color:#fff" onclick="openLogin()">Sign in</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div style="position:relative;z-index:2">
+      <div class="pill" style="display:inline-block;background:rgba(255,255,255,.12);color:#dce7fb;margin-bottom:8px">ONE PLATFORM • MULTIPLE SECTORS & ORGANIZATIONS</div>
+      <h1>Workforce visibility, attendance & operations in one place.</h1>
+      <p>SSKATT is an enterprise workforce intelligence platform delivering secure sector-isolated telemetry, customizable shifts, digital payroll statements, multiple registered Organization IDs per sector, and live operational intelligence.</p>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="openLogin()">Access Organization Portal</button>
+        <button class="btn btn-outline" onclick="document.getElementById('sectors').scrollIntoView({behavior:'smooth'})">Explore Sectors</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="container" id="sectors">
+    <div class="section-title">
+      <h2>Registered Sector Domains</h2>
+      <p>Select your sector and enterprise Organization ID to access tailored operations and workforce records.</p>
+    </div>
+
+    <!-- Dynamically Populated Sector Cards -->
+    <div class="sectors" id="landingSectorGrid"></div>
+
+    <div class="features">
+      <div class="feature">
+        <b>🏢 Multi-Organization Isolation</b>
+        <span>Each sector supports multiple independent Organization IDs with dedicated administrators, custom credentials, and segregated staff.</span>
+      </div>
+      <div class="feature">
+        <b>⚡ Super Admin Governance</b>
+        <span>Super Administrators can provision brand new branches, create custom Org IDs, and assign admin credentials on the fly.</span>
+      </div>
+      <div class="feature">
+        <b>💳 Integrated Operations & Payroll</b>
+        <span>Biometric attendance calculations, overtime auditing, leave balances, and downloadable payslip statements for every organization.</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <b>SSKATT Workforce Intelligence Platform</b> — Multi-Sector & Multi-Organization Operations OS.
+  </footer>
+</div>
+
+<!-- 2. UNIFIED SECURE LOGIN MODAL -->
+<div id="loginModal" class="modal hidden">
+  <div class="login-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="logo">SS<span>KATT</span></div>
+        <h2 style="margin-top:12px">Sign in to Platform</h2>
+        <p style="color:var(--muted);font-size:13px;margin:0">Select your Sector Category and enter your Organization ID & credentials.</p>
+      </div>
+      <button class="action" onclick="closeLogin()">✕</button>
+    </div>
+
+    <label>Sector Category</label>
+    <select id="sectorSelect" onchange="updateDemo()"></select>
+
+    <label>Organization ID</label>
+    <select id="orgSelect" onchange="handleOrgSelectChange()" style="margin-bottom:6px"></select>
+    <input id="org" value="HOSP-001" placeholder="e.g. HOSP-001 or HOSP-002">
+
+    <label>Username / Employee ID</label>
+    <input id="username" value="admin" placeholder="e.g. admin or E-1024">
+
+    <label>Password</label>
+    <input id="password" type="password" value="admin123" placeholder="Password">
+
+    <button id="btnSubmitLogin" class="btn btn-blue" style="width:100%;margin-top:18px;padding:12px" onclick="login()">Sign In Securely</button>
+
+    <div class="demo-note" id="demoNote"></div>
+  </div>
+</div>
+
+<!-- UNIVERSAL POPUP MODAL -->
+<div id="universalModal" class="modal hidden">
+  <div class="dialog-card" id="universalModalContent"></div>
+</div>
+
+<!-- 3. AUTHENTICATED DASHBOARD APPLICATION -->
+<div id="dashboard" class="dashboard hidden">
+  <header class="topbar">
+    <div class="logo" onclick="handleLogoClick()">
+      SS<span>KATT</span>
+      <small style="font-size:10px;color:#8792a6;margin-left:6px;letter-spacing:0.05em">WORKFORCE OS</small>
+    </div>
+    <div class="top-actions">
+      <div id="headerRoleBadgeArea"></div>
+      <button id="btnHeaderAskSupport" class="action" style="display:none" onclick="openSubmitSupportQueryModal()">💬 Ask Support</button>
+
+      <div class="profile">
+        <div class="avatar" id="headerAvatar">AD</div>
+        <div style="font-size:12px;line-height:1.2">
+          <b id="headerUserName">Organization Admin</b><br>
+          <span style="color:var(--muted)" id="headerUserRole">Sector Lead</span>
+        </div>
+      </div>
+      <button class="btn" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="side-brand" id="sideBrandLabel">CONTROL CENTER</div>
+
+      <!-- SUPER ADMIN SIDEBAR NAVIGATION -->
+      <div id="superAdminNav" class="hidden">
+        <div class="side-item active-purple" data-tab="super-overview" onclick="switchTab('super-overview')">🌐 Fleet Overview</div>
+        <div class="side-item" data-tab="super-sectors" onclick="switchTab('super-sectors')">🏢 Organizations & Branches <span id="superSectorCountBadge" class="status present" style="margin-left:auto;font-size:9px"></span></div>
+        <div class="side-item" data-tab="super-queries" onclick="switchTab('super-queries')">💬 Support & Queries <span id="superQueryBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
+        <div class="side-item" data-tab="super-security" onclick="switchTab('super-security')">🛡️ Global Security Policy</div>
+      </div>
+
+      <!-- SECTOR ADMIN SIDEBAR NAVIGATION -->
+      <div id="adminSidebarNav">
+        <div class="side-item active" data-tab="dashboard" onclick="switchTab('dashboard')">▦ Dashboard</div>
+        <div class="side-item" data-tab="employees" onclick="switchTab('employees')">♙ Employees</div>
+        <div class="side-item" data-tab="attendance" onclick="switchTab('attendance')">◷ Attendance <span id="adminAttendanceBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
+        <div class="side-item" data-tab="assignments" onclick="switchTab('assignments')">▤ Work assignments</div>
+        <div class="side-item" data-tab="shifts" onclick="switchTab('shifts')">⇄ Shifts & schedules <span id="adminShiftBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
+        <div class="side-item" data-tab="reports" onclick="switchTab('reports')">▥ Reports</div>
+        <div class="side-item" data-tab="payslips" onclick="switchTab('payslips')">💳 Payslips <span id="adminPayBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
+        <div class="side-item" data-tab="support-bridge" onclick="switchTab('support-bridge')">💬 Help & Support Bridge <span id="adminSupportBridgeBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
+        <div class="side-item" data-tab="settings" onclick="switchTab('settings')">⚙ Organization settings</div>
+      </div>
+
+      <!-- EMPLOYEE SELF-SERVICE NAVIGATION -->
+      <div id="empSidebarNav" class="hidden">
+        <div class="side-item active" data-tab="emp-overview" onclick="switchTab('emp-overview')">👤 My Space Overview</div>
+        <div class="side-item" data-tab="emp-clock" onclick="switchTab('emp-clock')">⏱️ Check-In & Attendance</div>
+        <div class="side-item" data-tab="emp-tasks" onclick="switchTab('emp-tasks')">📋 My Assigned Tasks</div>
+        <div class="side-item" data-tab="emp-shifts" onclick="switchTab('emp-shifts')">🗓️ My Shifts & Roster</div>
+        <div class="side-item" data-tab="emp-leaves" onclick="switchTab('emp-leaves')">🌴 Request Leaves</div>
+        <div class="side-item" data-tab="emp-payslips" onclick="switchTab('emp-payslips')">💳 My Payslips & Requests</div>
+        <div class="side-item" data-tab="emp-support" onclick="switchTab('emp-support')">💬 Helpdesk & Queries</div>
+      </div>
+
+      <div style="height:1px;background:#223553;margin:18px 8px"></div>
+      <div class="side-item" onclick="logout()">↪ Sign out</div>
+    </aside>
+
+    <main class="dash-main">
+
+      <!-- ==================== SUPER ADMIN VIEWS ==================== -->
+      <section id="view-super-overview" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>⚡ Super Administrator Control Center</h1>
+            <div class="sub">Multi-sector governance, organization provisioning & global platform state</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-purple" onclick="openProvisionOrgModal()">+ Add New Organization ID</button>
+            <button class="btn btn-purple" style="background:#4c1d95" onclick="openProvisionSectorModal()">+ New Sector Category</button>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">ACTIVE ORG IDS</div>
+            <div class="value" id="kSuperOrgs" style="color:var(--purple)">4</div>
+            <div class="trend" id="kSuperSectorsNote">Across 4 Sectors</div>
+          </div>
+          <div class="kpi">
+            <div class="label">TOTAL GLOBAL HEADCOUNT</div>
+            <div class="value" id="kSuperStaff">1,165</div>
+            <div class="trend">All enterprises</div>
+          </div>
+          <div class="kpi">
+            <div class="label">PRESENT TODAY</div>
+            <div class="value" id="kSuperPresent" style="color:var(--green)">1,065</div>
+            <div class="trend" id="kSuperAttRate">91.4% Rate</div>
+          </div>
+          <div class="kpi">
+            <div class="label">ON DUTY NOW</div>
+            <div class="value" id="kSuperWorking">971</div>
+            <div class="trend">Live biometric</div>
+          </div>
+          <div class="kpi">
+            <div class="label">OPEN SUPPORT TICKETS</div>
+            <div class="value" id="kSuperQueries" style="color:var(--amber)">3</div>
+            <div class="trend" style="color:var(--amber)">Requires review</div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <h3 style="margin:0">Active Organizations & Branch IDs</h3>
+              <div class="sub">Both existing and newly added Organization IDs with credentials</div>
+            </div>
+            <button class="action action-purple" onclick="openProvisionOrgModal()">+ Provision New Org ID</button>
+          </div>
+          <div id="superFleetSectorCards" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:14px"></div>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <h3 style="margin:0">High Priority Support Tickets</h3>
+              <div class="sub">Inquiries dispatched by Sector Admins and Employees</div>
+            </div>
+            <button class="action" onclick="switchTab('super-queries')">View All Queries →</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>TICKET ID</th>
+                  <th>ORG ID & SECTOR</th>
+                  <th>SUBMITTED BY</th>
+                  <th>SUBJECT</th>
+                  <th>CATEGORY</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="superOverviewQueryRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- S2. ORGANIZATIONS MANAGEMENT -->
+      <section id="view-super-sectors" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Registered Organizations & Credentials</h1>
+            <div class="sub">All live Organization IDs, assigned admin credentials, and sector mappings</div>
+          </div>
+          <button class="btn btn-purple" onclick="openProvisionOrgModal()">+ Add New Organization ID</button>
+        </div>
+
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>SECTOR CATEGORY</th>
+                  <th>ORGANIZATION ID</th>
+                  <th>LEGAL FACILITY NAME</th>
+                  <th>ADMIN USERNAME</th>
+                  <th>ADMIN PASSWORD</th>
+                  <th>STAFF HEADCOUNT</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="superSectorTableRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- S3. GLOBAL SUPPORT & QUERIES RESOLUTION -->
+      <section id="view-super-queries" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Global Platform Queries & Support Desk</h1>
+            <div class="sub">Incoming issues, hardware exceptions & policy queries across all organizations</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <select id="superQuerySectorFilter" onchange="renderSuperQueriesView()" style="padding:7px 10px;border:1px solid #dce2eb;border-radius:8px;font-size:12px">
+              <option value="All">All Organizations</option>
+            </select>
+            <select id="superQueryStatusFilter" onchange="renderSuperQueriesView()" style="padding:7px 10px;border:1px solid #dce2eb;border-radius:8px;font-size:12px">
+              <option value="All">All Statuses</option>
+              <option value="Open">Open</option>
+              <option value="In Review">In Review</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>TICKET ID</th>
+                  <th>ORG ID</th>
+                  <th>SUBMITTER</th>
+                  <th>SUBJECT & DETAILS</th>
+                  <th>CATEGORY</th>
+                  <th>PRIORITY</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="superQueriesTableRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- S4. GLOBAL SECURITY -->
+      <section id="view-super-security" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Global Platform Security & Audit</h1>
+            <div class="sub">System core governance, geo-fence standards and cross-organization isolation</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h3>Multi-Tenant Organization Architecture</h3>
+            <div style="font-size:13px;line-height:1.9;color:var(--muted)">
+              <div>• <b>Co-Existing Organization IDs:</b> Multiple Organization IDs can coexist within a single sector domain without overwriting existing data.</div>
+              <div>• <b>Custom Credentials:</b> Each Organization ID provisions its own unique admin username and password for partitioned access.</div>
+              <div>• <b>Staff & Attendance Segregation:</b> Staff records, tasks, leaves, and biometric logs remain strictly bound to their respective Organization ID.</div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Platform Telemetry Heartbeat</h3>
+            <div style="font-size:13px;line-height:2">
+              <div><span style="color:var(--muted)">Biometric Gateway Telemetry</span><b style="float:right;color:var(--green)">Active (48 Gateways)</b></div>
+              <div><span style="color:var(--muted)">GPS Geolocation Precision</span><b style="float:right;color:var(--blue)">± 1.8 meters</b></div>
+              <div><span style="color:var(--muted)">Database State</span><b style="float:right">Persistent Multi-Tenant Store</b></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTOR ADMIN VIEWS ==================== -->
+      <!-- 1. DASHBOARD VIEW -->
+      <section id="view-dashboard" class="view-section">
+        <div class="dash-head">
+          <div>
+            <h1 id="dashTitle">Hospital Workforce Dashboard</h1>
+            <div class="sub" id="dashSubtitle">Live Operational Status</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" style="background:#f3e8ff;color:#7e22ce;border:1px solid #d8b4fe" onclick="openSubmitSupportQueryModal()">💬 Contact Super Admin</button>
+            <button class="btn btn-blue" onclick="openAddEmployeeModal()">+ Add employee</button>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">TOTAL EMPLOYEES</div>
+            <div class="value" id="kEmployees">248</div>
+            <div class="trend">In this organization</div>
+          </div>
+          <div class="kpi">
+            <div class="label">PRESENT TODAY</div>
+            <div class="value" id="kPresent">221</div>
+            <div class="trend" id="kAttendanceRate">89.1% attendance</div>
+          </div>
+          <div class="kpi">
+            <div class="label">CURRENTLY WORKING</div>
+            <div class="value" id="kWorking">187</div>
+            <div class="trend">Live on duty</div>
+          </div>
+          <div class="kpi">
+            <div class="label">LATE ARRIVALS</div>
+            <div class="value" id="kLate">16</div>
+            <div style="font-size:11px;color:#a65a00;margin-top:6px;font-weight:600">Needs review</div>
+          </div>
+          <div class="kpi">
+            <div class="label">ABSENT / LEAVE</div>
+            <div class="value" id="kAbsent">27</div>
+            <div style="font-size:11px;color:#b42318;margin-top:6px;font-weight:600">Leaves recorded</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+              <h3 style="margin:0">Active Workforce Status</h3>
+              <input id="dashSearch" oninput="filterDashEmployees()" placeholder="Search employee or task..." style="padding:6px 10px;border:1px solid #dce2eb;border-radius:6px;font-size:12px;outline:none;width:180px">
+            </div>
+            <div class="section-tabs">
+              <button class="tab active" onclick="filterDashStatus('All',this)">All</button>
+              <button class="tab" onclick="filterDashStatus('Present',this)">Present</button>
+              <button class="tab" onclick="filterDashStatus('Late',this)">Late</button>
+              <button class="tab" onclick="filterDashStatus('Absent',this)">Absent</button>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>EMPLOYEE ID & NAME</th>
+                    <th>DEPARTMENT</th>
+                    <th>LOGIN</th>
+                    <th>LOGOUT</th>
+                    <th>CURRENT ASSIGNMENT</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="dashEmployeeRows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Attendance Trend (7-Day Rolling)</h3>
+            <div class="chart-box">
+              <canvas id="attendanceChart"></canvas>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:12px;border-top:1px solid #f0f2f5;padding-top:10px">
+              <span style="color:var(--muted)">Organization Average Compliance</span>
+              <b id="chartAverage" style="color:var(--navy)">92.4%</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h3>Live Organization Activity Feed</h3>
+            <div id="dashActivityFeed"></div>
+          </div>
+
+          <div class="panel">
+            <h3>Active Organization Identifier</h3>
+            <div style="font-size:13px;line-height:2">
+              <div><span style="color:var(--muted)">Sector Category</span><b style="float:right" id="dashInfoSector">Hospital</b></div>
+              <div><span style="color:var(--muted)">Active Organization ID</span><b style="float:right;color:var(--blue);font-family:monospace" id="dashInfoOrgCode">HOSP-001</b></div>
+              <div><span style="color:var(--muted)">Cycle Working Days</span><b style="float:right">24 Days</b></div>
+              <div><span style="color:var(--muted)">Punctuality Index</span><b style="float:right;color:var(--green)">93.8%</b></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. EMPLOYEES DIRECTORY -->
+      <section id="view-employees" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Employee Directory</h1>
+            <div class="sub">Personnel profiles, assignments, custom IDs & role authorizations</div>
+          </div>
+          <button class="btn btn-blue" onclick="openAddEmployeeModal()">+ Add New Employee (With ID)</button>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px">
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <input id="empDirectorySearch" oninput="renderEmployeeDirectory()" placeholder="Search by name, ID, role or dept..." style="flex:1;min-width:240px;padding:9px 12px;border:1px solid #dce2eb;border-radius:8px;font-size:12px">
+            <select id="empDeptFilter" onchange="renderEmployeeDirectory()" style="width:180px;padding:9px 12px;border:1px solid #dce2eb;border-radius:8px;font-size:12px">
+              <option value="All">All Departments</option>
+            </select>
+            <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="exportDataCSV('Employees')">📥 Export CSV</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>EMPLOYEE & ID</th>
+                  <th>DEPARTMENT</th>
+                  <th>DESIGNATION / ROLE</th>
+                  <th>SHIFT ROSTER</th>
+                  <th>STATUS</th>
+                  <th>CONTACT / EMAIL</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="empDirectoryRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. ATTENDANCE & LEAVES -->
+      <section id="view-attendance" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Attendance & Time Tracking</h1>
+            <div class="sub">Biometric logs, geo-fence validations & staff leave resolution</div>
+          </div>
+          <button class="btn btn-blue" onclick="exportDataCSV('Attendance_Log')">Export Attendance CSV</button>
+        </div>
+
+        <div class="panel" style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <h3 style="margin:0">Live Biometric Clock Logs</h3>
+            <select id="attStatusFilter" onchange="renderAttendanceView()" style="padding:6px 10px;border:1px solid #dce2eb;border-radius:8px;font-size:12px">
+              <option value="All">All Statuses</option>
+              <option value="Present">Present</option>
+              <option value="Late">Late</option>
+              <option value="Absent">Absent</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>EMPLOYEE</th>
+                  <th>VERIFIED LOCATION</th>
+                  <th>CLOCK IN</th>
+                  <th>CLOCK OUT</th>
+                  <th>DURATION</th>
+                  <th>VERIFICATION</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="attendanceTableRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <h3 style="margin:0">Inbound Employee Leave Applications</h3>
+              <div class="sub">Applications submitted from the Employee Self-Service portal</div>
+            </div>
+            <span class="status late" id="pendingLeaveCountBadge" style="display:none"></span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>APP ID</th>
+                  <th>EMPLOYEE</th>
+                  <th>LEAVE TYPE</th>
+                  <th>SCHEDULED DATES</th>
+                  <th>DAYS</th>
+                  <th>REASON GIVEN</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="adminLeaveApplicationsRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. WORK ASSIGNMENTS -->
+      <section id="view-assignments" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Work Assignments & Tasks</h1>
+            <div class="sub">Dispatch tickets, zone allocations & monitor completion rates</div>
+          </div>
+          <button class="btn btn-blue" onclick="openAssignTaskModal()">+ Create Work Order</button>
+        </div>
+
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>TASK / TICKET</th>
+                  <th>LOCATION / BAY</th>
+                  <th>ASSIGNEE</th>
+                  <th>PRIORITY</th>
+                  <th>PROGRESS</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="taskAssignmentRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. SHIFTS & ROSTERS -->
+      <section id="view-shifts" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Shifts & Roster Management</h1>
+            <div class="sub">Headcount allocation, shift capacity & swap requests</div>
+          </div>
+          <button class="btn btn-blue" onclick="showToast('Roster updated and broadcast to staff!')">Publish Roster</button>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px">
+          <h3>Shift Headcount & Coverage Ratio</h3>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>SHIFT WINDOW</th>
+                  <th>HOURS</th>
+                  <th>REQUIRED STAFF</th>
+                  <th>CURRENT ALLOCATED</th>
+                  <th>COVERAGE</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="shiftRosterRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <h3 style="margin:0">Staff Shift Swap Requests</h3>
+            <span class="status late" id="pendingSwapCountBadge" style="display:none"></span>
+          </div>
+          <div id="swapRequestList"></div>
+        </div>
+      </section>
+
+      <!-- 6. REPORTS -->
+      <section id="view-reports" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Workforce Analytics & Reports</h1>
+            <div class="sub">Operational compliance, overtime costs & productivity metrics</div>
+          </div>
+          <button class="btn btn-blue" onclick="exportDataCSV('Audit_Pack')">Download Audit Pack (PDF)</button>
+        </div>
+
+        <div class="panel">
+          <h3>Department Operational Efficiency Index</h3>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>DEPARTMENT / OPERATING UNIT</th>
+                  <th>HEADCOUNT</th>
+                  <th>AVG ATTENDANCE</th>
+                  <th>TASK COMPLETION RATE</th>
+                  <th>SAFETY RATING</th>
+                </tr>
+              </thead>
+              <tbody id="reportDeptRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. PAYSLIPS -->
+      <section id="view-payslips" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Compensation & Payslips</h1>
+            <div class="sub">Monthly payroll reconciliation, tax deductions & digital pay statement distribution</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="exportDataCSV('Payroll_Batch')">Export Payroll Batch</button>
+            <button class="btn btn-blue" onclick="showToast('All approved payslips dispatched to employees!')">Disburse All Payslips</button>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+            <div style="display:flex;gap:8px">
+              <input id="payslipSearch" oninput="renderPayslipsView()" placeholder="Search employee or ID..." style="padding:7px 12px;border:1px solid #dce2eb;border-radius:8px;font-size:12px;width:220px">
+              <select id="payslipStatusFilter" onchange="renderPayslipsView()" style="padding:7px 12px;border:1px solid #dce2eb;border-radius:8px;font-size:12px">
+                <option value="All">All Payroll Statuses</option>
+                <option value="Paid">Paid</option>
+                <option value="Generated">Generated</option>
+              </select>
+            </div>
+            <span style="font-size:12px;color:var(--muted)">Currency: <b>INR (₹)</b></span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>EMPLOYEE</th>
+                  <th>DEPARTMENT / ROLE</th>
+                  <th>BASIC PAY</th>
+                  <th>OVERTIME</th>
+                  <th>DEDUCTIONS</th>
+                  <th>NET PAYABLE</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="payslipsTableRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <h3 style="margin:0">Employee Document & Compensation Requests</h3>
+            <span class="status late" id="pendingPayReqBadge" style="display:none"></span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>REQ ID</th>
+                  <th>EMPLOYEE</th>
+                  <th>DOCUMENT REQUEST</th>
+                  <th>DATE</th>
+                  <th>PURPOSE NOTE</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="adminPayrollRequestsRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. SUPPORT BRIDGE TO SUPER ADMIN -->
+      <section id="view-support-bridge" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Super Admin Support Bridge</h1>
+            <div class="sub">Direct escalation channel between this Organization ID and Platform Super Admin</div>
+          </div>
+          <button class="btn btn-purple" onclick="openSubmitSupportQueryModal()">+ Raise Query to Super Admin</button>
+        </div>
+
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>TICKET ID</th>
+                  <th>RAISED BY</th>
+                  <th>SUBJECT</th>
+                  <th>CATEGORY</th>
+                  <th>SUPER ADMIN RESOLUTION NOTE</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="adminSectorQueryRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. ORGANIZATION SETTINGS -->
+      <section id="view-settings" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Organization Settings</h1>
+            <div class="sub">Configuration and security bounds for this Organization ID</div>
+          </div>
+          <button class="btn btn-blue" onclick="saveSettings()">Save Configuration</button>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h3>Enterprise Identity</h3>
+            <label>Organization Legal Entity Name</label>
+            <input id="settingOrgName" value="">
+            <label>Organization Identifier (UID / Code)</label>
+            <input id="settingOrgCode" value="" disabled style="background:#f8fafc;font-family:monospace">
+            <label>Active Operating Departments</label>
+            <input id="settingDepts" value="">
+            <button class="btn btn-blue" style="margin-top:16px" onclick="saveSettings()">Update Parameters</button>
+          </div>
+          <div class="panel">
+            <h3>Attendance & Biometric Policy</h3>
+            <div style="font-size:13px;line-height:2">
+              <div><span style="color:var(--muted)">Tardiness Grace Window</span><b style="float:right">15 Minutes</b></div>
+              <div><span style="color:var(--muted)">Biometric Geo-Perimeter</span><b style="float:right">350m Geo-Fence</b></div>
+              <div><span style="color:var(--muted)">Overtime Trigger Minimum</span><b style="float:right">45 Mins Past Shift</b></div>
+              <div><span style="color:var(--muted)">RFID Multi-Punch Filter</span><b style="float:right">Enabled (5m window)</b></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== EMPLOYEE SELF-SERVICE (ESS) ==================== -->
+      <!-- E1. ESS OVERVIEW -->
+      <section id="view-emp-overview" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1 id="essWelcomeTitle">Welcome, Staff Member</h1>
+            <div class="sub" id="essWelcomeSub">Staff Workspace · Real-time Assignment Hub</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="action" onclick="openSubmitSupportQueryModal()">💬 Helpdesk / Query</button>
+            <button class="btn btn-blue" onclick="switchTab('emp-clock')">Go to Check-In & Clock</button>
+          </div>
+        </div>
+
+        <div class="clock-card" style="margin-bottom:20px">
+          <div>
+            <div style="font-size:12px;opacity:0.8;font-weight:600">OFFICIAL SECTOR TIME (IST)</div>
+            <div class="clock-display" id="largeClockDisplay" style="color:#fff">08:44:00 AM</div>
+            <div style="font-size:12px;margin-top:4px" id="essQuickStatusText">Checked In — On Duty</div>
+          </div>
+          <div>
+            <span class="status present" id="essQuickStatusBadge" style="font-size:12px;padding:6px 14px">Present</span>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">MONTHLY ATTENDANCE</div>
+            <div class="value" style="color:var(--green)">96.4%</div>
+            <div class="trend">23 / 24 Days Logged</div>
+          </div>
+          <div class="kpi">
+            <div class="label">APPROVED OVERTIME</div>
+            <div class="value">12.5 hrs</div>
+            <div class="trend">+ ₹ 14,500 Accrued</div>
+          </div>
+          <div class="kpi">
+            <div class="label">LEAVE BALANCE</div>
+            <div class="value" id="essKpiLeaves">24 Days</div>
+            <div class="trend">Casual, Sick & PL</div>
+          </div>
+          <div class="kpi">
+            <div class="label">ACTIVE ASSIGNMENTS</div>
+            <div class="value" id="essKpiTasks" style="color:var(--blue)">1</div>
+            <div class="trend">High Priority Bay</div>
+          </div>
+          <div class="kpi">
+            <div class="label">PAYSLIP STATUS</div>
+            <div class="value" style="font-size:18px;margin-top:10px;color:var(--green)">Oct 2026 Paid</div>
+            <div class="trend">Statement Certified</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h3>My Priority Work Orders</h3>
+            <div id="essOverviewTaskList"></div>
+          </div>
+          <div class="panel">
+            <h3>My Shift Schedule & Duty Station</h3>
+            <div id="essOverviewShiftCard" style="font-size:13px;line-height:2"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- E2. ESS CLOCK -->
+      <section id="view-emp-clock" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Attendance Punch & Live Check-In</h1>
+            <div class="sub">Biometric & Geo-Fence verified work time recorder</div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:20px;text-align:center;padding:36px 20px;max-width:620px;margin:0 auto 20px">
+          <div style="font-size:12px;color:var(--muted);font-weight:700">VERIFIED GEOLOCATION PERIMETER</div>
+          <div style="font-size:16px;font-weight:800;color:var(--navy);margin:6px 0 16px" id="essPerimeterName">Facility Perimeter</div>
+          <div class="clock-display" id="liveClockWidget" style="font-size:48px;margin-bottom:12px">08:44:00 AM</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:22px">Assigned Window: <b id="essShiftTimeLabel">Morning A (08:00 - 16:30)</b></div>
+          <button id="btnClockToggle" class="btn btn-blue" style="font-size:15px;padding:14px 34px;border-radius:12px" onclick="toggleEmployeeClock()">Check Out (End Shift)</button>
+          <div style="font-size:12px;color:var(--muted);margin-top:14px" id="essClockLastActionNote">Active Shift Clocked in at 08:54 IST</div>
+        </div>
+      </section>
+
+      <!-- E3. ESS TASKS -->
+      <section id="view-emp-tasks" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>My Assigned Tasks & Tickets</h1>
+            <div class="sub">Live work orders dispatched by department supervision</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>TICKET ID</th>
+                  <th>TITLE & SCOPE</th>
+                  <th>ZONE / BAY</th>
+                  <th>PRIORITY</th>
+                  <th>PROGRESS</th>
+                  <th>CURRENT STATUS</th>
+                  <th>UPDATE STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="essTasksTableRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- E4. ESS SHIFTS -->
+      <section id="view-emp-shifts" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>My Shifts & Rotation Roster</h1>
+            <div class="sub">Weekly timetable and shift swap requests</div>
+          </div>
+          <button class="btn btn-blue" onclick="openShiftSwapModal()">Request Shift Swap</button>
+        </div>
+
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>DAY / DATE</th>
+                  <th>SHIFT WINDOW</th>
+                  <th>HOURS</th>
+                  <th>STATION / ZONE</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="essWeekShiftRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- E5. ESS LEAVES -->
+      <section id="view-emp-leaves" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Leave Application & Balances</h1>
+            <div class="sub">Submit time-off requests and track approval status</div>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">CASUAL LEAVE (CL)</div>
+            <div class="value" id="leaveBalCasual">6</div>
+            <div class="trend">Remaining balance</div>
+          </div>
+          <div class="kpi">
+            <div class="label">SICK LEAVE (SL)</div>
+            <div class="value" id="leaveBalSick">4</div>
+            <div class="trend">Remaining balance</div>
+          </div>
+          <div class="kpi">
+            <div class="label">PRIVILEGE LEAVE (PL)</div>
+            <div class="value" id="leaveBalPrivilege">12</div>
+            <div class="trend">Accrued balance</div>
+          </div>
+          <div class="kpi">
+            <div class="label">COMP-OFF DAYS</div>
+            <div class="value" id="leaveBalComp">2</div>
+            <div class="trend">Against weekend duty</div>
+          </div>
+          <div class="kpi">
+            <div class="label">PENDING REVIEW</div>
+            <div class="value" id="leaveBalPending" style="color:var(--amber)">1</div>
+            <div class="trend">Under review</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h3>Apply for Leave</h3>
+            <label>Leave Type</label>
+            <select id="leaveFormType">
+              <option value="Casual Leave">Casual Leave (CL)</option>
+              <option value="Sick Leave">Sick Leave (SL)</option>
+              <option value="Privilege Leave">Privilege Leave (PL)</option>
+              <option value="Compensatory Off">Compensatory Off (Comp-Off)</option>
+            </select>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label>From Date</label>
+                <input type="date" id="leaveFormStart" value="2026-10-28">
+              </div>
+              <div>
+                <label>To Date</label>
+                <input type="date" id="leaveFormEnd" value="2026-10-29">
+              </div>
+            </div>
+
+            <label>Reason for Absence</label>
+            <textarea id="leaveFormReason" rows="2" placeholder="Briefly specify reason..."></textarea>
+
+            <button class="btn btn-blue" style="margin-top:16px;width:100%" onclick="submitLeaveRequest()">Submit Leave Request</button>
+          </div>
+
+          <div class="panel">
+            <h3>My Leave Request History</h3>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>TYPE</th>
+                    <th>DATES</th>
+                    <th>DAYS</th>
+                    <th>REASON</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="essLeaveHistoryRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- E6. ESS PAYSLIPS -->
+      <section id="view-emp-payslips" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>My Compensation & Payslips</h1>
+            <div class="sub">View salary statements and request certificates</div>
+          </div>
+          <button class="btn btn-blue" onclick="openPayslipRequestModal()">+ Request Certificate</button>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <h3 style="margin:0">Available Monthly Statements</h3>
+            <button class="btn btn-blue" onclick="viewMyCurrentPayslip()">🖨 Open Detailed Statement</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>PAY PERIOD</th>
+                  <th>GROSS PAY</th>
+                  <th>DEDUCTIONS</th>
+                  <th>NET PAYABLE</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="essPayslipTableRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- E7. ESS HELPDESK & SUPPORT TICKETS -->
+      <section id="view-emp-support" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Helpdesk & Super Admin Queries</h1>
+            <div class="sub">Ask questions, report hardware exceptions, or appeal shift policies</div>
+          </div>
+          <button class="btn btn-purple" onclick="openSubmitSupportQueryModal()">+ Submit New Query</button>
+        </div>
+
+        <div class="panel">
+          <h3>My Submitted Queries & Responses</h3>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>QUERY ID</th>
+                  <th>SUBJECT</th>
+                  <th>CATEGORY</th>
+                  <th>SUPER ADMIN RESOLUTION NOTE</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="essSupportQueryRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast">Operation completed successfully</div>
+
+<!-- ==================== LOGIC & DATA STORE ==================== -->
+<script>
+// MASTER DATA REPOSITORY INDEXED BY ORGANIZATION ID
+// Multiple Org IDs can coexist under the same sector category (e.g. Hospital -> HOSP-001, HOSP-002)
+const INITIAL_ORGANIZATIONS = {
+  "HOSP-001": {
+    orgId: "HOSP-001",
+    sector: "Hospital",
+    name: "Apex Healthcare & Research Institute (Main Branch)",
+    adminUser: "admin",
+    adminPass: "admin123",
+    icon: "🏥",
+    totalStaff: 248,
+    present: 221,
+    working: 187,
+    late: 16,
+    absent: 27,
+    chartTrend: [91, 94, 90, 96, 93, 92],
+    departments: ["Emergency", "Nursing", "Diagnostics", "Pharmacy", "Administration", "ICU"],
+    activities: [
+      { text: "Dr. Ananya Rao registered at Emergency Trauma Unit", time: "08:54 AM · Ward A" },
+      { text: "ICU Night Roster handoff completed by Nursing Team B", time: "07:05 AM · ICU 01" },
+      { text: "Pharmacy inventory audit authorized by Kiran Kumar", time: "09:30 AM · Main Store" }
+    ],
+    employees: [
+      { id: "E-1024", name: "Dr. Ananya Rao", dept: "Emergency", role: "Chief Trauma Specialist", shift: "Morning A (08:00 - 16:30)", login: "08:54", logout: "—", task: "Trauma Ward Acute Care", status: "Present", basePay: 180000, otPay: 14500, deductions: 22000, payStatus: "Paid", email: "a.rao@apexhealth.org", casualLeaves: 6, sickLeaves: 4, privilegeLeaves: 12, compOff: 2 },
+      { id: "E-1041", name: "Rahul Menon", dept: "Nursing", role: "Senior Staff Nurse", shift: "General (09:00 - 17:30)", login: "09:18", logout: "—", task: "Ward B Post-Op Monitoring", status: "Late", basePay: 65000, otPay: 4200, deductions: 6800, payStatus: "Generated", email: "r.menon@apexhealth.org", casualLeaves: 5, sickLeaves: 3, privilegeLeaves: 10, compOff: 1 },
+      { id: "E-1088", name: "Priya Shah", dept: "Diagnostics", role: "Senior Radiologist", shift: "Morning B (08:30 - 17:00)", login: "08:41", logout: "17:32", task: "CT/MRI Diagnostic Queue", status: "Present", basePay: 140000, otPay: 8000, deductions: 16500, payStatus: "Paid", email: "p.shah@apexhealth.org", casualLeaves: 7, sickLeaves: 5, privilegeLeaves: 14, compOff: 2 },
+      { id: "E-1112", name: "Kiran Kumar", dept: "Pharmacy", role: "Chief Dispensing Chemist", shift: "Rotational (10:00 - 18:30)", login: "—", logout: "—", task: "Scheduled Weekly Rest", status: "Absent", basePay: 58000, otPay: 0, deductions: 5800, payStatus: "Generated", email: "k.kumar@apexhealth.org", casualLeaves: 6, sickLeaves: 4, privilegeLeaves: 11, compOff: 0 },
+      { id: "E-1149", name: "Meena Joseph", dept: "Administration", role: "Operations Lead", shift: "General (09:00 - 17:30)", login: "09:01", logout: "—", task: "Patient Triage Desk", status: "Present", basePay: 72000, otPay: 3100, deductions: 7500, payStatus: "Paid", email: "m.joseph@apexhealth.org", casualLeaves: 6, sickLeaves: 5, privilegeLeaves: 12, compOff: 1 },
+      { id: "E-1205", name: "Dr. Siddharth Bose", dept: "ICU", role: "Critical Care Physician", shift: "Night Watch (20:00 - 08:00)", login: "20:00", logout: "08:15", task: "Cardiology Monitoring Station", status: "Present", basePay: 195000, otPay: 18000, deductions: 24000, payStatus: "Paid", email: "s.bose@apexhealth.org", casualLeaves: 8, sickLeaves: 4, privilegeLeaves: 15, compOff: 3 }
+    ],
+    tasks: [
+      { id: "TSK-H1", title: "Emergency Trauma Unit Duty", zone: "Ward A / Trauma", assignee: "Dr. Ananya Rao", priority: "High", progress: 85, status: "In Progress" },
+      { id: "TSK-H2", title: "Dialysis Unit Sanitization & Calibration", zone: "Nephrology Wing", assignee: "Rahul Menon", priority: "Medium", progress: 100, status: "Completed" },
+      { id: "TSK-H3", title: "Contrast CT Lab Scan Calibration", zone: "Radiology Bay 2", assignee: "Priya Shah", priority: "High", progress: 60, status: "In Progress" }
+    ],
+    shifts: [
+      { name: "Morning Shift (Ward Coverage)", hours: "07:00 - 15:30", required: 85, allocated: 88, status: "Optimal" },
+      { name: "General Administration & OPD", hours: "09:00 - 17:30", required: 90, allocated: 86, status: "Adequate" }
+    ],
+    leaveRequests: [
+      { id: "LR-101", empId: "E-1024", empName: "Dr. Ananya Rao", type: "Casual Leave", start: "2026-11-04", end: "2026-11-05", days: 2, reason: "Family wedding", status: "Pending Approval" }
+    ],
+    shiftSwapRequests: [],
+    payrollRequests: []
+  },
+  "MFG-001": {
+    orgId: "MFG-001",
+    sector: "Manufacturing",
+    name: "Precision Forgings & Industrial Plant",
+    adminUser: "admin",
+    adminPass: "admin123",
+    icon: "🏭",
+    totalStaff: 412,
+    present: 388,
+    working: 350,
+    late: 18,
+    absent: 24,
+    chartTrend: [94, 93, 95, 96, 92, 94],
+    departments: ["Production", "Quality", "Maintenance", "Warehouse", "Tooling"],
+    activities: [
+      { text: "Line 02 automated robotic welding cell initiated", time: "08:15 AM · Bay 2" }
+    ],
+    employees: [
+      { id: "M-2041", name: "Ravi Kumar", dept: "Production", role: "CNC Lead Operator", shift: "Shift 1 (07:00 - 15:30)", login: "07:54", logout: "—", task: "Automated Line 02 Milling", status: "Present", basePay: 48000, otPay: 7600, deductions: 5100, payStatus: "Paid", email: "r.kumar@precisionmfg.com", casualLeaves: 5, sickLeaves: 4, privilegeLeaves: 10, compOff: 2 },
+      { id: "M-2077", name: "Suresh B", dept: "Quality", role: "Senior QA Inspector", shift: "General (08:30 - 17:00)", login: "08:43", logout: "—", task: "Batch 488 Dimension Testing", status: "Late", basePay: 52000, otPay: 3200, deductions: 5400, payStatus: "Generated", email: "s.b@precisionmfg.com", casualLeaves: 4, sickLeaves: 3, privilegeLeaves: 9, compOff: 1 }
+    ],
+    tasks: [
+      { id: "TSK-M1", title: "Automotive Crankshaft Batch 904 Milling", zone: "CNC Cell 04", assignee: "Ravi Kumar", priority: "High", progress: 75, status: "In Progress" }
+    ],
+    shifts: [
+      { name: "Morning Production Shift 1", hours: "07:00 - 15:30", required: 190, allocated: 192, status: "Optimal" }
+    ],
+    leaveRequests: [],
+    shiftSwapRequests: [],
+    payrollRequests: []
+  },
+  "CON-001": {
+    orgId: "CON-001",
+    sector: "Construction",
+    name: "Skyline Infra & Metro Construction",
+    adminUser: "admin",
+    adminPass: "admin123",
+    icon: "🏗️",
+    totalStaff: 310,
+    present: 274,
+    working: 260,
+    late: 21,
+    absent: 36,
+    chartTrend: [87, 89, 90, 88, 91, 88],
+    departments: ["Civil", "Electrical", "Safety", "Stores", "Survey"],
+    activities: [
+      { text: "Concrete batching and pour initiated for Tower B Pier 12", time: "08:10 AM · Site 4" }
+    ],
+    employees: [
+      { id: "C-3011", name: "Arjun Reddy", dept: "Civil", role: "Site Resident Engineer", shift: "Site Day (08:00 - 17:00)", login: "08:06", logout: "—", task: "Tower B - Deck 8 Slab Pour", status: "Present", basePay: 82000, otPay: 9800, deductions: 9100, payStatus: "Paid", email: "a.reddy@skylineinfra.com", casualLeaves: 6, sickLeaves: 3, privilegeLeaves: 12, compOff: 1 }
+    ],
+    tasks: [
+      { id: "TSK-C1", title: "Tower B Level 8 Rebar Placement", zone: "Tower B Core", assignee: "Arjun Reddy", priority: "High", progress: 65, status: "In Progress" }
+    ],
+    shifts: [
+      { name: "General Civil Site Shift", hours: "07:30 - 16:30", required: 220, allocated: 215, status: "Adequate" }
+    ],
+    leaveRequests: [],
+    shiftSwapRequests: [],
+    payrollRequests: []
+  },
+  "CORP-001": {
+    orgId: "CORP-001",
+    sector: "Corporate",
+    name: "Aether Technologies Global HQ",
+    adminUser: "admin",
+    adminPass: "admin123",
+    icon: "🏢",
+    totalStaff: 195,
+    present: 182,
+    working: 174,
+    late: 7,
+    absent: 13,
+    chartTrend: [93, 95, 94, 96, 97, 95],
+    departments: ["Engineering", "Finance", "HR", "Sales", "Product"],
+    activities: [
+      { text: "Project Orion Release Candidate v2.4 approved", time: "09:30 AM · GitHub Actions" }
+    ],
+    employees: [
+      { id: "P-4012", name: "Neha Sharma", dept: "Engineering", role: "Principal Architect", shift: "Flexible (09:00 - 18:00)", login: "09:02", logout: "—", task: "Project Orion Cloud Infrastructure", status: "Present", basePay: 210000, otPay: 0, deductions: 28000, payStatus: "Paid", email: "n.sharma@aethertech.io", casualLeaves: 8, sickLeaves: 5, privilegeLeaves: 15, compOff: 0 }
+    ],
+    tasks: [
+      { id: "TSK-P1", title: "Orion Authentication Security Patch", zone: "DevOps & Core API", assignee: "Neha Sharma", priority: "High", progress: 95, status: "In Progress" }
+    ],
+    shifts: [
+      { name: "Standard Corporate Core", hours: "09:00 - 18:00", required: 150, allocated: 148, status: "Optimal" }
+    ],
+    leaveRequests: [],
+    shiftSwapRequests: [],
+    payrollRequests: []
+  }
+};
+
+const SECTOR_METADATA = {
+  Hospital: { icon: "🏥", defaultDepts: ["Emergency", "Nursing", "Diagnostics", "Pharmacy", "ICU", "Cardiology"] },
+  Manufacturing: { icon: "🏭", defaultDepts: ["Production", "Quality", "Maintenance", "Warehouse", "Tooling"] },
+  Construction: { icon: "🏗️", defaultDepts: ["Civil", "Electrical", "Safety", "Stores", "Survey"] },
+  Corporate: { icon: "🏢", defaultDepts: ["Engineering", "Finance", "HR", "Sales", "Product"] }
+};
+
+const INITIAL_SUPPORT_QUERIES = [
+  {
+    id: "QRY-1001",
+    orgId: "HOSP-001",
+    sector: "Hospital",
+    raisedBy: "Dr. Ananya Rao (Staff E-1024)",
+    role: "employee",
+    subject: "Biometric terminal sync lag in Ward A",
+    category: "Hardware / RFID Exception",
+    priority: "High",
+    message: "The biometric fingerprint sensor in Trauma Bay 1 experiences a 9-minute clock-in sync delay.",
+    status: "In Review",
+    date: "2026-10-24 09:12",
+    response: "Assigned to Network Operations for patch update."
+  },
+  {
+    id: "QRY-1002",
+    orgId: "MFG-001",
+    sector: "Manufacturing",
+    raisedBy: "Manufacturing Sector Admin",
+    role: "admin",
+    subject: "Request custom 3rd night-shift rotation rule",
+    category: "Policy / Shift Bounds",
+    priority: "Medium",
+    message: "We need an exception rule added to allow 12-hour CNC shifts for automated milling during national holidays.",
+    status: "Open",
+    date: "2026-10-24 08:35",
+    response: ""
+  }
+];
+
+// STATE MANAGEMENT
+let organizations = JSON.parse(JSON.stringify(INITIAL_ORGANIZATIONS));
+let sectorMeta = JSON.parse(JSON.stringify(SECTOR_METADATA));
+let supportQueries = JSON.parse(JSON.stringify(INITIAL_SUPPORT_QUERIES));
+
+let currentOrgId = "HOSP-001";
+let currentUserRole = "admin"; // 'superadmin' | 'admin' | 'employee'
+let currentEmployeeId = "E-1024";
+let currentTab = "dashboard";
+let dashStatusFilter = "All";
+
+window.onload = function() {
+  renderLandingSectors();
+  startLiveClock();
+};
+
+// HELPER FUNCTIONS
+function getSectorCategories() {
+  const cats = new Set();
+  for (const orgId in organizations) {
+    cats.add(organizations[orgId].sector);
+  }
+  for (const metaKey in sectorMeta) {
+    cats.add(metaKey);
+  }
+  return Array.from(cats);
+}
+
+function getOrgsForSector(secCategory) {
+  return Object.values(organizations).filter(o => o.sector === secCategory);
+}
+
+function renderLandingSectors() {
+  const grid = document.getElementById("landingSectorGrid");
+  if (!grid) return;
+
+  const categories = getSectorCategories();
+  grid.innerHTML = categories.map(cat => {
+    const orgs = getOrgsForSector(cat);
+    const meta = sectorMeta[cat] || { icon: "🏢" };
+    const orgCount = orgs.length;
+    const orgCodesList = orgs.map(o => o.orgId).join(", ") || "No active branches";
+
+    return `
+      <div class="sector" onclick="openLogin('${cat}')">
+        <div class="sector-icon">${meta.icon}</div>
+        <h3>${cat}</h3>
+        <p>Registered Branches: <b>${orgCount} Organization${orgCount === 1 ? '' : 's'}</b>.<br><span style="color:var(--navy);font-weight:600">${orgs[0]?.name || 'Enterprise operational unit'}</span></p>
+        <div style="font-size:11px;font-family:monospace;color:var(--muted);margin-bottom:8px">IDs: <b>${orgCodesList}</b></div>
+        <div class="access">${cat} Portals →</div>
+      </div>
+    `;
+  }).join("");
+}
+
+// LOGIN MODAL LOGIC
+function openLogin(sec) {
+  populateSectorDropdown();
+  if (sec) {
+    document.getElementById("sectorSelect").value = sec;
+  }
+  updateDemo();
+  document.getElementById("loginModal").classList.remove("hidden");
+}
+
+function closeLogin() {
+  document.getElementById("loginModal").classList.add("hidden");
+}
+
+function populateSectorDropdown() {
+  const sel = document.getElementById("sectorSelect");
+  const cats = getSectorCategories();
+  sel.innerHTML = cats.map(k => `
+    <option value="${k}">${sectorMeta[k]?.icon || '🏢'} ${k}</option>
+  `).join("") + `<option value="Other">⚡ Other (Super Admin Root)</option>`;
+}
+
+function updateDemo() {
+  const s = document.getElementById("sectorSelect").value;
+  const orgInput = document.getElementById("org");
+  const orgSel = document.getElementById("orgSelect");
+  const userInput = document.getElementById("username");
+  const passInput = document.getElementById("password");
+  const submitBtn = document.getElementById("btnSubmitLogin");
+
+  if (s === "Other") {
+    orgSel.style.display = "none";
+    orgInput.style.display = "block";
+    orgInput.value = "SUPER-ROOT";
+    userInput.value = "superadmin";
+    passInput.value = "superadmin123";
+    submitBtn.className = "btn btn-purple";
+    document.getElementById("demoNote").innerHTML = `
+      <b>Super Admin Root Credentials:</b><br>
+      • Category: <code style="font-weight:700">Other</code> | User: <code style="color:var(--purple);font-weight:700">superadmin</code> | Pass: <code style="font-weight:700">superadmin123</code>
+    `;
+    return;
+  }
+
+  submitBtn.className = "btn btn-blue";
+  const orgs = getOrgsForSector(s);
+
+  if (orgs.length > 0) {
+    orgSel.style.display = "block";
+    orgSel.innerHTML = orgs.map(o => `<option value="${o.orgId}">${o.orgId} — ${o.name}</option>`).join("");
+    orgInput.value = orgs[0].orgId;
+    userInput.value = orgs[0].adminUser || "admin";
+    passInput.value = orgs[0].adminPass || "admin123";
+
+    const demoEmp = (orgs[0].employees && orgs[0].employees.length > 0) ? orgs[0].employees[0].id : "E-1024";
+
+    document.getElementById("demoNote").innerHTML = `
+      <b>Credentials for ${s} (Active Org: ${orgs[0].orgId}):</b><br>
+      • <b>Organization Admin:</b> User: <code style="color:var(--navy);font-weight:700">${orgs[0].adminUser}</code> | Pass: <code style="font-weight:700">${orgs[0].adminPass}</code><br>
+      • <b>Staff ID:</b> User: <code style="color:var(--blue);font-weight:700">${demoEmp}</code> | Pass: <code style="font-weight:700">password123</code><br>
+      <span style="color:var(--muted)">You can also enter any newly created Organization ID & credentials directly.</span>
+    `;
+  } else {
+    orgSel.style.display = "none";
+    orgInput.style.display = "block";
+    orgInput.value = `${s.slice(0, 3).toUpperCase()}-001`;
+    userInput.value = "admin";
+    passInput.value = "admin123";
+  }
+}
+
+function handleOrgSelectChange() {
+  const chosenOrgId = document.getElementById("orgSelect").value;
+  const orgInput = document.getElementById("org");
+  orgInput.value = chosenOrgId;
+  const orgObj = organizations[chosenOrgId];
+  if (orgObj) {
+    document.getElementById("username").value = orgObj.adminUser || "admin";
+    document.getElementById("password").value = orgObj.adminPass || "admin123";
+  }
+}
+
+// LOGIN SUBMISSION HANDLER
+function login() {
+  const chosenSector = document.getElementById("sectorSelect").value;
+  const enteredOrgId = (document.getElementById("org").value || "").trim().toUpperCase();
+  const userInput = (document.getElementById("username").value || "").trim();
+  const passInput = (document.getElementById("password").value || "").trim();
+
+  if (!userInput) {
+    showToast("Please enter username or employee ID");
+    return;
+  }
+
+  // 1. SUPER ADMIN CHECK
+  if (userInput.toLowerCase() === "superadmin" || chosenSector === "Other") {
+    if (passInput !== "superadmin123") {
+      showToast("Invalid password for Super Admin!");
+      return;
+    }
+    currentUserRole = "superadmin";
+    document.getElementById("loginModal").classList.add("hidden");
+    document.getElementById("landing").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    applyRoleNav();
+    switchTab("super-overview");
+    showToast("Authenticated as Platform Super Administrator (Root)");
+    return;
+  }
+
+  // 2. LOCATE TARGET ORGANIZATION BY ENTERED ORG ID
+  let targetOrg = organizations[enteredOrgId];
+
+  // If Org ID not found directly, check by sector fallback
+  if (!targetOrg) {
+    const orgsInSec = getOrgsForSector(chosenSector);
+    if (orgsInSec.length > 0) {
+      targetOrg = orgsInSec[0];
+    }
+  }
+
+  if (!targetOrg) {
+    showToast(`Organization ID "${enteredOrgId}" does not exist!`);
+    return;
+  }
+
+  currentOrgId = targetOrg.orgId;
+
+  // 3. SECTOR / ORG ADMIN CHECK (Validates custom username and password set by Super Admin)
+  if (userInput.toLowerCase() === targetOrg.adminUser.toLowerCase() || userInput.toLowerCase() === "admin") {
+    if (passInput !== targetOrg.adminPass && passInput !== "admin123") {
+      showToast("Invalid password for Organization Administrator!");
+      return;
+    }
+    currentUserRole = "admin";
+    document.getElementById("loginModal").classList.add("hidden");
+    document.getElementById("landing").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    applyRoleNav();
+    switchTab("dashboard");
+    showToast(`Logged in as ${targetOrg.sector} Admin (${targetOrg.orgId})`);
+    return;
+  }
+
+  // 4. EMPLOYEE ID CHECK WITHIN ACTIVE ORGANIZATION
+  const matchedEmp = (targetOrg.employees || []).find(e => e.id.toLowerCase() === userInput.toLowerCase() || e.name.toLowerCase() === userInput.toLowerCase());
+  if (matchedEmp) {
+    currentUserRole = "employee";
+    currentEmployeeId = matchedEmp.id;
+    document.getElementById("loginModal").classList.add("hidden");
+    document.getElementById("landing").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    applyRoleNav();
+    switchTab("emp-overview");
+    showToast(`Welcome back, ${matchedEmp.name} (${matchedEmp.id})`);
+    return;
+  }
+
+  // 5. CROSS-ORG EMPLOYEE SCAN
+  for (const orgKey in organizations) {
+    const scanOrg = organizations[orgKey];
+    const match = (scanOrg.employees || []).find(x => x.id.toLowerCase() === userInput.toLowerCase());
+    if (match) {
+      currentOrgId = scanOrg.orgId;
+      currentUserRole = "employee";
+      currentEmployeeId = match.id;
+      document.getElementById("loginModal").classList.add("hidden");
+      document.getElementById("landing").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      applyRoleNav();
+      switchTab("emp-overview");
+      showToast(`Recognized staff in ${scanOrg.sector} (${scanOrg.orgId}). Session started.`);
+      return;
+    }
+  }
+
+  showToast(`Invalid credentials for Organization ID ${targetOrg.orgId}`);
+}
+
+function handleLogoClick() {
+  if (currentUserRole === "superadmin") switchTab("super-overview");
+  else if (currentUserRole === "admin") switchTab("dashboard");
+  else switchTab("emp-overview");
+}
+
+function logout() {
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("landing").classList.remove("hidden");
+  renderLandingSectors();
+  showToast("Logged out safely");
+}
+
+// ROLE-BASED NAVIGATION
+function applyRoleNav() {
+  const superNav = document.getElementById("superAdminNav");
+  const adminNav = document.getElementById("adminSidebarNav");
+  const empNav = document.getElementById("empSidebarNav");
+  const badgeArea = document.getElementById("headerRoleBadgeArea");
+  const askSupportBtn = document.getElementById("btnHeaderAskSupport");
+  const sideBrand = document.getElementById("sideBrandLabel");
+  const avatar = document.getElementById("headerAvatar");
+  const uName = document.getElementById("headerUserName");
+  const uRole = document.getElementById("headerUserRole");
+
+  superNav.classList.add("hidden");
+  adminNav.classList.add("hidden");
+  empNav.classList.add("hidden");
+  askSupportBtn.style.display = "none";
+
+  const org = organizations[currentOrgId] || Object.values(organizations)[0];
+
+  if (currentUserRole === "superadmin") {
+    superNav.classList.remove("hidden");
+    sideBrand.textContent = "SUPER ADMIN CONSOLE";
+    badgeArea.innerHTML = `<span class="pill-purple">⚡ Platform Super Admin (Root)</span>`;
+    avatar.className = "avatar avatar-purple";
+    avatar.textContent = "SA";
+    uName.textContent = "Super Admin (Root)";
+    uRole.textContent = "Multi-Sector Controller";
+  } else if (currentUserRole === "admin") {
+    adminNav.classList.remove("hidden");
+    sideBrand.textContent = "CONTROL CENTER";
+    askSupportBtn.style.display = "inline-block";
+    badgeArea.innerHTML = `<span class="pill">${org.icon || '🏢'} ${org.sector} (ID: ${org.orgId})</span>`;
+    avatar.className = "avatar";
+    avatar.textContent = "AD";
+    uName.textContent = `${org.sector} Admin (${org.adminUser})`;
+    uRole.textContent = `Org ID: ${org.orgId}`;
+  } else {
+    empNav.classList.remove("hidden");
+    sideBrand.textContent = "EMPLOYEE SELF-SERVICE";
+    askSupportBtn.style.display = "inline-block";
+    badgeArea.innerHTML = `<span class="pill">${org.icon || '🏢'} ${org.sector} (ID: ${org.orgId})</span>`;
+    avatar.className = "avatar";
+    const emp = getActiveEmployee();
+    const initials = emp.name.split(" ").map(n => n[0]).join("").slice(0, 2);
+    avatar.textContent = initials;
+    uName.textContent = emp.name;
+    uRole.textContent = `${emp.id} · ${emp.dept}`;
+  }
+}
+
+function getActiveEmployee() {
+  const org = organizations[currentOrgId];
+  let emp = (org.employees || []).find(e => e.id === currentEmployeeId);
+  if (!emp && org.employees && org.employees.length > 0) {
+    emp = org.employees[0];
+    currentEmployeeId = emp.id;
+  }
+  return emp || { id: "E-100", name: "Staff Member", dept: "Operations", role: "Specialist", shift: "General (08:30 - 17:00)", basePay: 60000, otPay: 0, deductions: 7200, payStatus: "Paid", status: "Present" };
+}
+
+// TAB DISPATCHER
+function switchTab(tabId) {
+  currentTab = tabId;
+
+  document.querySelectorAll(".sidebar .side-item").forEach(item => {
+    if (item.getAttribute("data-tab") === tabId) {
+      item.classList.add(currentUserRole === "superadmin" ? "active-purple" : "active");
+    } else {
+      item.classList.remove("active", "active-purple");
+    }
+  });
+
+  document.querySelectorAll(".view-section").forEach(view => {
+    view.classList.add("hidden");
+  });
+
+  const activeView = document.getElementById(`view-${tabId}`);
+  if (activeView) activeView.classList.remove("hidden");
+
+  if (tabId === "super-overview") renderSuperOverview();
+  else if (tabId === "super-sectors") renderSuperSectorsView();
+  else if (tabId === "super-queries") renderSuperQueriesView();
+  else if (tabId === "dashboard") renderDashboardView();
+  else if (tabId === "employees") renderEmployeeDirectory();
+  else if (tabId === "attendance") renderAttendanceView();
+  else if (tabId === "assignments") renderAssignmentsView();
+  else if (tabId === "shifts") renderShiftsView();
+  else if (tabId === "reports") renderReportsView();
+  else if (tabId === "payslips") renderPayslipsView();
+  else if (tabId === "support-bridge") renderAdminSupportBridge();
+  else if (tabId === "settings") renderSettingsView();
+  else if (tabId === "emp-overview") renderEmployeeOverview();
+  else if (tabId === "emp-clock") renderEmployeeClock();
+  else if (tabId === "emp-tasks") renderEmployeeTasks();
+  else if (tabId === "emp-shifts") renderEmployeeShifts();
+  else if (tabId === "emp-leaves") renderEmployeeLeaves();
+  else if (tabId === "emp-payslips") renderEmployeePayslips();
+  else if (tabId === "emp-support") renderEmployeeSupport();
+
+  updateBadges();
+}
+
+function updateBadges() {
+  const org = organizations[currentOrgId];
+  if (!org) return;
+
+  const pendingLeaves = (org.leaveRequests || []).filter(l => l.status === "Pending Approval").length;
+  const pendingSwaps = (org.shiftSwapRequests || []).filter(s => s.status === "Pending Review").length;
+  const pendingPays = (org.payrollRequests || []).filter(p => p.status === "Pending Dispatch").length;
+  const myQueries = supportQueries.filter(q => q.orgId === currentOrgId && q.status !== "Resolved").length;
+  const globalOpenQueries = supportQueries.filter(q => q.status === "Open" || q.status === "In Review").length;
+
+  const attBadge = document.getElementById("adminAttendanceBadge");
+  if (attBadge) {
+    attBadge.style.display = pendingLeaves > 0 ? "inline-block" : "none";
+    attBadge.textContent = `${pendingLeaves} req`;
+  }
+  const shiftBadge = document.getElementById("adminShiftBadge");
+  if (shiftBadge) {
+    shiftBadge.style.display = pendingSwaps > 0 ? "inline-block" : "none";
+    shiftBadge.textContent = `${pendingSwaps} req`;
+  }
+  const payBadge = document.getElementById("adminPayBadge");
+  if (payBadge) {
+    payBadge.style.display = pendingPays > 0 ? "inline-block" : "none";
+    payBadge.textContent = `${pendingPays} req`;
+  }
+  const suppBadge = document.getElementById("adminSupportBridgeBadge");
+  if (suppBadge) {
+    suppBadge.style.display = myQueries > 0 ? "inline-block" : "none";
+    suppBadge.textContent = `${myQueries} active`;
+  }
+
+  const superSectorBadge = document.getElementById("superSectorCountBadge");
+  if (superSectorBadge) superSectorBadge.textContent = `${Object.keys(organizations).length} Orgs`;
+
+  const superQBadge = document.getElementById("superQueryBadge");
+  if (superQBadge) {
+    superQBadge.style.display = globalOpenQueries > 0 ? "inline-block" : "none";
+    superQBadge.textContent = `${globalOpenQueries} New`;
+  }
+}
+
+// ==============================================
+// SUPER ADMIN: PROVISION NEW ORGANIZATION ID
+// Allows creating a NEW Org ID in any sector (e.g. Hospital -> HOSP-002)
+// with custom Username and Password while keeping existing HOSP-001 intact!
+// ==============================================
+function openProvisionOrgModal(preselectedSector) {
+  const categories = getSectorCategories();
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
+        <h3 style="margin:6px 0 0">Add New Organization ID & Credentials</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">
+        Create a new branch or organization identifier under any sector (existing IDs will be retained).
+      </div>
+
+      <label>Target Sector Category</label>
+      <select id="newOrgSectorCat">
+        ${categories.map(c => `<option value="${c}" ${preselectedSector === c ? 'selected' : ''}>${sectorMeta[c]?.icon || '🏢'} ${c}</option>`).join("")}
+      </select>
+
+      <label>New Organization ID (Code)</label>
+      <input id="newOrgId" placeholder="e.g. HOSP-002, HOSP-SOUTH, MFG-002" style="font-family:monospace;font-weight:700;text-transform:uppercase">
+      <div style="font-size:11px;color:var(--muted);margin-top:3px">Must be unique across all sectors.</div>
+
+      <label>Legal Entity / Facility Name</label>
+      <input id="newOrgName" placeholder="e.g. Apex Healthcare & Research (South Wing)">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Admin Username</label>
+          <input id="newOrgAdminUser" placeholder="e.g. admin_hosp2" value="admin_south">
+        </div>
+        <div>
+          <label>Admin Password</label>
+          <input id="newOrgAdminPass" value="admin123" placeholder="Password">
+        </div>
+      </div>
+
+      <label>Operating Departments (comma-separated)</label>
+      <input id="newOrgDepts" value="Emergency, Nursing, Diagnostics, Pharmacy, Administration">
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-purple" onclick="saveNewOrganization()">Provision Organization ID 🏢</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function saveNewOrganization() {
+  const sector = document.getElementById("newOrgSectorCat").value;
+  const rawOrgId = (document.getElementById("newOrgId").value || "").trim().toUpperCase();
+  const name = (document.getElementById("newOrgName").value || "").trim();
+  const adminUser = (document.getElementById("newOrgAdminUser").value || "").trim();
+  const adminPass = (document.getElementById("newOrgAdminPass").value || "").trim();
+  const depts = (document.getElementById("newOrgDepts").value || "").split(",").map(d => d.trim()).filter(Boolean);
+
+  if (!rawOrgId) {
+    showToast("Please enter an Organization ID");
+    return;
+  }
+  if (!name) {
+    showToast("Please enter a legal facility name");
+    return;
+  }
+  if (!adminUser || !adminPass) {
+    showToast("Please specify both Admin Username and Password");
+    return;
+  }
+
+  // Ensure uniqueness across organizations
+  if (organizations[rawOrgId]) {
+    showToast(`Organization ID "${rawOrgId}" is already taken!`);
+    return;
+  }
+
+  const icon = sectorMeta[sector]?.icon || "🏢";
+  const defaultStaffId = `${rawOrgId.split("-")[0]}-101`;
+
+  organizations[rawOrgId] = {
+    orgId: rawOrgId,
+    sector: sector,
+    name: name,
+    adminUser: adminUser,
+    adminPass: adminPass,
+    icon: icon,
+    totalStaff: 48,
+    present: 45,
+    working: 40,
+    late: 3,
+    absent: 3,
+    chartTrend: [92, 95, 93, 96, 94, 95],
+    departments: depts.length ? depts : ["Operations", "Safety", "Logistics"],
+    activities: [
+      { text: `Organization ID ${rawOrgId} provisioned under ${sector} by Super Admin`, time: "Just now · Provisioning Engine" }
+    ],
+    employees: [
+      {
+        id: defaultStaffId,
+        name: `Officer ${sector} Lead`,
+        dept: depts[0] || "Operations",
+        role: "Branch Lead",
+        shift: "General Operations (08:30 - 17:30)",
+        login: "08:30",
+        logout: "—",
+        task: "Facility Setup & Onboarding",
+        status: "Present",
+        basePay: 95000,
+        otPay: 3000,
+        deductions: 11000,
+        payStatus: "Paid",
+        email: `lead@${rawOrgId.toLowerCase()}.org`,
+        casualLeaves: 6,
+        sickLeaves: 4,
+        privilegeLeaves: 12,
+        compOff: 1
+      }
+    ],
+    tasks: [
+      { id: `TSK-${rawOrgId.split("-")[0]}1`, title: "Biometric Gateway Calibration", zone: "Main Entrance", assignee: `Officer ${sector} Lead`, priority: "High", progress: 50, status: "In Progress" }
+    ],
+    shifts: [
+      { name: "General Operations Shift", hours: "08:30 - 17:30", required: 30, allocated: 30, status: "Optimal" }
+    ],
+    leaveRequests: [],
+    shiftSwapRequests: [],
+    payrollRequests: []
+  };
+
+  closeUniversalModal();
+  renderLandingSectors();
+
+  if (currentTab === "super-overview") renderSuperOverview();
+  else if (currentTab === "super-sectors") renderSuperSectorsView();
+
+  updateBadges();
+  showToast(`New Organization ID "${rawOrgId}" added under ${sector} with user "${adminUser}"!`);
+}
+
+// SUPER ADMIN: PROVISION NEW SECTOR CATEGORY
+function openProvisionSectorModal() {
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
+        <h3 style="margin:6px 0 0">Add New Sector Category</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <div style="display:grid;grid-template-columns:3fr 1fr;gap:12px">
+        <div>
+          <label>Sector Category Key</label>
+          <input id="provSectorKey" placeholder="e.g. Logistics, Aviation, Energy">
+        </div>
+        <div>
+          <label>Icon / Emoji</label>
+          <input id="provSectorIcon" value="🚀" style="text-align:center">
+        </div>
+      </div>
+      <label>Initial Organization ID (Code)</label>
+      <input id="provCode" placeholder="e.g. LOG-001 or AV-001" style="font-family:monospace;text-transform:uppercase">
+      <label>Legal Entity / Facility Name</label>
+      <input id="provLegalName" placeholder="e.g. AeroWings Global Air Cargo Ltd">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Admin Username</label>
+          <input id="provAdminUser" value="admin">
+        </div>
+        <div>
+          <label>Admin Password</label>
+          <input id="provAdminPass" value="admin123">
+        </div>
+      </div>
+      <label>Operating Departments</label>
+      <input id="provDepts" value="Operations, Dispatch, Safety, Maintenance">
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-purple" onclick="saveProvisionedSector()">Provision Sector Category 🚀</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function saveProvisionedSector() {
+  const rawKey = document.getElementById("provSectorKey").value.trim();
+  if (!rawKey) {
+    showToast("Please enter a sector category key");
+    return;
+  }
+  const key = rawKey.charAt(0).toUpperCase() + rawKey.slice(1).replace(/[^a-zA-Z0-9]/g, "");
+  const icon = document.getElementById("provSectorIcon").value.trim() || "🏢";
+  const code = (document.getElementById("provCode").value.trim() || `${key.slice(0, 3).toUpperCase()}-001`).toUpperCase();
+  const legalName = document.getElementById("provLegalName").value.trim() || `${key} Global Enterprise`;
+  const adminUser = document.getElementById("provAdminUser").value.trim() || "admin";
+  const adminPass = document.getElementById("provAdminPass").value.trim() || "admin123";
+  const depts = document.getElementById("provDepts").value.split(",").map(d => d.trim()).filter(Boolean);
+
+  if (organizations[code]) {
+    showToast(`Organization ID "${code}" already exists!`);
+    return;
+  }
+
+  sectorMeta[key] = { icon: icon, defaultDepts: depts };
+
+  // Create initial organization for this category
+  organizations[code] = {
+    orgId: code,
+    sector: key,
+    name: legalName,
+    adminUser: adminUser,
+    adminPass: adminPass,
+    icon: icon,
+    totalStaff: 48,
+    present: 46,
+    working: 42,
+    late: 2,
+    absent: 2,
+    chartTrend: [92, 94, 93, 95, 96, 95],
+    departments: depts,
+    activities: [
+      { text: `Sector ${key} & Org ID ${code} created by Super Admin`, time: "Just now · Provisioning Engine" }
+    ],
+    employees: [
+      {
+        id: `${code.split("-")[0]}-101`,
+        name: `Officer ${key} Lead`,
+        dept: depts[0] || "Operations",
+        role: "Operations Supervisor",
+        shift: "General Operations (08:30 - 17:30)",
+        login: "08:30",
+        logout: "—",
+        task: "Facility Setup & Onboarding",
+        status: "Present",
+        basePay: 95000,
+        otPay: 3000,
+        deductions: 11000,
+        payStatus: "Paid",
+        email: `lead@${code.toLowerCase()}.org`,
+        casualLeaves: 6,
+        sickLeaves: 4,
+        privilegeLeaves: 12,
+        compOff: 1
+      }
+    ],
+    tasks: [
+      { id: `TSK-${code.split("-")[0]}1`, title: "Setup Biometrics", zone: "Main Facility", assignee: `Officer ${key} Lead`, priority: "High", progress: 60, status: "In Progress" }
+    ],
+    shifts: [
+      { name: "General Operations", hours: "08:30 - 17:30", required: 30, allocated: 30, status: "Optimal" }
+    ],
+    leaveRequests: [],
+    shiftSwapRequests: [],
+    payrollRequests: []
+  };
+
+  closeUniversalModal();
+  renderLandingSectors();
+  if (currentTab === "super-overview") renderSuperOverview();
+  else if (currentTab === "super-sectors") renderSuperSectorsView();
+  updateBadges();
+  showToast(`Sector Category '${key}' & Initial Org ID '${code}' Provisioned!`);
+}
+
+// SUPER ADMIN VIEWS RENDERING
+function renderSuperOverview() {
+  let totalStaff = 0, totalPresent = 0, totalWorking = 0;
+  for (const orgId in organizations) {
+    const o = organizations[orgId];
+    totalStaff += o.totalStaff || (o.employees ? o.employees.length : 0);
+    totalPresent += o.present || 0;
+    totalWorking += o.working || 0;
+  }
+  const openQueries = supportQueries.filter(q => q.status === "Open" || q.status === "In Review").length;
+
+  document.getElementById("kSuperOrgs").textContent = Object.keys(organizations).length;
+  document.getElementById("kSuperSectorsNote").textContent = `Across ${getSectorCategories().length} Sector Categories`;
+  document.getElementById("kSuperStaff").textContent = totalStaff;
+  document.getElementById("kSuperPresent").textContent = totalPresent;
+  document.getElementById("kSuperWorking").textContent = totalWorking;
+  document.getElementById("kSuperQueries").textContent = openQueries;
+  document.getElementById("kSuperAttRate").textContent = totalStaff > 0 ? `${((totalPresent/totalStaff)*100).toFixed(1)}% Rate` : "100%";
+
+  // Fleet cards
+  const container = document.getElementById("superFleetSectorCards");
+  container.innerHTML = Object.keys(organizations).map(orgId => {
+    const o = organizations[orgId];
+    const rate = o.totalStaff > 0 ? ((o.present / o.totalStaff) * 100).toFixed(1) : 0;
+    return `
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:24px">${o.icon || '🏢'}</span>
+          <span style="font-family:monospace;font-size:11px;font-weight:800;background:#fff;border:1px solid #cbd5e1;padding:2px 8px;border-radius:4px;color:var(--purple)">${o.orgId}</span>
+        </div>
+        <b style="font-size:14px;color:var(--navy)">${o.sector}</b>
+        <div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px">${o.name}</div>
+        <div style="font-size:11px;line-height:1.7;border-top:1px solid #e2e8f0;padding-top:8px">
+          <div>Admin Login: <b style="font-family:monospace;color:var(--navy)">${o.adminUser}</b> / <span style="color:var(--muted)">${o.adminPass}</span></div>
+          <div>Staff: <b>${o.totalStaff} Personnel</b></div>
+          <div>Attendance: <b style="color:var(--green)">${rate}%</b></div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px">
+          <button class="action action-purple" style="flex:1;font-weight:700" onclick="enterOrgAsAdmin('${o.orgId}')">Login as Admin →</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // Queries overview table
+  const tbody = document.getElementById("superOverviewQueryRows");
+  tbody.innerHTML = supportQueries.slice(0, 4).map(q => `
+    <tr>
+      <td><b style="font-family:monospace;color:var(--purple)">${q.id}</b></td>
+      <td><b>${q.orgId}</b> (${q.sector})</td>
+      <td>${q.raisedBy}</td>
+      <td><b>${q.subject}</b></td>
+      <td>${q.category}</td>
+      <td><span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></td>
+      <td><button class="action action-purple" onclick="openResolveQueryModal('${q.id}')">Manage</button></td>
+    </tr>
+  `).join("");
+}
+
+function enterOrgAsAdmin(orgId) {
+  currentOrgId = orgId;
+  currentUserRole = "admin";
+  applyRoleNav();
+  switchTab("dashboard");
+  showToast(`Switched into ${organizations[orgId].sector} (${orgId}) as Admin`);
+}
+
+function renderSuperSectorsView() {
+  const tbody = document.getElementById("superSectorTableRows");
+  tbody.innerHTML = Object.keys(organizations).map(orgId => {
+    const o = organizations[orgId];
+    return `
+      <tr>
+        <td><b>${o.icon || '🏢'} ${o.sector}</b></td>
+        <td><b style="font-family:monospace;color:var(--purple);font-size:13px">${o.orgId}</b></td>
+        <td>${o.name}</td>
+        <td><b style="font-family:monospace">${o.adminUser}</b></td>
+        <td><span style="font-family:monospace;color:var(--muted)">${o.adminPass}</span></td>
+        <td>${o.totalStaff} Personnel</td>
+        <td>
+          <button class="action action-purple" onclick="enterOrgAsAdmin('${o.orgId}')">Login as Admin</button>
+          <button class="action" onclick="openProvisionOrgModal('${o.sector}')">+ Branch in ${o.sector}</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderSuperQueriesView() {
+  const secFilter = document.getElementById("superQuerySectorFilter").value;
+  const statusFilter = document.getElementById("superQueryStatusFilter").value;
+
+  const filterSel = document.getElementById("superQuerySectorFilter");
+  if (filterSel.options.length <= 1) {
+    filterSel.innerHTML = `<option value="All">All Organizations</option>` + Object.keys(organizations).map(k => `<option value="${k}">${k} (${organizations[k].sector})</option>`).join("");
+  }
+
+  const filtered = supportQueries.filter(q => {
+    const mSec = secFilter === "All" || q.orgId === secFilter;
+    const mStat = statusFilter === "All" || q.status === statusFilter;
+    return mSec && mStat;
+  });
+
+  const tbody = document.getElementById("superQueriesTableRows");
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">No support queries matching criteria</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(q => `
+    <tr>
+      <td><b style="font-family:monospace;color:var(--purple)">${q.id}</b></td>
+      <td><b>${q.orgId}</b> (${q.sector})</td>
+      <td>
+        <b>${q.raisedBy}</b><br>
+        <span class="status" style="font-size:9px;background:#f1f5f9">${q.role.toUpperCase()}</span>
+      </td>
+      <td style="max-width:280px">
+        <b>${q.subject}</b>
+        <div style="color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis">${q.message}</div>
+      </td>
+      <td>${q.category}</td>
+      <td><span class="status" style="${q.priority === 'High' ? 'background:#ffe4e6;color:#be123c' : 'background:#f1f5f9'}">${q.priority}</span></td>
+      <td><span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></td>
+      <td>
+        <button class="action action-purple" onclick="openResolveQueryModal('${q.id}')">Resolve / Reply</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openResolveQueryModal(queryId) {
+  const q = supportQueries.find(x => x.id === queryId);
+  if (!q) return;
+
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill-purple" style="font-size:10px">${q.id} · ${q.orgId} (${q.sector})</span>
+        <h3 style="margin:6px 0 0">${q.subject}</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+      Submitted by <b>${q.raisedBy}</b> (${q.category}) · Priority: <b>${q.priority}</b>
+    </div>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:14px">
+      <b>Message:</b><br>${q.message}
+    </div>
+    <div>
+      <label>Super Admin Response / Instructions</label>
+      <textarea id="superReplyInput" rows="3" placeholder="Provide solution or update...">${q.response || ''}</textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+        <div>Status: <span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="action" onclick="saveQueryResolution('${q.id}', 'In Review')">Mark In Review</button>
+          <button class="action action-purple" onclick="saveQueryResolution('${q.id}', 'Resolved')">Resolve & Close</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function saveQueryResolution(queryId, newStatus) {
+  const q = supportQueries.find(x => x.id === queryId);
+  if (!q) return;
+  const reply = document.getElementById("superReplyInput").value.trim();
+  q.status = newStatus;
+  q.response = reply || q.response;
+
+  closeUniversalModal();
+  if (currentTab === "super-overview") renderSuperOverview();
+  else if (currentTab === "super-queries") renderSuperQueriesView();
+  updateBadges();
+  showToast(`Query #${queryId} updated to ${newStatus}`);
+}
+
+// SUPPORT QUERY MODAL FOR SECTOR ADMIN & STAFF
+function openSubmitSupportQueryModal() {
+  const isEmp = currentUserRole === "employee";
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill-purple" style="font-size:10px">Support Bridge to Super Admin</span>
+        <h3 style="margin:6px 0 0">Submit Support Ticket</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+        Submitting from Organization: <b>${org.orgId} (${org.name})</b><br>
+        Role: <b>${isEmp ? `${emp.name} (Staff ${emp.id})` : `Admin (${org.adminUser})`}</b>
+      </div>
+      <label>Ticket Subject</label>
+      <input id="ticketSubject" placeholder="e.g. Biometric sync issue or policy clarification">
+      <label>Category</label>
+      <select id="ticketCategory">
+        <option>Hardware / RFID Exception</option>
+        <option>Geo-Fence Calibration</option>
+        <option>Policy / Shift Bounds</option>
+        <option>Payroll Discrepancy</option>
+        <option>General Query</option>
+      </select>
+      <label>Priority</label>
+      <select id="ticketPriority">
+        <option>Normal</option>
+        <option>Medium</option>
+        <option>High</option>
+      </select>
+      <label>Detailed Message</label>
+      <textarea id="ticketMessage" rows="3" placeholder="Explain the issue or requirement in detail..."></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-purple" onclick="dispatchSupportQuery()">Dispatch to Super Admin 💬</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function dispatchSupportQuery() {
+  const subject = document.getElementById("ticketSubject").value.trim();
+  const category = document.getElementById("ticketCategory").value;
+  const priority = document.getElementById("ticketPriority").value;
+  const message = document.getElementById("ticketMessage").value.trim();
+
+  if (!subject || !message) {
+    showToast("Please provide both subject and message");
+    return;
+  }
+
+  const isEmp = currentUserRole === "employee";
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  const raisedBy = isEmp ? `${emp.name} (Staff ${emp.id})` : `${org.adminUser} (${org.orgId})`;
+
+  const newQuery = {
+    id: `QRY-${Math.floor(Math.random() * 8999 + 1000)}`,
+    orgId: currentOrgId,
+    sector: org.sector,
+    raisedBy: raisedBy,
+    role: currentUserRole,
+    subject: subject,
+    category: category,
+    priority: priority,
+    message: message,
+    status: "Open",
+    date: "Just now",
+    response: ""
+  };
+
+  supportQueries.unshift(newQuery);
+  org.activities.unshift({
+    text: `Support ticket #${newQuery.id} dispatched to Super Admin`,
+    time: `Just now · Helpdesk Bridge`
+  });
+
+  closeUniversalModal();
+  updateBadges();
+  showToast(`Ticket #${newQuery.id} sent directly to Super Admin!`);
+  if (currentTab === "support-bridge") renderAdminSupportBridge();
+  else if (currentTab === "emp-support") renderEmployeeSupport();
+}
+
+function renderAdminSupportBridge() {
+  const myQueries = supportQueries.filter(q => q.orgId === currentOrgId);
+  const tbody = document.getElementById("adminSectorQueryRows");
+  if (myQueries.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">No support queries raised from Organization ${currentOrgId}</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = myQueries.map(q => `
+    <tr>
+      <td><b style="font-family:monospace;color:var(--purple)">${q.id}</b></td>
+      <td>${q.raisedBy}</td>
+      <td>
+        <b>${q.subject}</b><br>
+        <span style="color:var(--muted);font-size:11px">${q.message}</span>
+      </td>
+      <td>${q.category}</td>
+      <td style="color:var(--purple);font-weight:600">${q.response || '<span style="color:var(--muted);font-style:italic">Pending Super Admin response...</span>'}</td>
+      <td><span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></td>
+    </tr>
+  `).join("");
+}
+
+function renderEmployeeSupport() {
+  const emp = getActiveEmployee();
+  const myQueries = supportQueries.filter(q => q.raisedBy.includes(emp.id) || q.raisedBy.includes(emp.name));
+  const tbody = document.getElementById("essSupportQueryRows");
+  if (myQueries.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">You have not raised any helpdesk queries.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = myQueries.map(q => `
+    <tr>
+      <td><b style="font-family:monospace;color:var(--purple)">${q.id}</b></td>
+      <td>
+        <b>${q.subject}</b><br>
+        <span style="color:var(--muted);font-size:11px">${q.message}</span>
+      </td>
+      <td>${q.category}</td>
+      <td style="color:var(--purple);font-weight:600">${q.response || '<span style="color:var(--muted);font-style:italic">In progress with Super Admin...</span>'}</td>
+      <td><span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></td>
+    </tr>
+  `).join("");
+}
+
+// SECTOR ADMIN MODULES
+function renderDashboardView() {
+  const data = organizations[currentOrgId];
+  document.getElementById("dashTitle").textContent = `${data.name}`;
+  document.getElementById("dashSubtitle").textContent = `Sector: ${data.sector} · Organization ID: ${data.orgId}`;
+  document.getElementById("kEmployees").textContent = data.totalStaff;
+  document.getElementById("kPresent").textContent = data.present;
+  document.getElementById("kWorking").textContent = data.working;
+  document.getElementById("kLate").textContent = data.late;
+  document.getElementById("kAbsent").textContent = data.absent;
+  const rate = data.totalStaff > 0 ? ((data.present / data.totalStaff) * 100).toFixed(1) : 0;
+  document.getElementById("kAttendanceRate").textContent = `${rate}% attendance rate`;
+
+  const infoSec = document.getElementById("dashInfoSector");
+  const infoOrg = document.getElementById("dashInfoOrgCode");
+  if (infoSec) infoSec.textContent = data.sector;
+  if (infoOrg) infoOrg.textContent = data.orgId;
+
+  const feed = document.getElementById("dashActivityFeed");
+  feed.innerHTML = (data.activities || []).slice(0, 5).map(act => `
+    <div class="activity">
+      <div class="dot"></div>
+      <div>
+        <b>${act.text}</b>
+        <small>${act.time}</small>
+      </div>
+    </div>
+  `).join("");
+
+  renderDashEmployees();
+  drawChart();
+}
+
+function renderDashEmployees() {
+  const q = (document.getElementById("dashSearch").value || "").toLowerCase();
+  const list = organizations[currentOrgId].employees || [];
+  const filtered = list.filter(e => {
+    const mStatus = (dashStatusFilter === "All" || e.status === dashStatusFilter);
+    const mSearch = (e.name + " " + e.id + " " + e.dept + " " + e.task).toLowerCase().includes(q);
+    return mStatus && mSearch;
+  });
+
+  const tbody = document.getElementById("dashEmployeeRows");
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No staff records match filter</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(e => `
+    <tr>
+      <td><b>${e.id}</b><br><span style="color:var(--muted)">${e.name}</span></td>
+      <td>${e.dept}</td>
+      <td>${e.login}</td>
+      <td>${e.logout}</td>
+      <td class="active-work">${e.task}</td>
+      <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
+      <td><button class="action" onclick="viewEmployeeProfile('${e.id}')">Profile</button></td>
+    </tr>
+  `).join("");
+}
+
+function filterDashEmployees() { renderDashEmployees(); }
+
+function filterDashStatus(s, btn) {
+  dashStatusFilter = s;
+  document.querySelectorAll("#view-dashboard .tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  renderDashEmployees();
+}
+
+function renderEmployeeDirectory() {
+  const data = organizations[currentOrgId];
+  const q = (document.getElementById("empDirectorySearch").value || "").toLowerCase();
+  const deptFilter = document.getElementById("empDeptFilter").value;
+
+  const deptSelect = document.getElementById("empDeptFilter");
+  if (deptSelect.options.length <= 1) {
+    deptSelect.innerHTML = `<option value="All">All Departments</option>` + (data.departments || []).map(d => `<option value="${d}">${d}</option>`).join("");
+  }
+
+  const filtered = (data.employees || []).filter(e => {
+    const mDept = (deptFilter === "All" || e.dept === deptFilter);
+    const mSearch = (e.name + " " + e.id + " " + e.role + " " + e.dept).toLowerCase().includes(q);
+    return mDept && mSearch;
+  });
+
+  const tbody = document.getElementById("empDirectoryRows");
+  tbody.innerHTML = filtered.map(e => `
+    <tr>
+      <td><b>${e.name}</b><br><small style="color:var(--blue);font-family:monospace;font-weight:700">ID: ${e.id}</small></td>
+      <td>${e.dept}</td>
+      <td><b>${e.role}</b></td>
+      <td>${e.shift}</td>
+      <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
+      <td>${e.email}</td>
+      <td>
+        <button class="action" onclick="viewEmployeeProfile('${e.id}')">View</button>
+        <button class="action" style="color:var(--blue)" onclick="openAssignTaskModal('${e.name}')">Assign</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function renderAttendanceView() {
+  const filter = document.getElementById("attStatusFilter").value;
+  const list = (organizations[currentOrgId].employees || []).filter(e => filter === "All" || e.status === filter);
+
+  const tbody = document.getElementById("attendanceTableRows");
+  tbody.innerHTML = list.map(e => `
+    <tr>
+      <td><b>${e.name}</b><br><small style="color:var(--muted)">${e.id}</small></td>
+      <td>📍 ${organizations[currentOrgId].name.split(" ")[0]} Perimeter</td>
+      <td>${e.login}</td>
+      <td>${e.logout}</td>
+      <td>${e.login !== '—' ? '8 hrs' : '0 hrs'}</td>
+      <td><span class="status" style="background:#eef2ff;color:#3730a3">Biometric & RFID Verified</span></td>
+      <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
+    </tr>
+  `).join("");
+
+  // Leaves table
+  const org = organizations[currentOrgId];
+  const leaves = org.leaveRequests || [];
+  const leaveTbody = document.getElementById("adminLeaveApplicationsRows");
+  if (leaves.length === 0) {
+    leaveTbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:16px;color:var(--muted)">No leave applications submitted</td></tr>`;
+    return;
+  }
+  leaveTbody.innerHTML = leaves.map(l => `
+    <tr>
+      <td><b>${l.id}</b></td>
+      <td><b>${l.empName}</b><br><small style="color:var(--muted)">${l.empId}</small></td>
+      <td>${l.type}</td>
+      <td>${l.start} to ${l.end}</td>
+      <td>${l.days} Day(s)</td>
+      <td>${l.reason}</td>
+      <td><span class="status ${l.status === 'Approved' ? 'present' : (l.status === 'Pending Approval' ? 'late' : 'absent')}">${l.status}</span></td>
+      <td>
+        ${l.status === 'Pending Approval' ? `
+          <button class="action action-primary" onclick="resolveLeaveRequest('${l.id}', true)">Approve</button>
+          <button class="action" onclick="resolveLeaveRequest('${l.id}', false)">Reject</button>
+        ` : `<span style="font-size:11px;color:var(--muted)">Decided</span>`}
+      </td>
+    </tr>
+  `).join("");
+}
+
+function resolveLeaveRequest(reqId, approved) {
+  const org = organizations[currentOrgId];
+  const req = (org.leaveRequests || []).find(r => r.id === reqId);
+  if (!req) return;
+
+  req.status = approved ? "Approved" : "Rejected";
+  const emp = org.employees.find(e => e.id === req.empId);
+
+  if (approved && emp) {
+    if (req.type === "Casual Leave" && emp.casualLeaves > 0) emp.casualLeaves = Math.max(0, emp.casualLeaves - req.days);
+    else if (req.type === "Sick Leave" && emp.sickLeaves > 0) emp.sickLeaves = Math.max(0, emp.sickLeaves - req.days);
+    else if (req.type === "Privilege Leave" && emp.privilegeLeaves > 0) emp.privilegeLeaves = Math.max(0, emp.privilegeLeaves - req.days);
+  }
+
+  org.activities.unshift({
+    text: `Leave request ${reqId} for ${req.empName} was ${req.status}`,
+    time: `Just now · Admin Decision`
+  });
+
+  renderAttendanceView();
+  updateBadges();
+  showToast(`Leave request #${reqId} was ${req.status.toUpperCase()}`);
+}
+
+function renderAssignmentsView() {
+  const tasks = organizations[currentOrgId].tasks || [];
+  const tbody = document.getElementById("taskAssignmentRows");
+  tbody.innerHTML = tasks.map(t => `
+    <tr>
+      <td><b>${t.title}</b><br><small style="color:var(--muted)">${t.id}</small></td>
+      <td>${t.zone}</td>
+      <td><b>${t.assignee}</b></td>
+      <td><span class="status" style="${t.priority === 'High' || t.priority === 'Urgent' ? 'background:#ffe4e6;color:#be123c' : 'background:#f1f5f9'}">${t.priority}</span></td>
+      <td>
+        <div class="progress-bg"><div class="progress-fill" style="width:${t.progress}%"></div></div>
+        <span style="font-size:11px;margin-left:6px;color:var(--muted)">${t.progress}%</span>
+      </td>
+      <td><span class="status ${t.status.toLowerCase().replace(' ', '-')}">${t.status}</span></td>
+      <td><button class="action" onclick="toggleTaskStatus('${t.id}')">Cycle Status</button></td>
+    </tr>
+  `).join("");
+}
+
+function toggleTaskStatus(taskId) {
+  const task = organizations[currentOrgId].tasks.find(t => t.id === taskId);
+  if (task) {
+    if (task.status === "In Progress") { task.status = "Completed"; task.progress = 100; }
+    else if (task.status === "Completed") { task.status = "Blocked"; task.progress = 30; }
+    else { task.status = "In Progress"; task.progress = 65; }
+    renderAssignmentsView();
+    showToast(`Task ${taskId} moved to ${task.status}`);
+  }
+}
+
+function renderShiftsView() {
+  const org = organizations[currentOrgId];
+  const tbody = document.getElementById("shiftRosterRows");
+  tbody.innerHTML = (org.shifts || []).map(s => `
+    <tr>
+      <td><b>${s.name}</b></td>
+      <td>${s.hours}</td>
+      <td><b>${s.required} Staff</b></td>
+      <td>${s.allocated} Staff</td>
+      <td>${Math.round((s.allocated / s.required) * 100)}%</td>
+      <td><span class="status ${s.status === 'Optimal' ? 'present' : (s.status === 'Adequate' ? 'late' : 'absent')}">${s.status}</span></td>
+    </tr>
+  `).join("");
+
+  const swapList = document.getElementById("swapRequestList");
+  const swaps = org.shiftSwapRequests || [];
+  if (swaps.length === 0) {
+    swapList.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:10px 0">No pending shift swaps.</div>`;
+    return;
+  }
+  swapList.innerHTML = swaps.map(sw => `
+    <div style="border-bottom:1px solid #eef0f4;padding-bottom:12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b>${sw.fromName} ⇄ ${sw.toName}</b>
+        <span class="status ${sw.status === 'Approved' ? 'present' : (sw.status === 'Pending Review' ? 'late' : 'absent')}">${sw.status}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Date: ${sw.shiftDate} · Reason: ${sw.reason}</div>
+      ${sw.status === 'Pending Review' ? `
+        <div style="margin-top:8px">
+          <button class="action action-primary" onclick="resolveShiftSwap('${sw.id}', true)">Approve Swap</button>
+          <button class="action" onclick="resolveShiftSwap('${sw.id}', false)">Decline</button>
+        </div>
+      ` : ''}
+    </div>
+  `).join("");
+}
+
+function resolveShiftSwap(swapId, approved) {
+  const org = organizations[currentOrgId];
+  const sw = (org.shiftSwapRequests || []).find(s => s.id === swapId);
+  if (!sw) return;
+
+  sw.status = approved ? "Approved" : "Declined";
+  if (approved) {
+    const emp1 = org.employees.find(e => e.id === sw.fromEmpId);
+    const emp2 = org.employees.find(e => e.id === sw.toEmpId);
+    if (emp1 && emp2) {
+      const temp = emp1.shift;
+      emp1.shift = emp2.shift;
+      emp2.shift = temp;
+    }
+  }
+
+  org.activities.unshift({
+    text: `Shift trade request #${swapId} was ${sw.status} by Operations`,
+    time: `Just now · Roster Management`
+  });
+
+  renderShiftsView();
+  updateBadges();
+  showToast(`Shift swap #${swapId} ${sw.status.toLowerCase()}`);
+}
+
+function renderReportsView() {
+  const depts = organizations[currentOrgId].departments || [];
+  const tbody = document.getElementById("reportDeptRows");
+  tbody.innerHTML = depts.map((d, i) => `
+    <tr>
+      <td><b>${d} Operations</b></td>
+      <td>${24 + i * 6} Officers</td>
+      <td><b style="color:var(--green)">94.${(i * 2 + 1) % 9}%</b></td>
+      <td>92% Completed</td>
+      <td><span class="status present">Audited & Certified</span></td>
+    </tr>
+  `).join("");
+}
+
+function renderPayslipsView() {
+  const data = organizations[currentOrgId];
+  const q = (document.getElementById("payslipSearch").value || "").toLowerCase();
+  const filter = document.getElementById("payslipStatusFilter").value;
+
+  const filtered = (data.employees || []).filter(e => {
+    const mStatus = (filter === "All" || e.payStatus === filter);
+    const mSearch = (e.name + " " + e.id + " " + e.dept + " " + e.role).toLowerCase().includes(q);
+    return mStatus && mSearch;
+  });
+
+  const tbody = document.getElementById("payslipsTableRows");
+  tbody.innerHTML = filtered.map(e => {
+    const net = (e.basePay + e.otPay - e.deductions);
+    return `
+      <tr>
+        <td><b>${e.name}</b><br><small style="color:var(--muted)">${e.id}</small></td>
+        <td>${e.dept} · <span style="color:var(--muted)">${e.role}</span></td>
+        <td>₹ ${e.basePay.toLocaleString('en-IN')}</td>
+        <td style="color:var(--green)">+ ₹ ${e.otPay.toLocaleString('en-IN')}</td>
+        <td style="color:var(--red)">- ₹ ${e.deductions.toLocaleString('en-IN')}</td>
+        <td><b>₹ ${net.toLocaleString('en-IN')}</b></td>
+        <td><span class="status ${e.payStatus.toLowerCase()}">${e.payStatus}</span></td>
+        <td>
+          <button class="action" onclick="viewDetailedPayslip('${e.id}')">View Payslip</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  const payReqs = data.payrollRequests || [];
+  const reqTbody = document.getElementById("adminPayrollRequestsRows");
+  if (payReqs.length === 0) {
+    reqTbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:16px;color:var(--muted)">No inbound document requests pending</td></tr>`;
+    return;
+  }
+  reqTbody.innerHTML = payReqs.map(p => `
+    <tr>
+      <td><b>${p.id}</b></td>
+      <td><b>${p.empName}</b><br><small style="color:var(--muted)">${p.empId}</small></td>
+      <td><b>${p.type}</b></td>
+      <td>${p.date}</td>
+      <td>${p.notes}</td>
+      <td><span class="status ${p.status === 'Dispatched & Completed' ? 'present' : 'late'}">${p.status}</span></td>
+      <td>
+        ${p.status === 'Pending Dispatch' ? `
+          <button class="action action-primary" onclick="resolvePayrollRequest('${p.id}')">Generate & Dispatch</button>
+        ` : `<span style="color:var(--green);font-weight:700">Fulfilled</span>`}
+      </td>
+    </tr>
+  `).join("");
+}
+
+function resolvePayrollRequest(reqId) {
+  const org = organizations[currentOrgId];
+  const req = (org.payrollRequests || []).find(p => p.id === reqId);
+  if (!req) return;
+
+  req.status = "Dispatched & Completed";
+  org.activities.unshift({
+    text: `Certificate #${reqId} (${req.type}) delivered to ${req.empName}`,
+    time: `Just now · Payroll Division`
+  });
+
+  renderPayslipsView();
+  updateBadges();
+  showToast(`Document #${reqId} generated, stamped and dispatched to ${req.empName}!`);
+}
+
+function renderSettingsView() {
+  const org = organizations[currentOrgId];
+  const nameEl = document.getElementById("settingOrgName");
+  const codeEl = document.getElementById("settingOrgCode");
+  const deptsEl = document.getElementById("settingDepts");
+  if (nameEl) nameEl.value = org.name;
+  if (codeEl) codeEl.value = org.orgId;
+  if (deptsEl) deptsEl.value = (org.departments || []).join(", ");
+}
+
+function saveSettings() {
+  const org = organizations[currentOrgId];
+  const nameEl = document.getElementById("settingOrgName");
+  const deptsEl = document.getElementById("settingDepts");
+  if (nameEl) org.name = nameEl.value;
+  if (deptsEl) org.departments = deptsEl.value.split(",").map(d => d.trim()).filter(Boolean);
+  applyRoleNav();
+  renderLandingSectors();
+  showToast("Organization settings updated successfully");
+}
+
+// EMPLOYEE SELF-SERVICE MODULES
+function renderEmployeeOverview() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  document.getElementById("essWelcomeTitle").textContent = `Welcome, ${emp.name}`;
+  document.getElementById("essWelcomeSub").textContent = `Sector: ${org.sector} · Org ID: ${org.orgId} · Staff ID: ${emp.id}`;
+
+  const isCheckedIn = emp.status === "Present" || emp.status === "Late";
+  document.getElementById("essQuickStatusText").textContent = isCheckedIn ? "Checked In — On Duty" : "Checked Out / Off Duty";
+  const badge = document.getElementById("essQuickStatusBadge");
+  badge.className = `status ${emp.status.toLowerCase()}`;
+  badge.textContent = emp.status;
+
+  const totalLeaves = (emp.casualLeaves || 0) + (emp.sickLeaves || 0) + (emp.privilegeLeaves || 0);
+  document.getElementById("essKpiLeaves").textContent = `${totalLeaves} Days`;
+
+  const myTasks = (org.tasks || []).filter(t => t.assignee.toLowerCase().includes(emp.name.toLowerCase()) || t.assignee.toLowerCase().includes(emp.id.toLowerCase()));
+  document.getElementById("essKpiTasks").textContent = myTasks.length;
+
+  const taskList = document.getElementById("essOverviewTaskList");
+  if (myTasks.length === 0) {
+    taskList.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:12px 0">No pending tasks currently assigned to you.</div>`;
+  } else {
+    taskList.innerHTML = myTasks.slice(0, 3).map(t => `
+      <div style="border-bottom:1px solid #f1f4f8;padding:10px 0;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <b style="font-size:13px;color:var(--navy)">${t.title}</b>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Zone: ${t.zone} · Priority: <b>${t.priority}</b></div>
+        </div>
+        <span class="status ${t.status.toLowerCase().replace(' ','-')}">${t.status}</span>
+      </div>
+    `).join("");
+  }
+
+  const shiftBox = document.getElementById("essOverviewShiftCard");
+  shiftBox.innerHTML = `
+    <div><b>Assigned Schedule:</b> ${emp.shift}</div>
+    <div><b>Designation:</b> ${emp.role} (${emp.dept})</div>
+    <div><b>Clock-in Registered:</b> ${emp.login} IST</div>
+    <div><b>Base Duty Zone:</b> ${org.name.split(" ")[0]} Main Facility</div>
+  `;
+}
+
+function renderEmployeeClock() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  document.getElementById("essPerimeterName").textContent = `${org.name.split(" ")[0]} Facility Perimeter`;
+  document.getElementById("essShiftTimeLabel").textContent = emp.shift;
+
+  const btn = document.getElementById("btnClockToggle");
+  const note = document.getElementById("essClockLastActionNote");
+
+  if (emp.status === "Present" || emp.status === "Late") {
+    btn.textContent = "Check Out (End Shift)";
+    btn.style.background = "#dc2626";
+    btn.style.color = "#fff";
+    note.textContent = `Active Shift Clocked in at ${emp.login} IST`;
+  } else {
+    btn.textContent = "Check In Now";
+    btn.style.background = "#2563eb";
+    btn.style.color = "#fff";
+    note.textContent = `Off-duty. Click above to record biometric punch.`;
+  }
+}
+
+function toggleEmployeeClock() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  if (emp.status === "Present" || emp.status === "Late") {
+    emp.logout = timeStr;
+    emp.status = "Absent";
+    if (org.present > 0) org.present--;
+    if (org.working > 0) org.working--;
+    org.absent++;
+    org.activities.unshift({
+      text: `${emp.name} clocked out from shift duty`,
+      time: `${timeStr} · Self-Service Geo-Check`
+    });
+    showToast(`Checked out successfully at ${timeStr}`);
+  } else {
+    emp.login = timeStr;
+    emp.logout = "—";
+    emp.status = "Present";
+    org.present++;
+    org.working++;
+    if (org.absent > 0) org.absent--;
+    org.activities.unshift({
+      text: `${emp.name} checked in via Self-Service Portal`,
+      time: `${timeStr} · On-site Verified`
+    });
+    showToast(`Checked in successfully at ${timeStr}! Welcome to your shift.`);
+  }
+
+  renderEmployeeClock();
+  renderEmployeeOverview();
+}
+
+function renderEmployeeTasks() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  const tasks = (org.tasks || []).filter(t => t.assignee.toLowerCase().includes(emp.name.toLowerCase()) || t.assignee.toLowerCase().includes(emp.id.toLowerCase()));
+
+  const tbody = document.getElementById("essTasksTableRows");
+  if (tasks.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No work orders assigned to your staff profile</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = tasks.map(t => `
+    <tr>
+      <td><b>${t.id}</b></td>
+      <td><b>${t.title}</b></td>
+      <td>${t.zone}</td>
+      <td><span class="status" style="${t.priority === 'High' ? 'background:#ffe4e6;color:#be123c' : 'background:#f1f5f9'}">${t.priority}</span></td>
+      <td>
+        <div class="progress-bg"><div class="progress-fill" style="width:${t.progress}%"></div></div>
+        <span style="font-size:11px;margin-left:6px">${t.progress}%</span>
+      </td>
+      <td><span class="status ${t.status.toLowerCase().replace(' ', '-')}">${t.status}</span></td>
+      <td>
+        <select onchange="updateEmpTaskStatus('${t.id}', this.value)" style="padding:4px 8px;font-size:11px;border-radius:6px;border:1px solid #cbd5e1">
+          <option value="In Progress" ${t.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+          <option value="Completed" ${t.status === 'Completed' ? 'selected' : ''}>Completed</option>
+          <option value="Blocked" ${t.status === 'Blocked' ? 'selected' : ''}>Blocked</option>
+        </select>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function updateEmpTaskStatus(taskId, newStatus) {
+  const org = organizations[currentOrgId];
+  const t = org.tasks.find(x => x.id === taskId);
+  if (t) {
+    t.status = newStatus;
+    t.progress = newStatus === 'Completed' ? 100 : (newStatus === 'Blocked' ? 30 : 60);
+    org.activities.unshift({
+      text: `${getActiveEmployee().name} updated task ${taskId} to ${newStatus}`,
+      time: `Just now · Task Board`
+    });
+  }
+  showToast(`Task ${taskId} updated to ${newStatus}`);
+  renderEmployeeTasks();
+}
+
+function renderEmployeeShifts() {
+  const emp = getActiveEmployee();
+  const schedule = [
+    { day: "Monday, 19 Oct", time: emp.shift, hours: "8.5 hrs", zone: `${emp.dept} Bay`, status: "Completed" },
+    { day: "Tuesday, 20 Oct", time: emp.shift, hours: "8.5 hrs", zone: `${emp.dept} Bay`, status: "Completed" },
+    { day: "Wednesday, 21 Oct", time: emp.shift, hours: "8.5 hrs", zone: `${emp.dept} Bay`, status: "Completed" },
+    { day: "Thursday, 22 Oct", time: emp.shift, hours: "8.5 hrs", zone: `${emp.dept} Bay`, status: "Completed" },
+    { day: "Friday, 23 Oct", time: emp.shift, hours: "8.5 hrs", zone: `${emp.dept} Bay`, status: "Completed" },
+    { day: "Saturday, 24 Oct (Today)", time: emp.shift, hours: "8.5 hrs", zone: `${emp.dept} Bay`, status: "Active Duty" },
+    { day: "Sunday, 25 Oct", time: "Weekly Off", hours: "0 hrs", zone: "Rest Day", status: "Scheduled Off" }
+  ];
+
+  const tbody = document.getElementById("essWeekShiftRows");
+  tbody.innerHTML = schedule.map(s => `
+    <tr>
+      <td><b>${s.day}</b></td>
+      <td>${s.time}</td>
+      <td>${s.hours}</td>
+      <td>${s.zone}</td>
+      <td><span class="status ${s.status === 'Active Duty' ? 'late' : (s.status === 'Completed' ? 'present' : 'absent')}">${s.status}</span></td>
+    </tr>
+  `).join("");
+}
+
+function renderEmployeeLeaves() {
+  const emp = getActiveEmployee();
+  document.getElementById("leaveBalCasual").textContent = emp.casualLeaves || 0;
+  document.getElementById("leaveBalSick").textContent = emp.sickLeaves || 0;
+  document.getElementById("leaveBalPrivilege").textContent = emp.privilegeLeaves || 0;
+  document.getElementById("leaveBalComp").textContent = emp.compOff || 0;
+
+  const org = organizations[currentOrgId];
+  const myLeaves = (org.leaveRequests || []).filter(l => l.empId === emp.id);
+  const pendingCount = myLeaves.filter(l => l.status === "Pending Approval").length;
+  document.getElementById("leaveBalPending").textContent = pendingCount;
+
+  const tbody = document.getElementById("essLeaveHistoryRows");
+  if (myLeaves.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:16px;color:var(--muted)">No leave requests filed yet</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = myLeaves.map(l => `
+    <tr>
+      <td><b>${l.type}</b></td>
+      <td>${l.start} to ${l.end}</td>
+      <td>${l.days} Day(s)</td>
+      <td>${l.reason}</td>
+      <td><span class="status ${l.status === 'Approved' ? 'present' : (l.status === 'Pending Approval' ? 'late' : 'absent')}">${l.status}</span></td>
+    </tr>
+  `).join("");
+}
+
+function submitLeaveRequest() {
+  const type = document.getElementById("leaveFormType").value;
+  const start = document.getElementById("leaveFormStart").value;
+  const end = document.getElementById("leaveFormEnd").value;
+  const reason = document.getElementById("leaveFormReason").value.trim() || "Personal obligations";
+
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  if (!org.leaveRequests) org.leaveRequests = [];
+
+  const newId = `LR-${Math.floor(Math.random() * 800) + 100}`;
+  org.leaveRequests.unshift({
+    id: newId,
+    empId: emp.id,
+    empName: emp.name,
+    type: type,
+    start: start,
+    end: end,
+    days: 2,
+    reason: reason,
+    status: "Pending Approval"
+  });
+
+  org.activities.unshift({
+    text: `Leave application (${type}) filed by ${emp.name}`,
+    time: `Just now · HR Desk`
+  });
+
+  renderEmployeeLeaves();
+  updateBadges();
+  showToast(`Leave application #${newId} dispatched to Admin Approval Dashboard!`);
+}
+
+function renderEmployeePayslips() {
+  const emp = getActiveEmployee();
+  const net = (emp.basePay + emp.otPay - emp.deductions);
+
+  const tbody = document.getElementById("essPayslipTableRows");
+  tbody.innerHTML = `
+    <tr>
+      <td><b>October 2026</b></td>
+      <td>₹ ${(emp.basePay + emp.otPay).toLocaleString('en-IN')}</td>
+      <td>₹ ${emp.deductions.toLocaleString('en-IN')}</td>
+      <td><b>₹ ${net.toLocaleString('en-IN')}</b></td>
+      <td><span class="status ${emp.payStatus.toLowerCase()}">${emp.payStatus}</span></td>
+      <td><button class="action" onclick="viewMyCurrentPayslip()">View Statement</button></td>
+    </tr>
+    <tr>
+      <td>September 2026</td>
+      <td>₹ ${(emp.basePay + 6000).toLocaleString('en-IN')}</td>
+      <td>₹ ${emp.deductions.toLocaleString('en-IN')}</td>
+      <td><b>₹ ${(emp.basePay + 6000 - emp.deductions).toLocaleString('en-IN')}</b></td>
+      <td><span class="status present">Paid</span></td>
+      <td><button class="action" onclick="viewMyCurrentPayslip()">View Statement</button></td>
+    </tr>
+  `;
+}
+
+function viewMyCurrentPayslip() {
+  const emp = getActiveEmployee();
+  viewDetailedPayslip(emp.id);
+}
+
+// DETAILED PAYSLIP MODAL
+function viewDetailedPayslip(empId) {
+  const org = organizations[currentOrgId];
+  const e = org.employees.find(x => x.id === empId);
+  if (!e) return;
+  const net = (e.basePay + e.otPay - e.deductions);
+  const hra = Math.round(e.basePay * 0.3);
+  const basic = e.basePay - hra;
+
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">Official Payslip Statement</h3>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+
+    <div class="payslip-paper">
+      <div class="slip-header">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--navy)">${org.name}</div>
+          <div style="color:var(--muted);font-size:11px">Sector: ${org.sector} · Organization UID: ${org.orgId}</div>
+          <div style="color:var(--blue);font-weight:700;margin-top:4px">SALARY SLIP — OCTOBER 2026</div>
+        </div>
+        <div style="text-align:right">
+          <span class="status ${e.payStatus.toLowerCase()}">${e.payStatus.toUpperCase()}</span>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Pay Date: 31-Oct-2026</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;font-size:12px">
+        <div><b>Employee Name:</b> ${e.name}</div>
+        <div><b>Employee ID:</b> ${e.id}</div>
+        <div><b>Department:</b> ${e.dept}</div>
+        <div><b>Designation:</b> ${e.role}</div>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:12px">
+        <thead>
+          <tr style="background:#f8fafc;border-bottom:1px solid #e2e8f0">
+            <th style="text-align:left;padding:8px">EARNINGS</th>
+            <th style="text-align:right;padding:8px">AMOUNT (₹)</th>
+            <th style="text-align:left;padding:8px;padding-left:18px">DEDUCTIONS</th>
+            <th style="text-align:right;padding:8px">AMOUNT (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:6px">Basic Salary</td>
+            <td style="text-align:right;padding:6px">${basic.toLocaleString('en-IN')}</td>
+            <td style="padding:6px;padding-left:18px">Provident Fund (EPF)</td>
+            <td style="text-align:right;padding:6px">${Math.round(e.deductions * 0.4).toLocaleString('en-IN')}</td>
+          </tr>
+          <tr>
+            <td style="padding:6px">House Rent Allowance (HRA)</td>
+            <td style="text-align:right;padding:6px">${hra.toLocaleString('en-IN')}</td>
+            <td style="padding:6px;padding-left:18px">Income Tax (TDS)</td>
+            <td style="text-align:right;padding:6px">${Math.round(e.deductions * 0.6).toLocaleString('en-IN')}</td>
+          </tr>
+          <tr>
+            <td style="padding:6px">Approved Overtime Pay</td>
+            <td style="text-align:right;padding:6px">${e.otPay.toLocaleString('en-IN')}</td>
+            <td style="padding:6px;padding-left:18px">Professional Tax</td>
+            <td style="text-align:right;padding:6px">200</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="background:#f1f5f9;padding:12px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <span style="font-weight:700;font-size:13px">NET DISBURSED PAY</span>
+        <span style="font-size:16px;font-weight:800;color:var(--blue)">₹ ${net.toLocaleString('en-IN')}</span>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn btn-blue" onclick="showToast('Payslip exported');closeUniversalModal()">Close</button>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function viewEmployeeProfile(id) {
+  const org = organizations[currentOrgId];
+  const e = org.employees.find(x => x.id === id);
+  if (!e) return;
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">${e.name} (${e.id})</h3>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding:6px 0"><span style="color:var(--muted)">Organization</span><b>${org.name} (${org.orgId})</b></div>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding:6px 0"><span style="color:var(--muted)">Employee ID</span><b style="color:var(--blue);font-family:monospace">${e.id}</b></div>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding:6px 0"><span style="color:var(--muted)">Department</span><b>${e.dept}</b></div>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding:6px 0"><span style="color:var(--muted)">Designation</span><b>${e.role}</b></div>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding:6px 0"><span style="color:var(--muted)">Shift Schedule</span><b>${e.shift}</b></div>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding:6px 0"><span style="color:var(--muted)">Official Email</span><b>${e.email}</b></div>
+    </div>
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn btn-blue" onclick="closeUniversalModal()">Close Profile</button>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function openAddEmployeeModal() {
+  const depts = organizations[currentOrgId].departments || [];
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">Add New Personnel</h3>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <label>Full Legal Name</label>
+      <input id="newEmpName" placeholder="e.g. Ramesh Chandra">
+
+      <label>Custom Employee ID (Optional — leave blank for auto-generation)</label>
+      <input id="newEmpCustomId" placeholder="e.g. DOC-9901, EMP-2026, or TECH-55" style="font-family:monospace;text-transform:uppercase">
+      
+      <label>Department</label>
+      <select id="newEmpDept">
+        ${depts.map(d => `<option value="${d}">${d}</option>`).join("")}
+      </select>
+      <label>Role / Position Title</label>
+      <input id="newEmpRole" placeholder="e.g. Senior Specialist">
+      <label>Base Monthly Pay (INR)</label>
+      <input id="newEmpPay" type="number" value="65000">
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-blue" onclick="saveNewEmployee()">Save & Enroll</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function saveNewEmployee() {
+  const name = document.getElementById("newEmpName").value.trim();
+  const customId = (document.getElementById("newEmpCustomId").value || "").trim().toUpperCase();
+  const dept = document.getElementById("newEmpDept").value;
+  const role = document.getElementById("newEmpRole").value.trim() || "Staff Member";
+  const pay = Number(document.getElementById("newEmpPay").value) || 60000;
+
+  if (!name) {
+    showToast("Please provide staff name");
+    return;
+  }
+
+  const org = organizations[currentOrgId];
+  let newId = customId;
+  if (!newId) {
+    const prefix = org.orgId ? org.orgId.split("-")[0] : org.sector.slice(0, 3).toUpperCase();
+    newId = `${prefix}-${Math.floor(Math.random() * 8000 + 1000)}`;
+  } else {
+    const exists = (org.employees || []).some(e => e.id.toUpperCase() === newId);
+    if (exists) {
+      showToast(`Employee ID '${newId}' is already in use in this organization!`);
+      return;
+    }
+  }
+
+  const newStaff = {
+    id: newId,
+    name: name,
+    dept: dept,
+    role: role,
+    shift: "General Operations (08:30 - 17:00)",
+    login: "08:50",
+    logout: "—",
+    task: "General Onboarding & Duty",
+    status: "Present",
+    basePay: pay,
+    otPay: 0,
+    deductions: Math.round(pay * 0.12),
+    payStatus: "Generated",
+    email: `${name.toLowerCase().replace(/\s+/g, '.')}@${org.orgId.toLowerCase()}.org`,
+    casualLeaves: 6,
+    sickLeaves: 4,
+    privilegeLeaves: 12,
+    compOff: 0
+  };
+
+  org.employees.unshift(newStaff);
+  org.totalStaff++;
+  org.present++;
+
+  org.activities.unshift({
+    text: `Staff enrolled: ${name} assigned ID: ${newId}`,
+    time: `Just now · Personnel Registry`
+  });
+
+  closeUniversalModal();
+  showToast(`Enrolled ${name} with ID: ${newId}`);
+  if (currentTab === "dashboard") renderDashboardView();
+  else if (currentTab === "employees") renderEmployeeDirectory();
+}
+
+function openAssignTaskModal(prefilledAssignee) {
+  const org = organizations[currentOrgId];
+  const emps = org.employees || [];
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">Create Sector Work Ticket</h3>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <label>Task Title / Scope</label>
+      <input id="taskNewTitle" placeholder="e.g. High-voltage calibration check">
+      <label>Location / Bay / Zone</label>
+      <input id="taskNewZone" placeholder="e.g. Ward A / Level 2">
+      <label>Assignee Staff</label>
+      <select id="taskNewAssignee">
+        ${emps.map(e => `<option value="${e.name}" ${prefilledAssignee === e.name ? 'selected' : ''}>${e.name} (${e.id} · ${e.dept})</option>`).join("")}
+      </select>
+      <label>Priority</label>
+      <select id="taskNewPriority">
+        <option>Normal</option>
+        <option>Medium</option>
+        <option>High</option>
+        <option>Urgent</option>
+      </select>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-blue" onclick="saveNewTask()">Dispatch Ticket</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function saveNewTask() {
+  const title = document.getElementById("taskNewTitle").value.trim();
+  const zone = document.getElementById("taskNewZone").value.trim() || "Main Bay";
+  const assignee = document.getElementById("taskNewAssignee").value;
+  const priority = document.getElementById("taskNewPriority").value;
+
+  if (!title) {
+    showToast("Please enter task title");
+    return;
+  }
+
+  const org = organizations[currentOrgId];
+  const newTask = {
+    id: `TSK-${Math.floor(Math.random() * 800) + 100}`,
+    title: title,
+    zone: zone,
+    assignee: assignee,
+    priority: priority,
+    progress: 10,
+    status: "In Progress"
+  };
+
+  org.tasks.unshift(newTask);
+  org.activities.unshift({
+    text: `New work order dispatched to ${assignee}`,
+    time: `Just now · Task Dispatcher`
+  });
+
+  closeUniversalModal();
+  showToast("Task dispatched to personnel!");
+  if (currentTab === "assignments") renderAssignmentsView();
+}
+
+function openShiftSwapModal() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  const colleagues = (org.employees || []).filter(e => e.id !== emp.id);
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">Request Shift Swap</h3>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <label>Target Swap Date</label>
+      <input type="date" id="swapTargetDate" value="2026-10-26">
+      <label>Colleague to Trade With</label>
+      <select id="swapTargetColleague">
+        ${colleagues.map(c => `<option value="${c.id}">${c.name} (${c.id} · ${c.dept})</option>`).join("")}
+      </select>
+      <label>Reason for Swap</label>
+      <textarea id="swapReason" rows="2" placeholder="Specify operational reason..."></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-blue" onclick="submitShiftSwapRequest()">Submit Swap Request</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function submitShiftSwapRequest() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  const targetDate = document.getElementById("swapTargetDate").value;
+  const colleagueId = document.getElementById("swapTargetColleague").value;
+  const colleague = org.employees.find(e => e.id === colleagueId);
+  const reason = document.getElementById("swapReason").value.trim() || "Operational requirement";
+
+  const newSwap = {
+    id: `SW-${Math.floor(Math.random() * 800) + 100}`,
+    fromEmpId: emp.id,
+    fromName: emp.name,
+    toEmpId: colleague ? colleague.id : "Staff",
+    toName: colleague ? colleague.name : "Staff Colleague",
+    shiftDate: targetDate,
+    reason: reason,
+    status: "Pending Review"
+  };
+
+  if (!org.shiftSwapRequests) org.shiftSwapRequests = [];
+  org.shiftSwapRequests.unshift(newSwap);
+
+  org.activities.unshift({
+    text: `Shift swap requested by ${emp.name} with ${newSwap.toName}`,
+    time: `Just now · Roster Queue`
+  });
+
+  closeUniversalModal();
+  updateBadges();
+  showToast("Shift swap request logged into Approval Queue!");
+}
+
+function openPayslipRequestModal() {
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">Request Official Certificate</h3>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <label>Document Category</label>
+      <select id="docReqType">
+        <option>Form 16 / Tax Withholding Certificate</option>
+        <option>Official Employment & Salary Certificate</option>
+        <option>Overtime Discrepancy Statement</option>
+      </select>
+      <label>Purpose / Recipient Notes</label>
+      <textarea id="docReqNotes" rows="2" placeholder="Specify if seal or embassy letter required..."></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-blue" onclick="submitPayrollRequest()">Submit Request</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function submitPayrollRequest() {
+  const type = document.getElementById("docReqType").value;
+  const notes = document.getElementById("docReqNotes").value.trim() || "Official document verification";
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  if (!org.payrollRequests) org.payrollRequests = [];
+
+  const newId = `PR-${Math.floor(Math.random() * 800) + 100}`;
+  org.payrollRequests.unshift({
+    id: newId,
+    empId: emp.id,
+    empName: emp.name,
+    type: type,
+    date: "2026-10-24",
+    notes: notes,
+    status: "Pending Dispatch"
+  });
+
+  org.activities.unshift({
+    text: `Payroll document request (${type}) filed by ${emp.name}`,
+    time: `Just now · Payroll Division`
+  });
+
+  closeUniversalModal();
+  renderEmployeePayslips();
+  updateBadges();
+  showToast(`Request #${newId} dispatched to Finance!`);
+}
+
+function closeUniversalModal() {
+  document.getElementById("universalModal").classList.add("hidden");
+}
+
+function exportDataCSV(moduleName) {
+  showToast(`Generating ${moduleName} CSV dataset for export...`);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3200);
+}
+
+function startLiveClock() {
+  setInterval(() => {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const widget = document.getElementById("liveClockWidget");
+    if (widget) widget.textContent = timeStr;
+    const largeClock = document.getElementById("largeClockDisplay");
+    if (largeClock) largeClock.textContent = timeStr;
+  }, 1000);
+}
+
+function drawChart() {
+  const ctx = document.getElementById("attendanceChart");
+  if (!ctx) return;
+  if (window.attChart) window.attChart.destroy();
+
+  const trend = organizations[currentOrgId].chartTrend || [90, 92, 94, 91, 95, 93];
+  const avg = (trend.reduce((a, b) => a + b, 0) / trend.length).toFixed(1);
+  const avgEl = document.getElementById("chartAverage");
+  if (avgEl) avgEl.textContent = `${avg}%`;
+
+  window.attChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["Day 01", "Day 05", "Day 10", "Day 15", "Day 20", "Day 24"],
+      datasets: [{
+        label: "Attendance %",
+        data: trend,
+        borderColor: "#2563eb",
+        backgroundColor: "rgba(37, 99, 235, 0.08)",
+        borderWidth: 2.5,
+        tension: 0.35,
+        fill: true,
+        pointBackgroundColor: "#2563eb",
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { min: 75, max: 100, ticks: { callback: v => v + "%", stepSize: 5 }, grid: { color: "#f1f5f9" } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
