@@ -612,7 +612,7 @@ button, input, select, textarea { font: inherit; }
 </head>
 <body>
 
-<!-- 1. PUBLIC LANDING PAGE (AI BOT HIDDEN INITIALLY) -->
+<!-- 1. PUBLIC LANDING PAGE -->
 <div id="landing">
   <header class="topbar">
     <div class="logo" onclick="location.reload()">
@@ -653,7 +653,7 @@ button, input, select, textarea { font: inherit; }
       </div>
       <div class="feature">
         <b>⚡ Super Admin Governance</b>
-        <span>Super Administrators can provision brand new branches, create custom Org IDs, and inspect support escalations.</span>
+        <span>Super Administrators can provision brand new sectors and branches, set custom login usernames & passwords, and manage platform tickets.</span>
       </div>
       <div class="feature">
         <b>💳 Integrated Operations & Certified Payslips</b>
@@ -684,10 +684,10 @@ button, input, select, textarea { font: inherit; }
 
     <label>Organization ID</label>
     <select id="orgSelect" onchange="handleOrgSelectChange()" style="margin-bottom:6px"></select>
-    <input id="org" value="HOSP-001" placeholder="e.g. HOSP-001 or HOSP-002">
+    <input id="org" value="HOSP-001" placeholder="e.g. HOSP-001 or custom Org ID">
 
     <label>Username / Employee ID</label>
-    <input id="username" value="admin" placeholder="e.g. admin or E-1024">
+    <input id="username" value="admin" placeholder="e.g. admin or custom username">
 
     <label>Password</label>
     <input id="password" type="password" value="admin123" placeholder="Password">
@@ -734,13 +734,14 @@ button, input, select, textarea { font: inherit; }
         <div class="side-item active-purple" data-tab="super-overview" onclick="switchTab('super-overview')">🌐 Fleet Overview</div>
         <div class="side-item" data-tab="super-sectors" onclick="switchTab('super-sectors')">🏢 Organizations & Branches <span id="superSectorCountBadge" class="status present" style="margin-left:auto;font-size:9px"></span></div>
         <div class="side-item" data-tab="super-queries" onclick="switchTab('super-queries')">💬 Support & Escalations <span id="superQueryBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
+        <div class="side-item" data-tab="super-retentions" onclick="switchTab('super-retentions')">🚨 Deletions & Retention Audit <span id="superDeletionBadge" class="status absent" style="display:none;margin-left:auto;font-size:9px"></span></div>
         <div class="side-item" data-tab="super-security" onclick="switchTab('super-security')">🛡️ Global Security Policy</div>
       </div>
 
       <!-- SECTOR ADMIN SIDEBAR NAVIGATION -->
       <div id="adminSidebarNav">
         <div class="side-item active" data-tab="dashboard" onclick="switchTab('dashboard')">▦ Dashboard</div>
-        <div class="side-item" data-tab="employees" onclick="switchTab('employees')">♙ Employees</div>
+        <div class="side-item" data-tab="employees" onclick="switchTab('employees')">♙ Employees <span id="adminResignBadge" class="status absent" style="display:none;margin-left:auto;font-size:9px"></span></div>
         <div class="side-item" data-tab="attendance" onclick="switchTab('attendance')">◷ Attendance & Leaves <span id="adminAttendanceBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
         <div class="side-item" data-tab="assignments" onclick="switchTab('assignments')">▤ Work assignments</div>
         <div class="side-item" data-tab="shifts" onclick="switchTab('shifts')">⇄ Shifts & schedules <span id="adminShiftBadge" class="status late" style="display:none;margin-left:auto;font-size:9px"></span></div>
@@ -759,6 +760,7 @@ button, input, select, textarea { font: inherit; }
         <div class="side-item" data-tab="emp-tasks" onclick="switchTab('emp-tasks')">📋 My Assigned Tasks</div>
         <div class="side-item" data-tab="emp-shifts" onclick="switchTab('emp-shifts')">🗓️ My Shifts & Roster</div>
         <div class="side-item" data-tab="emp-payslips" onclick="switchTab('emp-payslips')">💳 My Payslips & Print</div>
+        <div class="side-item" data-tab="emp-resignation" onclick="switchTab('emp-resignation')">📝 Resignation & Exit Center <span id="empResignStatusPill" class="status late" style="display:none;margin-left:auto;font-size:9px">Active</span></div>
         <div class="side-item" data-tab="emp-admin-chat" onclick="switchTab('emp-admin-chat')">💬 Message Sector Admin</div>
         <div class="side-item" data-tab="emp-support" onclick="switchTab('emp-support')">⚡ Escalated Super Tickets</div>
       </div>
@@ -848,6 +850,50 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- S-NEW. SUPER ADMIN DELETION AUDIT & EMPLOYEE RETENTION DESK -->
+      <section id="view-super-retentions" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>🚨 Employee Deletions, Audit Alerts & Retention Desk</h1>
+            <div class="sub">Monitor sector offboarding events, verify deletion authenticity with Sector Admins, and restore/retain personnel</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <select id="superDeletionFilter" onchange="renderSuperRetentionsView()" style="padding:7px 10px;border:1px solid #dce2eb;border-radius:8px;font-size:12px">
+              <option value="All">All Audit Statuses</option>
+              <option value="Action Required">Action Required (Unverified)</option>
+              <option value="Retained">Restored / Retained</option>
+              <option value="Confirmed Deleted">Confirmed Offboarded</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <h3 style="margin:0">Live Personnel Deletion Audit Trail</h3>
+              <div class="sub">Review deletions initiated by sector admins, initiate verification inquiry, or retain staff back</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>AUDIT REF</th>
+                  <th>ORGANIZATION & SECTOR</th>
+                  <th>DELETED EMPLOYEE</th>
+                  <th>OFFBOARDING REASON</th>
+                  <th>TIMESTAMP</th>
+                  <th>VERIFICATION STATUS</th>
+                  <th>ADMIN CONFIRMATION</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="superDeletionAuditRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- S2. ORGANIZATIONS MANAGEMENT -->
       <section id="view-super-sectors" class="view-section hidden">
         <div class="dash-head">
@@ -855,7 +901,10 @@ button, input, select, textarea { font: inherit; }
             <h1>Registered Organizations & Credentials</h1>
             <div class="sub">All live Organization IDs, assigned admin credentials, and sector mappings</div>
           </div>
-          <button class="btn btn-purple" onclick="openProvisionOrgModal()">+ Add New Organization ID</button>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-purple" onclick="openProvisionOrgModal()">+ Add New Organization ID</button>
+            <button class="btn btn-purple" style="background:#4c1d95" onclick="openProvisionSectorModal()">+ New Sector Category</button>
+          </div>
         </div>
 
         <div class="panel">
@@ -953,7 +1002,7 @@ button, input, select, textarea { font: inherit; }
       <section id="view-dashboard" class="view-section">
         <div class="dash-head">
           <div>
-            <h1 id="dashTitle">Hospital Workforce Dashboard</h1>
+            <h1 id="dashTitle">Workforce Dashboard</h1>
             <div class="sub" id="dashSubtitle">Live Operational Status</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -1021,7 +1070,7 @@ button, input, select, textarea { font: inherit; }
           </div>
 
           <div class="panel">
-            <h3>Attendance Trend (7-Day Rolling)</h3>
+            <h3>Attendance Trend (Rolling)</h3>
             <div class="chart-box">
               <canvas id="attendanceChart"></canvas>
             </div>
@@ -1058,6 +1107,34 @@ button, input, select, textarea { font: inherit; }
             <div class="sub">Personnel profiles, assignments, custom IDs & role authorizations</div>
           </div>
           <button class="btn btn-blue" onclick="openAddEmployeeModal()">+ Add New Employee (With ID)</button>
+        </div>
+
+        <!-- NEW: Inbound Staff Resignations Queue in Sector Admin View -->
+        <div class="panel" style="margin-bottom:18px;border:1px solid #fecdd3;background:#fff5f5">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <h3 style="margin:0;color:#991b1b">📝 Inbound Employee Resignations & Exit Requests</h3>
+              <div class="sub" style="color:#b91c1c">Formal separation notices submitted by staff members for administrative review and notice period calculation</div>
+            </div>
+            <span class="status absent" id="adminResignCountBadge" style="display:none">0 Pending</span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>REF ID</th>
+                  <th>EMPLOYEE & ID</th>
+                  <th>SUBMITTED ON</th>
+                  <th>NOTICE PERIOD</th>
+                  <th>PROPOSED LAST DAY</th>
+                  <th>DEPARTURE REASON & LETTER</th>
+                  <th>STATUS</th>
+                  <th>ADMIN ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="adminResignationTableRows"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="panel" style="margin-bottom:18px">
@@ -1336,13 +1413,26 @@ button, input, select, textarea { font: inherit; }
       <section id="view-support-bridge" class="view-section hidden">
         <div class="dash-head">
           <div>
-            <h1>Super Admin Support Bridge</h1>
-            <div class="sub">Direct escalation channel between this Organization ID and Platform Super Admin</div>
+            <h1>Super Admin Support Bridge & Verification Channel</h1>
+            <div class="sub">Direct escalation channel and deletion verification inquiries between this Organization ID and Platform Super Admin</div>
           </div>
           <button class="btn btn-purple" onclick="openEscalateBotModal('Sector Admin Escalation')">+ Raise Ticket to Super Admin</button>
         </div>
 
+        <!-- NEW: Active Deletion Verification Inquiries from Super Admin -->
+        <div class="panel" style="margin-bottom:20px;border:1px solid #fecdd3;background:#fff1f2">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div>
+              <h3 style="margin:0;color:#9f1239">🚨 Security Alerts: Employee Deletion Verifications</h3>
+              <div class="sub" style="color:#881337">Super Admin inquiries requiring your confirmation regarding recent personnel deletions</div>
+            </div>
+            <span class="status absent" id="adminPendingDeletionVerificationBadge">0 Inquiries</span>
+          </div>
+          <div id="adminDeletionInquiriesList"></div>
+        </div>
+
         <div class="panel">
+          <h3>Tickets & General Inquiries</h3>
           <div class="table-wrap">
             <table class="table">
               <thead>
@@ -1755,6 +1845,77 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- NEW: E6-B. EMPLOYEE RESIGNATION & EXIT CENTER -->
+      <section id="view-emp-resignation" class="view-section hidden">
+        <div class="dash-head">
+          <div>
+            <h1>Formal Resignation & Separation Center</h1>
+            <div class="sub">Submit your notice of resignation, calculate exit timeline, and track Sector Admin clearance decisions</div>
+          </div>
+          <span class="pill" id="empCurrentNoticeStatusPill" style="background:#f1f5f9;color:#334155">Status: Active Personnel</span>
+        </div>
+
+        <div class="grid2">
+          <!-- Resignation Submission Card -->
+          <div class="panel">
+            <h3>Tender Notice of Resignation</h3>
+            <div style="font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:14px">
+              Submitting this form formally conveys your intent to resign to your <b>Sector Administrator</b>. Your notice period and exit handover will be tracked officially.
+            </div>
+
+            <div id="essResignFormContainer">
+              <label>Reason for Resignation *</label>
+              <select id="empResignReasonSelect" onchange="handleResignReasonPreset(this.value)">
+                <option value="Better Career Opportunity / New Role">Better Career Opportunity / New Role</option>
+                <option value="Higher Studies / Professional Certification">Higher Studies / Professional Education</option>
+                <option value="Relocation / Family Relocation">Relocation / Relocating to Another City</option>
+                <option value="Health / Personal Obligations">Health / Personal Medical Reasons</option>
+                <option value="Career Transition / Entrepreneurship">Career Transition / Starting Own Venture</option>
+                <option value="Other Specific Reasons">Other Specific Reason...</option>
+              </select>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div>
+                  <label>Contractual Notice Period *</label>
+                  <select id="empResignNoticeDays" onchange="autoCalculateLastWorkingDay()">
+                    <option value="30" selected>30 Days (Standard Contract)</option>
+                    <option value="15">15 Days (Probationary / Early Buyout)</option>
+                    <option value="60">60 Days (Senior Executive)</option>
+                    <option value="90">90 Days (Critical Department Lead)</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Proposed Last Working Day (LWD) *</label>
+                  <input type="date" id="empResignLwdInput">
+                </div>
+              </div>
+
+              <label>Formal Resignation Letter & Handover Plan *</label>
+              <textarea id="empResignLetter" rows="4" placeholder="Dear Management, please accept this formal notice of my resignation..."></textarea>
+
+              <div style="margin-top:16px;background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px;font-size:12px">
+                <span style="color:var(--muted)">Forwarded to:</span> <b>Sector Administrator & HR Operations</b><br>
+                <span style="color:var(--muted)">Exit Clearance:</span> All equipment, badges, and account handovers must be completed prior to your final release voucher.
+              </div>
+
+              <button class="btn btn-purple" style="margin-top:16px;width:100%;padding:12px;background:#dc2626" onclick="submitEmployeeResignation()">
+                Submit Formal Resignation to Sector Admin 📨
+              </button>
+            </div>
+          </div>
+
+          <!-- Resignation Status & History Card -->
+          <div class="panel">
+            <h3>My Resignation & Exit Clearance Status</h3>
+            <div id="empResignStatusCard" style="font-size:13px;line-height:1.75">
+              <div style="color:var(--muted);padding:24px 0;text-align:center">
+                You have not submitted any active resignation notices. Your employment is in full active standing.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- E7. EMPLOYEE DIRECT CHAT WITH SECTOR ADMIN -->
       <section id="view-emp-admin-chat" class="view-section hidden">
         <div class="dash-head">
@@ -1892,6 +2053,22 @@ const INITIAL_ORGANIZATIONS = {
     ],
     leaveRequests: [
       { id: "LR-101", empId: "E-1024", empName: "Dr. Ananya Rao", type: "Casual Leave", start: "2026-11-04", end: "2026-11-05", days: 2, reason: "Attending annual medical conference", status: "Pending Approval", rejectionReason: "" }
+    ],
+    resignations: [
+      {
+        id: "RSG-401",
+        empId: "E-1041",
+        empName: "Rahul Menon",
+        dept: "Nursing",
+        submittedDate: "2026-10-25",
+        noticeDays: 30,
+        proposedLwd: "2026-11-24",
+        reason: "Relocation / Family Relocation",
+        letter: "Dear Management, I am tendering my resignation due to family relocation to my hometown. I will ensure a complete handover of Ward B patient monitoring duties.",
+        status: "Pending Review", // "Pending Review", "Accepted", "Retained / Withdrawn", "Discussion Scheduled"
+        adminRemarks: "",
+        officialLwd: "2026-11-24"
+      }
     ],
     shiftSwapRequests: [],
     payrollRequests: [],
@@ -2043,6 +2220,46 @@ let organizations = JSON.parse(JSON.stringify(INITIAL_ORGANIZATIONS));
 let sectorMeta = JSON.parse(JSON.stringify(SECTOR_METADATA));
 let supportQueries = JSON.parse(JSON.stringify(INITIAL_SUPPORT_QUERIES));
 
+// NEW: Master Deletion and Retention Audit Log Store
+let employeeDeletionAudits = [
+  {
+    auditId: "DEL-8091",
+    orgId: "HOSP-001",
+    sector: "Hospital",
+    empSnapshot: {
+      id: "E-1033",
+      name: "Suresh Pillai",
+      dept: "Administration",
+      role: "Operations Coordinator",
+      shift: "General (09:00 - 17:30)",
+      login: "09:00",
+      logout: "—",
+      task: "Archived Record",
+      status: "Present",
+      basePay: 52000,
+      otPay: 2000,
+      deductions: 6200,
+      payStatus: "Paid",
+      email: "s.pillai@apexhealth.org",
+      pan: "JKLMN9012O",
+      pfNo: "MH/BAN/0019283/E1033",
+      casualLeaves: 5,
+      sickLeaves: 3,
+      privilegeLeaves: 10,
+      compOff: 1
+    },
+    reason: "Resignation - Relocated to another city",
+    notes: "Employee submitted formal notice on 15 Oct.",
+    deletedByAdmin: "admin",
+    timestamp: "2026-10-25 11:30 AM",
+    superAdminQuerySent: false,
+    adminResponse: "pending", // "pending", "confirmed_yes", "confirmed_no"
+    adminResponseNote: "",
+    adminRetainRequested: false,
+    auditStatus: "Action Required" // "Action Required", "Confirmed Deleted", "Retained"
+  }
+];
+
 let currentOrgId = "HOSP-001";
 let currentUserRole = "admin";
 let currentEmployeeId = "E-1024";
@@ -2092,7 +2309,10 @@ function renderLandingSectors() {
 // LOGIN MODAL
 function openLogin(sec) {
   populateSectorDropdown();
-  if (sec) document.getElementById("sectorSelect").value = sec;
+  if (sec) {
+    const sel = document.getElementById("sectorSelect");
+    if (sel) sel.value = sec;
+  }
   updateDemo();
   document.getElementById("loginModal").classList.remove("hidden");
 }
@@ -2147,7 +2367,7 @@ function updateDemo() {
       <b>Credentials for ${s} (Active Org: ${orgs[0].orgId}):</b><br>
       • <b>Organization Admin:</b> User: <code style="color:var(--navy);font-weight:700">${orgs[0].adminUser}</code> | Pass: <code style="font-weight:700">${orgs[0].adminPass}</code><br>
       • <b>Staff ID:</b> User: <code style="color:var(--blue);font-weight:700">${demoEmp}</code> | Pass: <code style="font-weight:700">password123</code><br>
-      <span style="color:var(--muted)">You can also enter any newly created Organization ID & credentials directly.</span>
+      <span style="color:var(--muted)">You can also log in to any custom provisioned Organization ID directly.</span>
     `;
   } else {
     orgSel.style.display = "none";
@@ -2353,6 +2573,7 @@ function switchTab(tabId) {
   if (tabId === "super-overview") renderSuperOverview();
   else if (tabId === "super-sectors") renderSuperSectorsView();
   else if (tabId === "super-queries") renderSuperQueriesView();
+  else if (tabId === "super-retentions") renderSuperRetentionsView();
   else if (tabId === "dashboard") renderDashboardView();
   else if (tabId === "employees") renderEmployeeDirectory();
   else if (tabId === "attendance") renderAttendanceView();
@@ -2369,6 +2590,7 @@ function switchTab(tabId) {
   else if (tabId === "emp-tasks") renderEmployeeTasks();
   else if (tabId === "emp-shifts") renderEmployeeShifts();
   else if (tabId === "emp-payslips") renderEmployeePayslips();
+  else if (tabId === "emp-resignation") renderEmployeeResignationView();
   else if (tabId === "emp-admin-chat") renderEmpAdminChatView();
   else if (tabId === "emp-support") renderEmployeeSupport();
 
@@ -2383,6 +2605,33 @@ function updateBadges() {
   const pendingSwaps = (org.shiftSwapRequests || []).filter(s => s.status === "Pending Review").length;
   const myQueries = supportQueries.filter(q => q.orgId === currentOrgId && q.status !== "Resolved").length;
   const globalOpenQueries = supportQueries.filter(q => q.status === "Open" || q.status === "In Review").length;
+
+  // New resignation audits pending check
+  const pendingResignations = (org.resignations || []).filter(r => r.status === "Pending Review").length;
+  const resignBadge = document.getElementById("adminResignBadge");
+  if (resignBadge) {
+    resignBadge.style.display = pendingResignations > 0 ? "inline-block" : "none";
+    resignBadge.textContent = `${pendingResignations} exit req`;
+  }
+  const resignCountBadge = document.getElementById("adminResignCountBadge");
+  if (resignCountBadge) {
+    resignCountBadge.style.display = pendingResignations > 0 ? "inline-block" : "none";
+    resignCountBadge.textContent = `${pendingResignations} Resignation${pendingResignations === 1 ? '' : 's'} Pending`;
+  }
+
+  // Employee's own active resignation pill
+  const activeEmp = getActiveEmployee();
+  const myActiveResignation = (org.resignations || []).find(r => r.empId === activeEmp.id && (r.status === "Pending Review" || r.status === "Accepted"));
+  const empPill = document.getElementById("empResignStatusPill");
+  if (empPill) {
+    empPill.style.display = myActiveResignation ? "inline-block" : "none";
+    empPill.textContent = myActiveResignation ? myActiveResignation.status : "";
+    empPill.className = myActiveResignation?.status === "Accepted" ? "status absent" : "status late";
+  }
+
+  // New deletion audits pending check
+  const myPendingDeletionInquiries = employeeDeletionAudits.filter(d => d.orgId === currentOrgId && d.superAdminQuerySent && d.adminResponse === "pending").length;
+  const globalUnverifiedDeletions = employeeDeletionAudits.filter(d => d.auditStatus === "Action Required").length;
 
   const attBadge = document.getElementById("adminAttendanceBadge");
   if (attBadge) {
@@ -2401,8 +2650,9 @@ function updateBadges() {
   }
   const suppBadge = document.getElementById("adminSupportBridgeBadge");
   if (suppBadge) {
-    suppBadge.style.display = myQueries > 0 ? "inline-block" : "none";
-    suppBadge.textContent = `${myQueries} active`;
+    const totalBridgeAlerts = myQueries + myPendingDeletionInquiries;
+    suppBadge.style.display = totalBridgeAlerts > 0 ? "inline-block" : "none";
+    suppBadge.textContent = `${totalBridgeAlerts} alert${totalBridgeAlerts === 1 ? '' : 's'}`;
   }
   const superSectorBadge = document.getElementById("superSectorCountBadge");
   if (superSectorBadge) superSectorBadge.textContent = `${Object.keys(organizations).length} Orgs`;
@@ -2411,6 +2661,18 @@ function updateBadges() {
   if (superQBadge) {
     superQBadge.style.display = globalOpenQueries > 0 ? "inline-block" : "none";
     superQBadge.textContent = `${globalOpenQueries} New`;
+  }
+
+  const superDelBadge = document.getElementById("superDeletionBadge");
+  if (superDelBadge) {
+    superDelBadge.style.display = globalUnverifiedDeletions > 0 ? "inline-block" : "none";
+    superDelBadge.textContent = `${globalUnverifiedDeletions} Alert${globalUnverifiedDeletions === 1 ? '' : 's'}`;
+  }
+
+  const adminInqBadge = document.getElementById("adminPendingDeletionVerificationBadge");
+  if (adminInqBadge) {
+    adminInqBadge.textContent = `${myPendingDeletionInquiries} Inquir${myPendingDeletionInquiries === 1 ? 'y' : 'ies'}`;
+    adminInqBadge.style.display = myPendingDeletionInquiries > 0 ? "inline-block" : "none";
   }
 }
 
@@ -3319,18 +3581,12 @@ function renderDashEmployees() {
       <td>${e.logout}</td>
       <td>${e.task}</td>
       <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
-      <td><button class="action" onclick="viewEmployeeProfile('${e.id}')">Profile</button></td>
+      <td>
+        <button class="action" onclick="viewEmployeeProfile('${e.id}')">Profile</button>
+        <button class="action" style="color:var(--red);border-color:#fecaca;margin-left:4px" onclick="openDeleteEmployeeModal('${e.id}')">✕ Delete</button>
+      </td>
     </tr>
   `).join("");
-}
-
-function filterDashEmployees() { renderDashEmployees(); }
-
-function filterDashStatus(s, btn) {
-  dashStatusFilter = s;
-  document.querySelectorAll("#view-dashboard .tab").forEach(t => t.classList.remove("active"));
-  btn.classList.add("active");
-  renderDashEmployees();
 }
 
 function renderEmployeeDirectory() {
@@ -3361,72 +3617,98 @@ function renderEmployeeDirectory() {
       <td>
         <button class="action" onclick="viewEmployeeProfile('${e.id}')">View</button>
         <button class="action" style="color:var(--blue)" onclick="openAssignTaskModal('${e.name}')">Assign</button>
+        <button class="action" style="color:var(--red);border-color:#fecaca" onclick="openDeleteEmployeeModal('${e.id}')">Delete / Leave</button>
       </td>
     </tr>
   `).join("");
+
+  renderAdminResignationsQueue();
 }
 
 function renderAttendanceView() {
-  const filter = document.getElementById("attStatusFilter").value;
-  const list = (organizations[currentOrgId].employees || []).filter(e => filter === "All" || e.status === filter);
+  const org = organizations[currentOrgId];
+  if (!org) return;
+  const filter = document.getElementById("attStatusFilter")?.value || "All";
+  const emps = org.employees || [];
+
+  const filtered = emps.filter(e => {
+    if (filter === "All") return true;
+    return e.status === filter;
+  });
 
   const tbody = document.getElementById("attendanceTableRows");
-  tbody.innerHTML = list.map(e => `
-    <tr>
-      <td><b>${e.name}</b><br><small style="color:var(--muted)">${e.id}</small></td>
-      <td>📍 ${organizations[currentOrgId].name.split(" ")[0]} Perimeter</td>
-      <td>${e.login}</td>
-      <td>${e.logout}</td>
-      <td>${e.login !== '—' ? '8 hrs' : '0 hrs'}</td>
-      <td><span class="status" style="background:#eef2ff;color:#3730a3">Biometric & RFID Verified</span></td>
-      <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
-    </tr>
-  `).join("");
+  if (tbody) {
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:18px;color:var(--muted)">No biometric logs match filter</td></tr>`;
+    } else {
+      tbody.innerHTML = filtered.map(e => `
+        <tr>
+          <td><b>${escapeHtml(e.name)}</b><br><small style="color:var(--muted);font-family:monospace">${e.id}</small></td>
+          <td>📍 ${escapeHtml(org.name.split(" ")[0])} Facility Perimeter</td>
+          <td>${e.login || '—'}</td>
+          <td>${e.logout || '—'}</td>
+          <td>${e.login && e.login !== '—' ? '8.5 hrs' : '0 hrs'}</td>
+          <td><span class="status" style="background:#eef2ff;color:#3730a3">Biometric & RFID Verified</span></td>
+          <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
+        </tr>
+      `).join("");
+    }
+  }
 
-  // Inbound Leaves with Rejection Reason
-  const org = organizations[currentOrgId];
+  // Render leave applications for admin review
   const leaves = org.leaveRequests || [];
   const leaveTbody = document.getElementById("adminLeaveApplicationsRows");
-  if (leaves.length === 0) {
-    leaveTbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:16px;color:var(--muted)">No leave applications submitted</td></tr>`;
-    return;
+  if (leaveTbody) {
+    if (leaves.length === 0) {
+      leaveTbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:18px;color:var(--muted)">No staff leave applications pending</td></tr>`;
+    } else {
+      leaveTbody.innerHTML = leaves.map(l => `
+        <tr>
+          <td><b style="font-family:monospace">${l.id}</b></td>
+          <td><b>${escapeHtml(l.empName)}</b><br><small style="color:var(--muted);font-family:monospace">${l.empId}</small></td>
+          <td><b>${escapeHtml(l.type)}</b></td>
+          <td>${l.start} to ${l.end}</td>
+          <td><b>${l.days} Day(s)</b></td>
+          <td>${escapeHtml(l.reason)}</td>
+          <td>
+            ${l.status === 'Rejected' ? `
+              <div style="color:var(--red);font-size:11px;font-weight:600">
+                ⚠️ Reason: ${escapeHtml(l.rejectionReason || 'Operational shortfall')}
+              </div>
+            ` : (l.status === 'Approved' ? `
+              <span style="color:var(--green);font-size:11px;font-weight:600">✓ Granted as requested</span>
+            ` : `<span style="color:var(--muted);font-size:11px;font-style:italic">Pending decision</span>`)}
+          </td>
+          <td><span class="status ${l.status === 'Approved' ? 'present' : (l.status === 'Pending Approval' ? 'late' : 'absent')}">${l.status}</span></td>
+          <td>
+            ${l.status === 'Pending Approval' ? `
+              <button class="action action-primary" onclick="resolveLeaveRequest('${l.id}', true)">Approve</button>
+              <button class="action" style="color:#b91c1c;border-color:#fca5a5;background:#fef2f2" onclick="promptRejectLeave('${l.id}')">Reject...</button>
+            ` : `<span style="font-size:11px;color:var(--muted)">Decided</span>`}
+          </td>
+        </tr>
+      `).join("");
+    }
   }
-  leaveTbody.innerHTML = leaves.map(l => `
-    <tr>
-      <td><b>${l.id}</b></td>
-      <td><b>${l.empName}</b><br><small style="color:var(--muted)">${l.empId}</small></td>
-      <td>${l.type}</td>
-      <td>${l.start} to ${l.end}</td>
-      <td><b>${l.days} Day(s)</b></td>
-      <td>${escapeHtml(l.reason)}</td>
-      <td style="max-width:220px">
-        ${l.status === 'Rejected' ? `
-          <div style="color:var(--red);font-size:11px;font-weight:600;line-height:1.3">
-            <b>Reason:</b> ${escapeHtml(l.rejectionReason || 'Operational staff shortage')}
-          </div>
-        ` : (l.status === 'Approved' ? `
-          <span style="color:var(--green);font-size:11px;font-weight:600">✓ Granted as requested</span>
-        ` : `<span style="color:var(--muted);font-size:11px;font-style:italic">Pending decision</span>`)}
-      </td>
-      <td><span class="status ${l.status === 'Approved' ? 'present' : (l.status === 'Pending Approval' ? 'late' : 'absent')}">${l.status}</span></td>
-      <td>
-        ${l.status === 'Pending Approval' ? `
-          <button class="action action-primary" onclick="resolveLeaveRequest('${l.id}', true)">Approve</button>
-          <button class="action" style="color:#b91c1c;border-color:#fca5a5;background:#fef2f2" onclick="promptRejectLeave('${l.id}')">Reject...</button>
-        ` : `<span style="font-size:11px;color:var(--muted)">Decided</span>`}
-      </td>
-    </tr>
-  `).join("");
 }
 
 function renderAssignmentsView() {
-  const tasks = organizations[currentOrgId].tasks || [];
+  const org = organizations[currentOrgId];
+  if (!org) return;
+  const tasks = org.tasks || [];
   const tbody = document.getElementById("taskAssignmentRows");
+  if (!tbody) return;
+
+  if (tasks.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No work orders created. Click "+ Create Work Order" above to dispatch tasks.</td></tr>`;
+    return;
+  }
+
   tbody.innerHTML = tasks.map(t => `
     <tr>
-      <td><b>${t.title}</b><br><small style="color:var(--muted)">${t.id}</small></td>
-      <td>${t.zone}</td>
-      <td><b>${t.assignee}</b></td>
+      <td><b>${escapeHtml(t.title)}</b><br><small style="color:var(--muted);font-family:monospace">${t.id}</small></td>
+      <td>${escapeHtml(t.zone)}</td>
+      <td><b>${escapeHtml(t.assignee)}</b></td>
       <td><span class="status" style="${t.priority === 'High' || t.priority === 'Urgent' ? 'background:#ffe4e6;color:#be123c' : 'background:#f1f5f9'}">${t.priority}</span></td>
       <td>
         <div class="progress-bg"><div class="progress-fill" style="width:${t.progress}%"></div></div>
@@ -3438,86 +3720,58 @@ function renderAssignmentsView() {
   `).join("");
 }
 
-function toggleTaskStatus(taskId) {
-  const task = organizations[currentOrgId].tasks.find(t => t.id === taskId);
-  if (task) {
-    if (task.status === "In Progress") { task.status = "Completed"; task.progress = 100; }
-    else if (task.status === "Completed") { task.status = "Blocked"; task.progress = 30; }
-    else { task.status = "In Progress"; task.progress = 65; }
-    renderAssignmentsView();
-    showToast(`Task ${taskId} moved to ${task.status}`);
-  }
-}
-
 function renderShiftsView() {
   const org = organizations[currentOrgId];
+  if (!org) return;
   const tbody = document.getElementById("shiftRosterRows");
-  tbody.innerHTML = (org.shifts || []).map(s => `
-    <tr>
-      <td><b>${s.name}</b></td>
-      <td>${s.hours}</td>
-      <td><b>${s.required} Staff</b></td>
-      <td>${s.allocated} Staff</td>
-      <td>${Math.round((s.allocated / s.required) * 100)}%</td>
-      <td><span class="status ${s.status === 'Optimal' ? 'present' : (s.status === 'Adequate' ? 'late' : 'absent')}">${s.status}</span></td>
-    </tr>
-  `).join("");
+  if (tbody) {
+    tbody.innerHTML = (org.shifts || []).map(s => `
+      <tr>
+        <td><b>${escapeHtml(s.name)}</b></td>
+        <td>${s.hours}</td>
+        <td><b>${s.required} Staff</b></td>
+        <td>${s.allocated} Staff</td>
+        <td>${Math.round((s.allocated / s.required) * 100)}%</td>
+        <td><span class="status ${s.status === 'Optimal' ? 'present' : (s.status === 'Adequate' ? 'late' : 'absent')}">${s.status}</span></td>
+      </tr>
+    `).join("");
+  }
 
   const swapList = document.getElementById("swapRequestList");
-  const swaps = org.shiftSwapRequests || [];
-  if (swaps.length === 0) {
-    swapList.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:10px 0">No pending shift swaps.</div>`;
-    return;
-  }
-  swapList.innerHTML = swaps.map(sw => `
-    <div style="border-bottom:1px solid #eef0f4;padding-bottom:12px;margin-bottom:12px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>${sw.fromName} ⇄ ${sw.toName}</b>
-        <span class="status ${sw.status === 'Approved' ? 'present' : (sw.status === 'Pending Review' ? 'late' : 'absent')}">${sw.status}</span>
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-top:4px">Date: ${sw.shiftDate} · Reason: ${sw.reason}</div>
-      ${sw.status === 'Pending Review' ? `
-        <div style="margin-top:8px">
-          <button class="action action-primary" onclick="resolveShiftSwap('${sw.id}', true)">Approve Swap</button>
-          <button class="action" onclick="resolveShiftSwap('${sw.id}', false)">Decline</button>
+  if (swapList) {
+    const swaps = org.shiftSwapRequests || [];
+    if (swaps.length === 0) {
+      swapList.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:10px 0">No pending shift swap requests from staff.</div>`;
+    } else {
+      swapList.innerHTML = swaps.map(sw => `
+        <div style="border-bottom:1px solid #eef0f4;padding-bottom:12px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <b>${escapeHtml(sw.fromName)} ⇄ ${escapeHtml(sw.toName)}</b>
+            <span class="status ${sw.status === 'Approved' ? 'present' : (sw.status === 'Pending Review' ? 'late' : 'absent')}">${sw.status}</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Date: ${sw.shiftDate} · Reason: ${escapeHtml(sw.reason)}</div>
+          ${sw.status === 'Pending Review' ? `
+            <div style="margin-top:8px">
+              <button class="action action-primary" onclick="resolveShiftSwap('${sw.id}', true)">Approve Swap</button>
+              <button class="action" onclick="resolveShiftSwap('${sw.id}', false)">Decline</button>
+            </div>
+          ` : ''}
         </div>
-      ` : ''}
-    </div>
-  `).join("");
-}
-
-function resolveShiftSwap(swapId, approved) {
-  const org = organizations[currentOrgId];
-  const sw = (org.shiftSwapRequests || []).find(s => s.id === swapId);
-  if (!sw) return;
-
-  sw.status = approved ? "Approved" : "Declined";
-  if (approved) {
-    const emp1 = org.employees.find(e => e.id === sw.fromEmpId);
-    const emp2 = org.employees.find(e => e.id === sw.toEmpId);
-    if (emp1 && emp2) {
-      const temp = emp1.shift;
-      emp1.shift = emp2.shift;
-      emp2.shift = temp;
+      `).join("");
     }
   }
-
-  org.activities.unshift({
-    text: `Shift trade request #${swapId} was ${sw.status} by Operations`,
-    time: `Just now · Roster Management`
-  });
-
-  renderShiftsView();
-  updateBadges();
-  showToast(`Shift swap #${swapId} ${sw.status.toLowerCase()}`);
 }
 
 function renderReportsView() {
-  const depts = organizations[currentOrgId].departments || [];
+  const org = organizations[currentOrgId];
+  if (!org) return;
+  const depts = org.departments || [];
   const tbody = document.getElementById("reportDeptRows");
+  if (!tbody) return;
+
   tbody.innerHTML = depts.map((d, i) => `
     <tr>
-      <td><b>${d} Operations</b></td>
+      <td><b>${escapeHtml(d)} Operations</b></td>
       <td>${24 + i * 6} Officers</td>
       <td><b style="color:var(--green)">94.${(i * 2 + 1) % 9}%</b></td>
       <td>92% Completed</td>
@@ -3526,121 +3780,957 @@ function renderReportsView() {
   `).join("");
 }
 
+// 7. PAYSLIPS & COMPENSATION VIEW FOR SECTOR ADMIN
 function renderPayslipsView() {
-  const data = organizations[currentOrgId];
-  const q = (document.getElementById("payslipSearch").value || "").toLowerCase();
-  const filter = document.getElementById("payslipStatusFilter").value;
+  const org = organizations[currentOrgId];
+  if (!org) return;
+  const searchInput = document.getElementById("payslipSearch");
+  const q = (searchInput ? searchInput.value : "").toLowerCase();
+  const filterSelect = document.getElementById("payslipStatusFilter");
+  const filter = filterSelect ? filterSelect.value : "All";
 
-  const filtered = (data.employees || []).filter(e => {
-    const mStatus = (filter === "All" || e.payStatus === filter);
-    const mSearch = (e.name + " " + e.id + " " + e.dept + " " + e.role).toLowerCase().includes(q);
+  const emps = org.employees || [];
+  const filtered = emps.filter(e => {
+    const mStatus = (filter === "All" || (e.payStatus || "Paid") === filter);
+    const mSearch = ((e.name || "") + " " + (e.id || "") + " " + (e.dept || "") + " " + (e.role || "")).toLowerCase().includes(q);
     return mStatus && mSearch;
   });
 
   const tbody = document.getElementById("payslipsTableRows");
+  if (!tbody) return;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">No payslip records matching search criteria</td></tr>`;
+    return;
+  }
+
   tbody.innerHTML = filtered.map(e => {
-    const net = (e.basePay + e.otPay - e.deductions);
+    const base = Number(e.basePay) || 60000;
+    const ot = Number(e.otPay) || 0;
+    const ded = Number(e.deductions) || Math.round(base * 0.12);
+    const net = (base + ot - ded);
+    const payStatus = e.payStatus || "Paid";
+
     return `
       <tr>
-        <td><b>${e.name}</b><br><small style="color:var(--muted)">${e.id}</small></td>
-        <td>${e.dept} · <span style="color:var(--muted)">${e.role}</span></td>
-        <td>₹ ${e.basePay.toLocaleString('en-IN')}</td>
-        <td style="color:var(--green)">+ ₹ ${e.otPay.toLocaleString('en-IN')}</td>
-        <td style="color:var(--red)">- ₹ ${e.deductions.toLocaleString('en-IN')}</td>
+        <td><b>${escapeHtml(e.name)}</b><br><small style="color:var(--muted);font-family:monospace">${e.id}</small></td>
+        <td>${escapeHtml(e.dept)} · <span style="color:var(--muted)">${escapeHtml(e.role)}</span></td>
+        <td>₹ ${base.toLocaleString('en-IN')}</td>
+        <td style="color:var(--green)">+ ₹ ${ot.toLocaleString('en-IN')}</td>
+        <td style="color:var(--red)">- ₹ ${ded.toLocaleString('en-IN')}</td>
         <td><b>₹ ${net.toLocaleString('en-IN')}</b></td>
-        <td><span class="status ${e.payStatus.toLowerCase()}">${e.payStatus}</span></td>
+        <td><span class="status ${payStatus.toLowerCase()}">${payStatus}</span></td>
         <td>
-          <button class="action" onclick="viewDetailedPayslip('${e.id}')">View & Print Sheet</button>
+          <button class="action action-primary" onclick="viewDetailedPayslip('${e.id}')">View & Print Sheet</button>
         </td>
       </tr>
     `;
   }).join("");
 }
 
+// ==============================================================
+// SECTOR ADMIN RESIGNATIONS REVIEW WORKFLOW
+// ==============================================================
+function renderAdminResignationsQueue() {
+  const org = organizations[currentOrgId];
+  if (!org.resignations) org.resignations = [];
+  const tbody = document.getElementById("adminResignationTableRows");
+  if (!tbody) return;
+
+  if (org.resignations.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:18px;color:var(--muted)">No staff resignation requests submitted in this organization</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = org.resignations.map(r => {
+    let statusClass = "late";
+    if (r.status === "Accepted") statusClass = "absent";
+    else if (r.status === "Retained / Withdrawn") statusClass = "present";
+
+    return `
+      <tr>
+        <td><b style="font-family:monospace;color:var(--navy)">${r.id}</b></td>
+        <td><b>${escapeHtml(r.empName)}</b><br><small style="color:var(--muted);font-family:monospace">${r.empId} · ${r.dept}</small></td>
+        <td><small>${r.submittedDate}</small></td>
+        <td><b>${r.noticeDays} Days</b></td>
+        <td><b style="color:#b91c1c">${r.officialLwd || r.proposedLwd}</b></td>
+        <td style="max-width:240px">
+          <b>${escapeHtml(r.reason)}</b>
+          <div style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(r.letter)}</div>
+        </td>
+        <td><span class="status ${statusClass}">${r.status}</span></td>
+        <td>
+          <button class="action" onclick="openAdminReviewResignationModal('${r.id}')">Review & Decide</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function openAdminReviewResignationModal(resId) {
+  const org = organizations[currentOrgId];
+  const r = (org.resignations || []).find(x => x.id === resId);
+  if (!r) return;
+
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill" style="background:#fee2e2;color:#b91c1c;font-size:10px">Staff Resignation Clearance · Ref: ${r.id}</span>
+        <h3 style="margin:6px 0 0">Process Resignation: ${escapeHtml(r.empName)}</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:14px;border-radius:10px;font-size:12px;line-height:1.75;margin-bottom:14px">
+      <div><b>Employee:</b> ${escapeHtml(r.empName)} (ID: <code style="font-family:monospace">${r.empId}</code> · ${r.dept})</div>
+      <div><b>Submitted Notice Date:</b> ${r.submittedDate}</div>
+      <div><b>Contract Notice Period:</b> ${r.noticeDays} Days</div>
+      <div><b>Proposed Last Working Day (LWD):</b> <b style="color:var(--red)">${r.proposedLwd}</b></div>
+      <div><b>Stated Reason:</b> <b>${escapeHtml(r.reason)}</b></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1">
+        <b>Resignation Letter / Statement:</b><br>
+        <i style="color:#334155;white-space:pre-wrap">"${escapeHtml(r.letter)}"</i>
+      </div>
+    </div>
+
+    <div>
+      <label>Approved Official Last Working Day (LWD)</label>
+      <input type="date" id="adminApprovedLwd" value="${r.officialLwd || r.proposedLwd}">
+
+      <label>Administrative Decision Notes & Handover Instructions</label>
+      <textarea id="adminResignDecisionNotes" rows="3" placeholder="Provide formal clearance notes or counter-offer details...">${r.adminRemarks || ''}</textarea>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;flex-wrap:wrap;gap:8px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="background:#0b1730;color:#fff" onclick="adminScheduleRetentionChat('${r.id}')">
+            🤝 Propose Retention / Counter
+          </button>
+          <button class="btn" style="background:#dc2626;color:#fff" onclick="adminAcceptResignation('${r.id}')">
+            ✓ Accept Resignation & Set LWD
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function adminAcceptResignation(resId) {
+  const org = organizations[currentOrgId];
+  const r = (org.resignations || []).find(x => x.id === resId);
+  if (!r) return;
+
+  const approvedLwd = document.getElementById("adminApprovedLwd").value || r.proposedLwd;
+  const notes = (document.getElementById("adminResignDecisionNotes").value || "").trim() || "Resignation accepted as per contractual notice terms.";
+
+  r.status = "Accepted";
+  r.officialLwd = approvedLwd;
+  r.adminRemarks = notes;
+
+  org.activities.unshift({
+    text: `Resignation of ${r.empName} ACCEPTED by Sector Admin. Official LWD set to ${approvedLwd}`,
+    time: `Just now · HR Separation`
+  });
+
+  closeUniversalModal();
+  updateBadges();
+  renderEmployeeDirectory();
+  showToast(`Resignation accepted for ${r.empName}. Last working day finalized as ${approvedLwd}!`);
+}
+
+function adminScheduleRetentionChat(resId) {
+  const org = organizations[currentOrgId];
+  const r = (org.resignations || []).find(x => x.id === resId);
+  if (!r) return;
+
+  const notes = (document.getElementById("adminResignDecisionNotes").value || "").trim() || "Management invites you for an in-person retention discussion to address concerns.";
+  r.status = "Discussion Scheduled";
+  r.adminRemarks = notes;
+
+  // Dispatch an automated chat to employee direct message thread
+  if (!org.chats) org.chats = {};
+  if (!org.chats[r.empId]) org.chats[r.empId] = [];
+
+  org.chats[r.empId].push({
+    sender: "admin",
+    text: `Hello ${r.empName}, I reviewed your resignation letter. We highly value your contributions and would like to arrange a retention discussion before formal separation. Note: "${notes}"`,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+
+  org.activities.unshift({
+    text: `Retention discussion initiated with ${r.empName} regarding resignation`,
+    time: `Just now · Staff Retention`
+  });
+
+  closeUniversalModal();
+  updateBadges();
+  renderEmployeeDirectory();
+  showToast(`Retention discussion scheduled with ${r.empName}! A direct message has been sent to them.`);
+}
+
+// ==============================================================
+// EMPLOYEE SELF-SERVICE RESIGNATION VIEW ENGINE
+// ==============================================================
+function autoCalculateLastWorkingDay() {
+  const days = Number(document.getElementById("empResignNoticeDays")?.value || 30);
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + days);
+  const yyyy = targetDate.getFullYear();
+  const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+  const dd = String(targetDate.getDate()).padStart(2, '0');
+  const lwdInput = document.getElementById("empResignLwdInput");
+  if (lwdInput) lwdInput.value = `${yyyy}-${mm}-${dd}`;
+}
+
+function handleResignReasonPreset(val) {
+  const letter = document.getElementById("empResignLetter");
+  if (!letter) return;
+  if (!letter.value || letter.dataset.custom !== "true") {
+    letter.value = `Dear Sector Administrator,\n\nPlease accept this letter as formal notification that I am resigning from my position. I have made this decision due to ${val.toLowerCase()}.\n\nI will complete all pending assignments and assist in training colleagues during my contractual notice period.\n\nThank you for the support during my tenure.`;
+  }
+}
+
+function submitEmployeeResignation() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  if (!org.resignations) org.resignations = [];
+
+  // Check if active resignation already exists
+  const existing = org.resignations.find(r => r.empId === emp.id && (r.status === "Pending Review" || r.status === "Accepted"));
+  if (existing) {
+    showToast("You already have an active resignation under review!");
+    return;
+  }
+
+  const reason = document.getElementById("empResignReasonSelect").value;
+  const noticeDays = Number(document.getElementById("empResignNoticeDays").value) || 30;
+  const lwd = document.getElementById("empResignLwdInput").value;
+  const letter = (document.getElementById("empResignLetter").value || "").trim();
+
+  if (!lwd) {
+    showToast("Please provide your proposed Last Working Day");
+    return;
+  }
+  if (!letter) {
+    showToast("Please provide your resignation letter text");
+    return;
+  }
+
+  const now = new Date();
+  const submittedStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+  const newResign = {
+    id: `RSG-${Math.floor(Math.random() * 800) + 100}`,
+    empId: emp.id,
+    empName: emp.name,
+    dept: emp.dept,
+    submittedDate: submittedStr,
+    noticeDays: noticeDays,
+    proposedLwd: lwd,
+    officialLwd: lwd,
+    reason: reason,
+    letter: letter,
+    status: "Pending Review",
+    adminRemarks: ""
+  };
+
+  org.resignations.unshift(newResign);
+
+  org.activities.unshift({
+    text: `Formal resignation submitted by ${emp.name} (${emp.id}) with proposed LWD ${lwd}`,
+    time: `Just now · Employee Exit`
+  });
+
+  updateBadges();
+  renderEmployeeResignationView();
+  showToast(`Resignation ref #${newResign.id} submitted to Sector Admin!`);
+}
+
+function renderEmployeeResignationView() {
+  const emp = getActiveEmployee();
+  const org = organizations[currentOrgId];
+  if (!org.resignations) org.resignations = [];
+
+  const myResign = org.resignations.find(r => r.empId === emp.id);
+  const formBox = document.getElementById("essResignFormContainer");
+  const statusBox = document.getElementById("empResignStatusCard");
+  const topPill = document.getElementById("empCurrentNoticeStatusPill");
+
+  // Ensure default LWD is prefilled
+  autoCalculateLastWorkingDay();
+  handleResignReasonPreset(document.getElementById("empResignReasonSelect")?.value || "Better Career Opportunity / New Role");
+
+  if (!myResign) {
+    if (topPill) {
+      topPill.className = "pill";
+      topPill.style.background = "#eef4ff";
+      topPill.style.color = "#2563eb";
+      topPill.textContent = "Status: Active Personnel";
+    }
+    if (statusBox) {
+      statusBox.innerHTML = `
+        <div style="color:var(--muted);padding:30px 10px;text-align:center">
+          <span style="font-size:32px">💼</span>
+          <div style="font-size:14px;font-weight:700;color:var(--navy);margin-top:8px">No Active Separation Notices</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Your employment status is active with full operational privileges.</div>
+        </div>
+      `;
+    }
+    return;
+  }
+
+  // Active resignation exists
+  if (topPill) {
+    topPill.className = "pill";
+    if (myResign.status === "Accepted") {
+      topPill.style.background = "#fee2e2";
+      topPill.style.color = "#b91c1c";
+      topPill.textContent = `Resignation Accepted · LWD: ${myResign.officialLwd}`;
+    } else if (myResign.status === "Discussion Scheduled") {
+      topPill.style.background = "#eff6ff";
+      topPill.style.color = "#1d4ed8";
+      topPill.textContent = `Retention Discussion Scheduled`;
+    } else {
+      topPill.style.background = "#fff4df";
+      topPill.style.color = "#a65a00";
+      topPill.textContent = `Notice Under Review (${myResign.noticeDays} Days)`;
+    }
+  }
+
+  if (statusBox) {
+    statusBox.innerHTML = `
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div>
+            <span class="status ${myResign.status === 'Accepted' ? 'absent' : (myResign.status === 'Retained / Withdrawn' ? 'present' : 'late')}" style="font-size:11px">
+              ${myResign.status}
+            </span>
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-top:4px">Notice Ref: ${myResign.id}</div>
+          </div>
+          <div style="text-align:right">
+            <span style="font-size:11px;color:var(--muted)">Submitted: <b>${myResign.submittedDate}</b></span>
+          </div>
+        </div>
+
+        <div style="font-size:12px;line-height:1.8;border-top:1px solid #e2e8f0;padding-top:10px">
+          <div><b>Reason:</b> ${escapeHtml(myResign.reason)}</div>
+          <div><b>Notice Period:</b> ${myResign.noticeDays} Calendar Days</div>
+          <div><b>Final Last Working Day:</b> <b style="color:var(--red);font-size:13px">${myResign.officialLwd || myResign.proposedLwd}</b></div>
+          
+          <div style="margin-top:10px;background:#fff;border:1px solid #cbd5e1;padding:10px;border-radius:8px">
+            <b>Your Submitted Statement:</b>
+            <div style="font-size:11px;color:#475569;margin-top:4px;white-space:pre-wrap">"${escapeHtml(myResign.letter)}"</div>
+          </div>
+
+          ${myResign.adminRemarks ? `
+            <div style="margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;padding:10px;border-radius:8px;color:#166534">
+              <b>Sector Administrator Decision Remarks:</b>
+              <div style="font-size:12px;margin-top:2px">${escapeHtml(myResign.adminRemarks)}</div>
+            </div>
+          ` : `
+            <div style="margin-top:10px;color:var(--muted);font-style:italic">
+              ⏳ Awaiting administrative feedback from your Sector Lead.
+            </div>
+          `}
+        </div>
+
+        ${myResign.status === "Pending Review" || myResign.status === "Discussion Scheduled" ? `
+          <div style="margin-top:14px;display:flex;justify-content:flex-end">
+            <button class="action" style="color:var(--blue);border-color:#bfdbfe" onclick="withdrawMyResignation('${myResign.id}')">
+              Withdraw Resignation & Retain Employment
+            </button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+}
+
+function withdrawMyResignation(resId) {
+  const org = organizations[currentOrgId];
+  const r = (org.resignations || []).find(x => x.id === resId);
+  if (!r) return;
+
+  r.status = "Retained / Withdrawn";
+  r.adminRemarks = "Employee formally withdrew resignation notice. Continued on active roster.";
+
+  org.activities.unshift({
+    text: `${r.empName} WITHDREW their resignation notice. Continued on active duty.`,
+    time: `Just now · Employee Decision`
+  });
+
+  updateBadges();
+  renderEmployeeResignationView();
+  showToast("Resignation withdrawn successfully! Your status remains active.");
+}
+
+// ==============================================================
+// EMPLOYEE OFFBOARDING / DELETION & SUPER ADMIN AUDIT WORKFLOW
+// ==============================================================
+
+function openDeleteEmployeeModal(empId) {
+  const org = organizations[currentOrgId];
+  const emp = (org.employees || []).find(e => e.id === empId);
+  if (!emp) return;
+
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill" style="background:#fee2e2;color:#b91c1c;font-size:10px">Personnel Exit Protocol</span>
+        <h3 style="margin:6px 0 0">Delete / Offboard Employee</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+
+    <div style="background:#fff1f2;border:1px solid #fecdd3;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:14px;color:#881337">
+      ⚠️ <b>Security & Super Admin Escalation Notice:</b><br>
+      Deleting <b>${escapeHtml(emp.name)} (${emp.id})</b> will immediately remove them from active rosters. A high-priority deletion alert will be automatically dispatched to the <b>Platform Super Administrator</b> for security auditing and cross-verification.
+    </div>
+
+    <div style="font-size:13px;line-height:1.9;margin-bottom:12px">
+      <div>Employee: <b>${escapeHtml(emp.name)}</b> (ID: <code style="font-family:monospace">${emp.id}</code>)</div>
+      <div>Department & Role: <b>${emp.dept} · ${emp.role}</b></div>
+      <div>Current Status: <span class="status ${emp.status.toLowerCase()}">${emp.status}</span></div>
+    </div>
+
+    <div>
+      <label>Mandatory Departure Reason *</label>
+      <select id="deleteEmpReasonSelect" onchange="handleDeleteReasonSelect(this.value)">
+        <option value="Voluntary Resignation">Voluntary Resignation (Career Opportunity / Personal)</option>
+        <option value="Contract Completion">End of Contract / Project Tenure</option>
+        <option value="Relocation / Transfer">Relocation to Another State / Region</option>
+        <option value="Retirement">Formal Superannuation / Retirement</option>
+        <option value="Performance / Disciplinary Termination">Performance / Disciplinary Termination</option>
+        <option value="Other Specific Reason">Other Custom Reason...</option>
+      </select>
+
+      <label>Detailed Departure Explanation & Exit Handover Notes *</label>
+      <textarea id="deleteEmpDetailedNotes" rows="3" placeholder="Provide specific handover notes, effective last working date, or context..."></textarea>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn" style="background:#dc2626;color:#fff;font-weight:700" onclick="confirmDeleteEmployee('${emp.id}')">Delete & Alert Super Admin ✕</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function handleDeleteReasonSelect(val) {
+  const notes = document.getElementById("deleteEmpDetailedNotes");
+  if (!notes) return;
+  if (!notes.value) {
+    if (val === "Voluntary Resignation") notes.value = "Employee tendered formal 30-day resignation notice. Exit clearance initiated.";
+    else if (val === "Contract Completion") notes.value = "Fixed term operational contract completed. Handover fulfilled.";
+    else if (val === "Relocation / Transfer") notes.value = "Employee relocating away from facility zone.";
+    else if (val === "Performance / Disciplinary Termination") notes.value = "Terminated under corporate governance policy and HR clearance.";
+  }
+}
+
+function confirmDeleteEmployee(empId) {
+  const org = organizations[currentOrgId];
+  const empIndex = (org.employees || []).findIndex(e => e.id === empId);
+  if (empIndex === -1) return;
+
+  const reason = document.getElementById("deleteEmpReasonSelect").value;
+  const detailedNotes = (document.getElementById("deleteEmpDetailedNotes").value || "").trim();
+
+  if (!detailedNotes) {
+    showToast("Please provide detailed exit notes explaining the deletion.");
+    return;
+  }
+
+  const removedEmp = org.employees[empIndex];
+  // Remove employee from active array
+  org.employees.splice(empIndex, 1);
+  if (org.totalStaff > 0) org.totalStaff--;
+  if (removedEmp.status === "Present" && org.present > 0) org.present--;
+  if (removedEmp.status === "Late" && org.late > 0) org.late--;
+  if (removedEmp.status === "Absent" && org.absent > 0) org.absent--;
+  if (org.working > 0) org.working--;
+
+  const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " · " + new Date().toLocaleDateString();
+
+  // Create Master Audit Record
+  const newAudit = {
+    auditId: `DEL-${Math.floor(Math.random() * 8999 + 1000)}`,
+    orgId: currentOrgId,
+    sector: org.sector,
+    empSnapshot: JSON.parse(JSON.stringify(removedEmp)),
+    reason: reason,
+    notes: detailedNotes,
+    deletedByAdmin: org.adminUser,
+    timestamp: timeStr,
+    superAdminQuerySent: true, // Auto-escalated query dispatched to Super Admin
+    adminResponse: "pending", // waiting for verification
+    adminResponseNote: "",
+    adminRetainRequested: false,
+    auditStatus: "Action Required"
+  };
+
+  employeeDeletionAudits.unshift(newAudit);
+
+  // Auto-generate ticket to Super Admin Support queries
+  supportQueries.unshift({
+    id: `QRY-${Math.floor(Math.random() * 8999 + 1000)}`,
+    orgId: currentOrgId,
+    sector: org.sector,
+    raisedBy: `System Security Gateway (Org: ${currentOrgId})`,
+    role: "admin",
+    subject: `ALERT: Employee Removed [${removedEmp.name} (${removedEmp.id})]`,
+    category: "Personnel Termination Audit",
+    priority: "High",
+    message: `Sector Admin (${org.adminUser}) has deleted employee ${removedEmp.name} (${removedEmp.id}). Reason given: "${reason}". Notes: "${detailedNotes}". Super Admin verification required.`,
+    status: "Open",
+    date: "Just now",
+    response: ""
+  });
+
+  org.activities.unshift({
+    text: `⚠️ Employee ${removedEmp.name} (${removedEmp.id}) deleted by Admin (${reason}). Super Admin notified.`,
+    time: `Just now · Security Audit`
+  });
+
+  closeUniversalModal();
+  updateBadges();
+
+  if (currentTab === "dashboard") renderDashboardView();
+  else if (currentTab === "employees") renderEmployeeDirectory();
+
+  showToast(`Employee ${removedEmp.name} deleted. Incident alert transmitted to Super Admin!`);
+}
+
+// SUPER ADMIN RETENTION AND VERIFICATION VIEW
+function renderSuperRetentionsView() {
+  const filter = document.getElementById("superDeletionFilter")?.value || "All";
+  const tbody = document.getElementById("superDeletionAuditRows");
+  if (!tbody) return;
+
+  const filtered = employeeDeletionAudits.filter(a => {
+    if (filter === "All") return true;
+    return a.auditStatus === filter;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:26px;color:var(--muted)">No deletion audits matching current filter</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(a => {
+    const isPending = a.adminResponse === "pending";
+    const isRetained = a.auditStatus === "Retained";
+    const isConfirmedDel = a.auditStatus === "Confirmed Deleted";
+
+    let statusBadge = `<span class="status absent">Action Required</span>`;
+    if (isRetained) statusBadge = `<span class="status present">Restored / Retained</span>`;
+    else if (isConfirmedDel) statusBadge = `<span class="status late">Confirmed Offboarded</span>`;
+
+    let adminDecisionText = `<span style="color:var(--amber);font-weight:600">Pending Sector Admin Response</span>`;
+    if (a.adminResponse === "confirmed_yes") {
+      adminDecisionText = `<span style="color:var(--muted);font-weight:600">Admin confirmed departure</span>`;
+    } else if (a.adminResponse === "confirmed_no") {
+      adminDecisionText = `<span style="color:var(--red);font-weight:700">Admin claims ERROR / Wants retention!</span>`;
+    }
+
+    return `
+      <tr>
+        <td><b style="font-family:monospace;color:var(--purple)">${a.auditId}</b></td>
+        <td><b>${a.orgId}</b><br><small style="color:var(--muted)">${a.sector}</small></td>
+        <td>
+          <b>${escapeHtml(a.empSnapshot.name)}</b><br>
+          <small style="color:var(--blue);font-family:monospace">ID: ${a.empSnapshot.id} · ${a.empSnapshot.dept}</small>
+        </td>
+        <td style="max-width:240px">
+          <b>${escapeHtml(a.reason)}</b>
+          <div style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis">${escapeHtml(a.notes)}</div>
+        </td>
+        <td><small>${a.timestamp}</small></td>
+        <td>${statusBadge}</td>
+        <td>${adminDecisionText}</td>
+        <td>
+          <button class="action action-purple" onclick="openSuperAdminVerificationDialogue('${a.auditId}')">
+            ${isRetained ? 'View Details' : 'Verify & Retain ⚡'}
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// SUPER ADMIN VERIFICATION DIALOGUE MODAL
+function openSuperAdminVerificationDialogue(auditId) {
+  const audit = employeeDeletionAudits.find(a => a.auditId === auditId);
+  if (!audit) return;
+
+  const content = document.getElementById("universalModalContent");
+  const isRetained = audit.auditStatus === "Retained";
+  const isConfirmed = audit.auditStatus === "Confirmed Deleted";
+
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill-purple" style="font-size:10px">Super Admin Security Channel · Audit Ref: ${audit.auditId}</span>
+        <h3 style="margin:6px 0 0">Personnel Deletion Verification & Retention Hub</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;line-height:1.7">
+        <div><b>Target Organization:</b> ${audit.orgId} (${audit.sector})</div>
+        <div><b>Sector Admin:</b> ${audit.deletedByAdmin}</div>
+        <div><b>Deleted Employee:</b> <span style="color:var(--blue);font-weight:700">${escapeHtml(audit.empSnapshot.name)} (${audit.empSnapshot.id})</span></div>
+        <div><b>Role & Dept:</b> ${audit.empSnapshot.role} · ${audit.empSnapshot.dept}</div>
+        <div><b>Stated Reason:</b> <b>${escapeHtml(audit.reason)}</b></div>
+        <div><b>Logged At:</b> ${audit.timestamp}</div>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">
+        <b>Sector Admin Notes:</b> <i>"${escapeHtml(audit.notes)}"</i>
+      </div>
+    </div>
+
+    <!-- VERIFICATION WORKFLOW BOX -->
+    <div style="border:1px solid #cbd5e1;border-radius:12px;padding:16px;background:#fff">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--navy)">
+        Interactive Cross-Verification Step:
+      </div>
+
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px">
+        As Platform Super Administrator, you must confirm with the Sector Admin whether this deletion was genuinely intended or if it was an error requiring the employee to be retained.
+      </div>
+
+      <div style="background:#f1f5f9;padding:12px;border-radius:8px;font-size:12px;margin-bottom:14px">
+        <b>Current Admin Status:</b> 
+        ${audit.adminResponse === 'pending' 
+          ? `<span style="color:var(--amber);font-weight:700">Awaiting Sector Admin response to inquiry</span>` 
+          : (audit.adminResponse === 'confirmed_yes' 
+              ? `<span style="color:var(--green);font-weight:700">✓ Sector Admin confirmed: "Yes, I intentionally authorized this departure."</span>`
+              : `<span style="color:var(--red);font-weight:700">⚠️ Sector Admin reported: "No, I did not authorize deletion / It was done in error. Please retain employee back!"</span>`)}
+      </div>
+
+      ${isRetained ? `
+        <div style="background:#dcfce7;border:1px solid #86efac;padding:12px;border-radius:8px;color:#166534;font-size:13px;font-weight:700">
+          ✓ Employee has been successfully retained and restored back into the active sector roster!
+        </div>
+      ` : (isConfirmed ? `
+        <div style="background:#f1f5f9;border:1px solid #cbd5e1;padding:12px;border-radius:8px;color:#475569;font-size:13px;font-weight:600">
+          ✓ Employee deletion verified and permanently archived.
+        </div>
+      ` : `
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <!-- Option A: Query Admin / Simulate Admin Dialogue -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" style="background:#0b1730;color:#fff" onclick="sendSuperAdminInquiry('${audit.auditId}')">
+              ✉️ Send Verification Notice to Sector Admin
+            </button>
+            <button class="btn" style="background:#fee2e2;color:#991b1b;border:1px solid #f87171" onclick="simulateAdminResponseNo('${audit.auditId}')">
+              Simulate: Admin says "No, I did not delete, retain back!"
+            </button>
+            <button class="btn" style="background:#dcfce7;color:#166534;border:1px solid #86efac" onclick="simulateAdminResponseYes('${audit.auditId}')">
+              Simulate: Admin says "Yes, confirmed resignation"
+            </button>
+          </div>
+
+          <!-- Retention Action when Admin requests retention -->
+          ${audit.adminResponse === 'confirmed_no' ? `
+            <div style="background:#eff6ff;border:1px solid #93c5fd;padding:14px;border-radius:10px;margin-top:10px">
+              <b style="color:var(--blue);font-size:13px">⚡ Sector Admin has requested Employee Retention!</b>
+              <p style="font-size:12px;color:#1e3a8a;margin:4px 0 12px">
+                Sector Admin answered "No, I have not done deletion" and agreed "Yes, retain employee back". As Super Administrator, you can now execute the retention recovery protocol.
+              </p>
+              <button class="btn btn-purple" style="font-size:13px;padding:10px 18px" onclick="executeEmployeeRetention('${audit.auditId}')">
+                🔄 Restore & Retain ${escapeHtml(audit.empSnapshot.name)} to Active Roster
+              </button>
+            </div>
+          ` : (audit.adminResponse === 'confirmed_yes' ? `
+            <div style="margin-top:10px">
+              <button class="btn" style="background:#475569;color:#fff" onclick="finalizeConfirmedDeletion('${audit.auditId}')">
+                Archive Departure as Confirmed
+              </button>
+            </div>
+          ` : '')}
+        </div>
+      `)}
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:16px">
+      <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Close</button>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function sendSuperAdminInquiry(auditId) {
+  const audit = employeeDeletionAudits.find(a => a.auditId === auditId);
+  if (!audit) return;
+
+  audit.superAdminQuerySent = true;
+  updateBadges();
+  showToast(`Verification inquiry dispatched to Sector Admin for ${audit.orgId}!`);
+  openSuperAdminVerificationDialogue(auditId);
+}
+
+function simulateAdminResponseYes(auditId) {
+  const audit = employeeDeletionAudits.find(a => a.auditId === auditId);
+  if (!audit) return;
+
+  audit.adminResponse = "confirmed_yes";
+  audit.adminResponseNote = "Sector Admin confirmed voluntary exit during review.";
+  updateBadges();
+  showToast("Sector Admin confirmed: Deletion was intended.");
+  openSuperAdminVerificationDialogue(auditId);
+}
+
+function simulateAdminResponseNo(auditId) {
+  const audit = employeeDeletionAudits.find(a => a.auditId === auditId);
+  if (!audit) return;
+
+  audit.adminResponse = "confirmed_no";
+  audit.adminResponseNote = "Sector Admin stated: 'No, I did not delete this employee or it occurred accidentally. Please retain and restore!'";
+  audit.adminRetainRequested = true;
+  updateBadges();
+  showToast("Sector Admin states NOT intended! Retention requested.");
+  openSuperAdminVerificationDialogue(auditId);
+}
+
+function finalizeConfirmedDeletion(auditId) {
+  const audit = employeeDeletionAudits.find(a => a.auditId === auditId);
+  if (!audit) return;
+
+  audit.auditStatus = "Confirmed Deleted";
+  updateBadges();
+  closeUniversalModal();
+  renderSuperRetentionsView();
+  showToast(`Audit #${auditId} marked as Confirmed Offboarded.`);
+}
+
+// RESTORE & RETAIN EMPLOYEE BACK TO ACTIVE ROSTER BY SUPER ADMIN
+function executeEmployeeRetention(auditId) {
+  const audit = employeeDeletionAudits.find(a => a.auditId === auditId);
+  if (!audit) return;
+
+  const targetOrg = organizations[audit.orgId];
+  if (!targetOrg) {
+    showToast("Target Organization could not be found!");
+    return;
+  }
+
+  // Check if employee already back
+  const exists = (targetOrg.employees || []).some(e => e.id === audit.empSnapshot.id);
+  if (!exists) {
+    // Clone snapshot back into active employee roster
+    const restoredEmp = JSON.parse(JSON.stringify(audit.empSnapshot));
+    restoredEmp.status = "Present";
+    targetOrg.employees.unshift(restoredEmp);
+    targetOrg.totalStaff++;
+    targetOrg.present++;
+    targetOrg.working++;
+
+    targetOrg.activities.unshift({
+      text: `🔄 Super Admin restored & retained employee ${restoredEmp.name} (${restoredEmp.id}) back to roster!`,
+      time: `Just now · Super Admin Override`
+    });
+  }
+
+  audit.auditStatus = "Retained";
+  audit.adminRetainRequested = false;
+
+  updateBadges();
+  closeUniversalModal();
+  renderSuperRetentionsView();
+
+  showToast(`Employee ${audit.empSnapshot.name} (${audit.empSnapshot.id}) successfully retained and restored back to ${audit.orgId}!`);
+}
+
+// SECTOR ADMIN SUPPORT BRIDGE VIEW
 function renderAdminSupportBridge() {
   const myQueries = supportQueries.filter(q => q.orgId === currentOrgId);
   const tbody = document.getElementById("adminSectorQueryRows");
-  if (myQueries.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">No support queries raised from Organization ${currentOrgId}</td></tr>`;
+  if (tbody) {
+    if (myQueries.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">No support queries raised from Organization ${currentOrgId}</td></tr>`;
+    } else {
+      tbody.innerHTML = myQueries.map(q => `
+        <tr>
+          <td><b style="font-family:monospace;color:var(--purple)">${q.id}</b></td>
+          <td>${q.raisedBy}</td>
+          <td>
+            <b>${q.subject}</b><br>
+            <span style="color:var(--muted);font-size:11px">${q.message}</span>
+          </td>
+          <td>${q.category}</td>
+          <td style="color:var(--purple);font-weight:600">${q.response || '<span style="color:var(--muted);font-style:italic">Pending Super Admin response...</span>'}</td>
+          <td><span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></td>
+        </tr>
+      `).join("");
+    }
+  }
+
+  // Render Deletion Verification Inquiries directed to this Sector Admin
+  const inqContainer = document.getElementById("adminDeletionInquiriesList");
+  if (!inqContainer) return;
+
+  const myDeletions = employeeDeletionAudits.filter(d => d.orgId === currentOrgId);
+  if (myDeletions.length === 0) {
+    inqContainer.innerHTML = `<div style="font-size:12px;color:#881337;padding:8px 0">No active deletion verification alerts. All roster records comply.</div>`;
     return;
   }
-  tbody.innerHTML = myQueries.map(q => `
-    <tr>
-      <td><b style="font-family:monospace;color:var(--purple)">${q.id}</b></td>
-      <td>${q.raisedBy}</td>
-      <td>
-        <b>${q.subject}</b><br>
-        <span style="color:var(--muted);font-size:11px">${q.message}</span>
-      </td>
-      <td>${q.category}</td>
-      <td style="color:var(--purple);font-weight:600">${q.response || '<span style="color:var(--muted);font-style:italic">Pending Super Admin response...</span>'}</td>
-      <td><span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></td>
-    </tr>
-  `).join("");
+
+  inqContainer.innerHTML = myDeletions.map(d => {
+    return `
+      <div style="background:#fff;border:1px solid #fecdd3;border-radius:10px;padding:14px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <span class="status absent" style="font-size:10px">Super Admin Inquiry Ref: ${d.auditId}</span>
+            <div style="font-size:14px;font-weight:800;color:#9f1239;margin-top:4px">
+              Did you authorize the removal of ${escapeHtml(d.empSnapshot.name)} (${d.empSnapshot.id})?
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">
+              Department: <b>${d.empSnapshot.dept}</b> · Stated Reason: <b>${escapeHtml(d.reason)}</b> · Logged: ${d.timestamp}
+            </div>
+          </div>
+          <div>
+            ${d.auditStatus === 'Retained' 
+              ? `<span class="status present">Restored by Super Admin</span>` 
+              : (d.adminResponse === 'confirmed_yes' 
+                  ? `<span class="status completed">You Confirmed Yes</span>` 
+                  : (d.adminResponse === 'confirmed_no' 
+                      ? `<span class="status absent">Retention Requested</span>` 
+                      : `<span class="status late">Confirmation Pending</span>`))}
+          </div>
+        </div>
+
+        ${d.auditStatus === 'Retained' ? `
+          <div style="font-size:12px;color:var(--green);margin-top:10px;font-weight:600">
+            ✓ Super Admin has accepted your retention request and restored ${escapeHtml(d.empSnapshot.name)} back to your active staff directory!
+          </div>
+        ` : (d.adminResponse === 'pending' ? `
+          <div style="background:#fff1f2;padding:10px;border-radius:8px;margin-top:10px;font-size:12px;color:#881337">
+            <b>Super Admin Query:</b> "Our security system received an employee deletion event for <b>${escapeHtml(d.empSnapshot.name)}</b>. Please confirm: did you genuinely intend to delete this employee, or was this an accidental deletion that you wish to retain?"
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button class="btn btn-blue" style="font-size:12px;padding:6px 14px" onclick="sectorAdminReplyDeletion('${d.auditId}', 'yes')">
+                Yes, I authorized this deletion
+              </button>
+              <button class="btn" style="background:#dc2626;color:#fff;font-size:12px;padding:6px 14px" onclick="sectorAdminReplyDeletion('${d.auditId}', 'no')">
+                No, I did not delete! Retain employee back
+              </button>
+            </div>
+          </div>
+        ` : `
+          <div style="font-size:12px;color:var(--muted);margin-top:8px">
+            Your response: <b>${d.adminResponse === 'confirmed_yes' ? 'Confirmed departure was authorized' : 'Reported error & requested Super Admin retention'}</b>
+          </div>
+        `)}
+      </div>
+    `;
+  }).join("");
 }
 
-// EMPLOYEE SELF-SERVICE DIRECT VIEWS
+function sectorAdminReplyDeletion(auditId, responseChoice) {
+  const audit = employeeDeletionAudits.find(a => a.auditId === auditId);
+  if (!audit) return;
+
+  if (responseChoice === "yes") {
+    audit.adminResponse = "confirmed_yes";
+    audit.adminResponseNote = "Sector Admin confirmed authorization.";
+    showToast("You confirmed the employee deletion to Super Admin.");
+  } else {
+    audit.adminResponse = "confirmed_no";
+    audit.adminRetainRequested = true;
+    audit.adminResponseNote = "Sector Admin answered: 'No, I have not authorized deletion. Please retain employee back!'";
+    showToast("Notice sent to Super Admin: 'No, I did not delete. Retain employee back!'");
+  }
+
+  updateBadges();
+  renderAdminSupportBridge();
+}
+
+// ==============================================================
+// EMPLOYEE SELF-SERVICE DIRECT VIEWS & PAYSLIP PRINT SUITE
+// ==============================================================
+
 function renderEmployeeOverview() {
   const emp = getActiveEmployee();
   const org = organizations[currentOrgId];
-  document.getElementById("essWelcomeTitle").textContent = `Welcome, ${emp.name}`;
-  document.getElementById("essWelcomeSub").textContent = `Sector: ${org.sector} · Org ID: ${org.orgId} · Staff ID: ${emp.id}`;
+  const welcomeTitle = document.getElementById("essWelcomeTitle");
+  const welcomeSub = document.getElementById("essWelcomeSub");
+  if (welcomeTitle) welcomeTitle.textContent = `Welcome, ${emp.name}`;
+  if (welcomeSub) welcomeSub.textContent = `Sector: ${org.sector} · Org ID: ${org.orgId} · Staff ID: ${emp.id}`;
 
   const isCheckedIn = emp.status === "Present" || emp.status === "Late";
-  document.getElementById("essQuickStatusText").textContent = isCheckedIn ? "Checked In — On Duty" : "Checked Out / Off Duty";
+  const quickText = document.getElementById("essQuickStatusText");
+  if (quickText) quickText.textContent = isCheckedIn ? "Checked In — On Duty" : "Checked Out / Off Duty";
   const badge = document.getElementById("essQuickStatusBadge");
-  badge.className = `status ${emp.status.toLowerCase()}`;
-  badge.textContent = emp.status;
+  if (badge) {
+    badge.className = `status ${emp.status.toLowerCase()}`;
+    badge.textContent = emp.status;
+  }
 
   const totalLeaves = (emp.casualLeaves || 0) + (emp.sickLeaves || 0) + (emp.privilegeLeaves || 0);
-  document.getElementById("essKpiLeaves").textContent = `${totalLeaves} Days`;
+  const kpiLeaves = document.getElementById("essKpiLeaves");
+  if (kpiLeaves) kpiLeaves.textContent = `${totalLeaves} Days`;
 
-  const myTasks = (org.tasks || []).filter(t => t.assignee.toLowerCase().includes(emp.name.toLowerCase()) || t.assignee.toLowerCase().includes(emp.id.toLowerCase()));
-  document.getElementById("essKpiTasks").textContent = myTasks.length;
+  const myTasks = (org.tasks || []).filter(t => (t.assignee || "").toLowerCase().includes(emp.name.toLowerCase()) || (t.assignee || "").toLowerCase().includes(emp.id.toLowerCase()));
+  const kpiTasks = document.getElementById("essKpiTasks");
+  if (kpiTasks) kpiTasks.textContent = myTasks.length;
 
   const taskList = document.getElementById("essOverviewTaskList");
-  if (myTasks.length === 0) {
-    taskList.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:12px 0">No pending tasks currently assigned to you.</div>`;
-  } else {
-    taskList.innerHTML = myTasks.slice(0, 3).map(t => `
-      <div style="border-bottom:1px solid #f1f4f8;padding:10px 0;display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <b style="font-size:13px;color:var(--navy)">${t.title}</b>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Zone: ${t.zone} · Priority: <b>${t.priority}</b></div>
+  if (taskList) {
+    if (myTasks.length === 0) {
+      taskList.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:12px 0">No pending tasks currently assigned to you.</div>`;
+    } else {
+      taskList.innerHTML = myTasks.slice(0, 3).map(t => `
+        <div style="border-bottom:1px solid #f1f4f8;padding:10px 0;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <b style="font-size:13px;color:var(--navy)">${escapeHtml(t.title)}</b>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Zone: ${escapeHtml(t.zone)} · Priority: <b>${t.priority}</b></div>
+          </div>
+          <span class="status ${t.status.toLowerCase().replace(' ','-')}">${t.status}</span>
         </div>
-        <span class="status ${t.status.toLowerCase().replace(' ','-')}">${t.status}</span>
-      </div>
-    `).join("");
+      `).join("");
+    }
   }
 
   const shiftBox = document.getElementById("essOverviewShiftCard");
-  shiftBox.innerHTML = `
-    <div><b>Assigned Schedule:</b> ${emp.shift}</div>
-    <div><b>Designation:</b> ${emp.role} (${emp.dept})</div>
-    <div><b>Clock-in Registered:</b> ${emp.login} IST</div>
-    <div><b>Base Duty Zone:</b> ${org.name.split(" ")[0]} Main Facility</div>
-  `;
+  if (shiftBox) {
+    shiftBox.innerHTML = `
+      <div><b>Assigned Schedule:</b> ${emp.shift}</div>
+      <div><b>Designation:</b> ${emp.role} (${emp.dept})</div>
+      <div><b>Clock-in Registered:</b> ${emp.login} IST</div>
+      <div><b>Base Duty Zone:</b> ${org.name.split(" ")[0]} Main Facility</div>
+    `;
+  }
 }
 
 function renderEmployeeClock() {
   const emp = getActiveEmployee();
   const org = organizations[currentOrgId];
-  document.getElementById("essPerimeterName").textContent = `${org.name.split(" ")[0]} Facility Perimeter`;
-  document.getElementById("essShiftTimeLabel").textContent = emp.shift;
+  const pName = document.getElementById("essPerimeterName");
+  if (pName) pName.textContent = `${org.name.split(" ")[0]} Facility Perimeter`;
+  const sLabel = document.getElementById("essShiftTimeLabel");
+  if (sLabel) sLabel.textContent = emp.shift;
 
   const btn = document.getElementById("btnClockToggle");
   const note = document.getElementById("essClockLastActionNote");
 
   if (emp.status === "Present" || emp.status === "Late") {
-    btn.textContent = "Check Out (End Shift)";
-    btn.style.background = "#dc2626";
-    btn.style.color = "#fff";
-    note.textContent = `Active Shift Clocked in at ${emp.login} IST`;
+    if (btn) {
+      btn.textContent = "Check Out (End Shift)";
+      btn.style.background = "#dc2626";
+      btn.style.color = "#fff";
+    }
+    if (note) note.textContent = `Active Shift Clocked in at ${emp.login} IST`;
   } else {
-    btn.textContent = "Check In Now";
-    btn.style.background = "#2563eb";
-    btn.style.color = "#fff";
-    note.textContent = `Off-duty. Click above to record biometric punch.`;
+    if (btn) {
+      btn.textContent = "Check In Now";
+      btn.style.background = "#2563eb";
+      btn.style.color = "#fff";
+    }
+    if (note) note.textContent = `Off-duty. Click above to record biometric punch.`;
   }
 }
 
@@ -3676,9 +4766,10 @@ function toggleEmployeeClock() {
 function renderEmployeeTasks() {
   const emp = getActiveEmployee();
   const org = organizations[currentOrgId];
-  const tasks = (org.tasks || []).filter(t => t.assignee.toLowerCase().includes(emp.name.toLowerCase()) || t.assignee.toLowerCase().includes(emp.id.toLowerCase()));
+  const tasks = (org.tasks || []).filter(t => (t.assignee || "").toLowerCase().includes(emp.name.toLowerCase()) || (t.assignee || "").toLowerCase().includes(emp.id.toLowerCase()));
 
   const tbody = document.getElementById("essTasksTableRows");
+  if (!tbody) return;
   if (tasks.length === 0) {
     tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No work orders assigned to your staff profile</td></tr>`;
     return;
@@ -3686,8 +4777,8 @@ function renderEmployeeTasks() {
   tbody.innerHTML = tasks.map(t => `
     <tr>
       <td><b>${t.id}</b></td>
-      <td><b>${t.title}</b></td>
-      <td>${t.zone}</td>
+      <td><b>${escapeHtml(t.title)}</b></td>
+      <td>${escapeHtml(t.zone)}</td>
       <td><span class="status" style="${t.priority === 'High' ? 'background:#ffe4e6;color:#be123c' : 'background:#f1f5f9'}">${t.priority}</span></td>
       <td>
         <div class="progress-bg"><div class="progress-fill" style="width:${t.progress}%"></div></div>
@@ -3707,7 +4798,7 @@ function renderEmployeeTasks() {
 
 function updateEmpTaskStatus(taskId, newStatus) {
   const org = organizations[currentOrgId];
-  const t = org.tasks.find(x => x.id === taskId);
+  const t = (org.tasks || []).find(x => x.id === taskId);
   if (t) {
     t.status = newStatus;
     t.progress = newStatus === 'Completed' ? 100 : (newStatus === 'Blocked' ? 30 : 60);
@@ -3733,6 +4824,7 @@ function renderEmployeeShifts() {
   ];
 
   const tbody = document.getElementById("essWeekShiftRows");
+  if (!tbody) return;
   tbody.innerHTML = schedule.map(s => `
     <tr>
       <td><b>${s.day}</b></td>
@@ -3744,22 +4836,21 @@ function renderEmployeeShifts() {
   `).join("");
 }
 
-// FULL PAYSLIP GENERATOR & PRINT SUITE
 function generatePayslipHTML(emp, org, period = "October 2026") {
   const net = (emp.basePay + emp.otPay - emp.deductions);
   const hra = Math.round(emp.basePay * 0.35);
   const basic = Math.round(emp.basePay * 0.50);
-  const specialAllowance = emp.basePay - basic - hra;
+  const specialAllowance = Math.max(0, emp.basePay - basic - hra);
   const epf = Math.round(emp.deductions * 0.45);
   const tds = Math.round(emp.deductions * 0.52);
-  const profTax = emp.deductions - epf - tds;
+  const profTax = Math.max(0, emp.deductions - epf - tds);
 
   return `
     <div class="payslip-sheet" id="officialPayslipDocument">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0b1730;padding-bottom:14px;margin-bottom:12px">
         <div>
-          <div style="font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-0.5px">${org.name}</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">${org.address || 'Enterprise Operational Sector Unit'}</div>
+          <div style="font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-0.5px">${escapeHtml(org.name)}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${escapeHtml(org.address || 'Enterprise Operational Sector Unit')}</div>
           <div style="font-size:11px;font-family:monospace;color:var(--blue);margin-top:2px">ORG UID: ${org.orgId} · Sector: ${org.sector}</div>
         </div>
         <div style="text-align:right">
@@ -3771,8 +4862,8 @@ function generatePayslipHTML(emp, org, period = "October 2026") {
       <div class="payslip-meta-grid">
         <div><span style="color:var(--muted)">Employee ID:</span> <b style="font-family:monospace">${emp.id}</b></div>
         <div><span style="color:var(--muted)">Department:</span> <b>${emp.dept}</b></div>
-        <div><span style="color:var(--muted)">Employee Name:</span> <b>${emp.name}</b></div>
-        <div><span style="color:var(--muted)">Designation:</span> <b>${emp.role}</b></div>
+        <div><span style="color:var(--muted)">Employee Name:</span> <b>${escapeHtml(emp.name)}</b></div>
+        <div><span style="color:var(--muted)">Designation:</span> <b>${escapeHtml(emp.role)}</b></div>
         <div><span style="color:var(--muted)">Income Tax PAN:</span> <b style="font-family:monospace">${emp.pan || 'ABCDE1234F'}</b></div>
         <div><span style="color:var(--muted)">PF Account No:</span> <b style="font-family:monospace">${emp.pfNo || 'MH/BAN/0019283/E1024'}</b></div>
         <div><span style="color:var(--muted)">Days Payable:</span> <b>24 / 24 Days</b></div>
@@ -3809,15 +4900,15 @@ function generatePayslipHTML(emp, org, period = "October 2026") {
           </tr>
           <tr>
             <td>Approved Overtime Incentive</td>
-            <td style="text-align:right;font-weight:600;color:var(--green)">+ ₹ ${emp.otPay.toLocaleString('en-IN')}</td>
+            <td style="text-align:right;font-weight:600;color:var(--green)">+ ₹ ${(emp.otPay || 0).toLocaleString('en-IN')}</td>
             <td style="padding-left:24px">Voluntary Insurance / Other</td>
             <td style="text-align:right;color:var(--muted)">₹ 0</td>
           </tr>
           <tr style="background:#f8fafc;font-weight:700;border-top:2px solid #cbd5e1">
             <td>GROSS EARNINGS</td>
-            <td style="text-align:right;color:var(--blue)">₹ ${(emp.basePay + emp.otPay).toLocaleString('en-IN')}</td>
+            <td style="text-align:right;color:var(--blue)">₹ ${((emp.basePay || 0) + (emp.otPay || 0)).toLocaleString('en-IN')}</td>
             <td style="padding-left:24px">TOTAL DEDUCTIONS</td>
-            <td style="text-align:right;color:var(--red)">₹ ${emp.deductions.toLocaleString('en-IN')}</td>
+            <td style="text-align:right;color:var(--red)">₹ ${(emp.deductions || 0).toLocaleString('en-IN')}</td>
           </tr>
         </tbody>
       </table>
@@ -3853,28 +4944,30 @@ function renderEmployeePayslips() {
   const net = (emp.basePay + emp.otPay - emp.deductions);
 
   const tbody = document.getElementById("essPayslipTableRows");
-  tbody.innerHTML = `
-    <tr>
-      <td><b>October 2026</b></td>
-      <td>₹ ${(emp.basePay + emp.otPay).toLocaleString('en-IN')}</td>
-      <td style="color:var(--red)">- ₹ ${emp.deductions.toLocaleString('en-IN')}</td>
-      <td><b style="color:var(--blue)">₹ ${net.toLocaleString('en-IN')}</b></td>
-      <td><span class="status ${emp.payStatus.toLowerCase()}">${emp.payStatus}</span></td>
-      <td>
-        <button class="action action-primary" onclick="viewDetailedPayslip('${emp.id}')">🖨 Open & Print</button>
-      </td>
-    </tr>
-    <tr>
-      <td><b>September 2026</b></td>
-      <td>₹ ${(emp.basePay + 6000).toLocaleString('en-IN')}</td>
-      <td style="color:var(--red)">- ₹ ${emp.deductions.toLocaleString('en-IN')}</td>
-      <td><b style="color:var(--blue)">₹ ${(emp.basePay + 6000 - emp.deductions).toLocaleString('en-IN')}</b></td>
-      <td><span class="status present">Paid</span></td>
-      <td>
-        <button class="action" onclick="viewDetailedPayslip('${emp.id}', 'September 2026')">🖨 Open & Print</button>
-      </td>
-    </tr>
-  `;
+  if (tbody) {
+    tbody.innerHTML = `
+      <tr>
+        <td><b>October 2026</b></td>
+        <td>₹ ${(emp.basePay + emp.otPay).toLocaleString('en-IN')}</td>
+        <td style="color:var(--red)">- ₹ ${emp.deductions.toLocaleString('en-IN')}</td>
+        <td><b style="color:var(--blue)">₹ ${net.toLocaleString('en-IN')}</b></td>
+        <td><span class="status ${emp.payStatus.toLowerCase()}">${emp.payStatus}</span></td>
+        <td>
+          <button class="action action-primary" onclick="viewDetailedPayslip('${emp.id}')">🖨 Open & Print</button>
+        </td>
+      </tr>
+      <tr>
+        <td><b>September 2026</b></td>
+        <td>₹ ${(emp.basePay + 6000).toLocaleString('en-IN')}</td>
+        <td style="color:var(--red)">- ₹ ${emp.deductions.toLocaleString('en-IN')}</td>
+        <td><b style="color:var(--blue)">₹ ${(emp.basePay + 6000 - emp.deductions).toLocaleString('en-IN')}</b></td>
+        <td><span class="status present">Paid</span></td>
+        <td>
+          <button class="action" onclick="viewDetailedPayslip('${emp.id}', 'September 2026')">🖨 Open & Print</button>
+        </td>
+      </tr>
+    `;
+  }
 
   const inline = document.getElementById("essInlinePayslipContainer");
   if (inline) {
@@ -3888,7 +4981,7 @@ function viewMyCurrentPayslip() {
 
 function viewDetailedPayslip(empId, period = "October 2026") {
   const org = organizations[currentOrgId];
-  const emp = org.employees.find(x => x.id === empId);
+  const emp = (org.employees || []).find(x => x.id === empId);
   if (!emp) return;
 
   const content = document.getElementById("universalModalContent");
@@ -3926,8 +5019,9 @@ function printPayslipDirectly() {
 
 function renderEmployeeSupport() {
   const emp = getActiveEmployee();
-  const myQueries = supportQueries.filter(q => q.raisedBy.includes(emp.id) || q.raisedBy.includes(emp.name));
+  const myQueries = supportQueries.filter(q => (q.raisedBy || "").includes(emp.id) || (q.raisedBy || "").includes(emp.name));
   const tbody = document.getElementById("essSupportQueryRows");
+  if (!tbody) return;
   if (myQueries.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">You have not raised any direct escalated queries.</td></tr>`;
     return;
@@ -3935,36 +5029,267 @@ function renderEmployeeSupport() {
   tbody.innerHTML = myQueries.map(q => `
     <tr>
       <td><b style="font-family:monospace;color:var(--purple)">${q.id}</b></td>
-      <td><b>${q.subject}</b><br><span style="color:var(--muted);font-size:11px">${q.message}</span></td>
+      <td><b>${escapeHtml(q.subject)}</b><br><span style="color:var(--muted);font-size:11px">${escapeHtml(q.message)}</span></td>
       <td>${q.category}</td>
-      <td style="color:var(--purple);font-weight:600">${q.response || '<span style="color:var(--muted);font-style:italic">In progress with Super Admin...</span>'}</td>
+      <td style="color:var(--purple);font-weight:600">${q.response ? escapeHtml(q.response) : '<span style="color:var(--muted);font-style:italic">In progress with Super Admin...</span>'}</td>
       <td><span class="status ${q.status === 'Resolved' ? 'resolved' : (q.status === 'In Review' ? 'in-review' : 'open-status')}">${q.status}</span></td>
     </tr>
   `).join("");
 }
 
-function viewEmployeeProfile(id) {
-  const org = organizations[currentOrgId];
-  const e = org.employees.find(x => x.id === id);
-  if (!e) return;
+// ==============================================================
+// TIME, CLOCK & PROVISIONING UTILITY FUNCTIONS
+// ==============================================================
+
+function startLiveClock() {
+  const updateClock = () => {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const widget = document.getElementById("liveClockWidget");
+    if (widget) widget.textContent = timeStr;
+    const largeClock = document.getElementById("largeClockDisplay");
+    if (largeClock) largeClock.textContent = timeStr;
+  };
+  updateClock();
+  setInterval(updateClock, 1000);
+}
+
+function openProvisionSectorModal() {
   const content = document.getElementById("universalModalContent");
   content.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <h3 style="margin:0">${e.name} (${e.id})</h3>
+      <div>
+        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
+        <h3 style="margin:6px 0 0">Add New Sector Category & Admin Credentials</h3>
+      </div>
       <button class="action" onclick="closeUniversalModal()">✕</button>
     </div>
-    <div style="font-size:13px;line-height:2">
-      <div><b>Department:</b> ${e.dept}</div>
-      <div><b>Designation:</b> ${e.role}</div>
-      <div><b>Shift:</b> ${e.shift}</div>
-      <div><b>Email:</b> ${e.email}</div>
-      <div><b>Attendance Status:</b> <span class="status ${e.status.toLowerCase()}">${e.status}</span></div>
-    </div>
-    <div style="margin-top:20px;text-align:right">
-      <button class="btn btn-blue" onclick="closeUniversalModal()">Close Profile</button>
+    <div>
+      <div style="display:grid;grid-template-columns:3fr 1fr;gap:12px">
+        <div>
+          <label>Sector Category Name *</label>
+          <input id="provSectorKey" placeholder="e.g. Logistics, Aviation, Energy" oninput="autofillNewSectorFields(this.value)">
+        </div>
+        <div>
+          <label>Emoji / Icon</label>
+          <input id="provSectorIcon" value="🚀" style="text-align:center">
+        </div>
+      </div>
+
+      <label>Primary Organization ID (Code) *</label>
+      <input id="provSectorOrgId" placeholder="e.g. LOG-001, AVIA-001" style="font-family:monospace;font-weight:700;text-transform:uppercase">
+
+      <label>Legal Entity / Facility Name *</label>
+      <input id="provSectorFacilityName" placeholder="e.g. Global Freight & Cargo Terminal">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Sector Admin Username *</label>
+          <input id="provSectorAdminUser" value="admin">
+        </div>
+        <div>
+          <label>Sector Admin Password *</label>
+          <input id="provSectorAdminPass" value="admin123">
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-purple" onclick="saveProvisionedSector()">Provision Sector Category & Credentials 🚀</button>
+      </div>
     </div>
   `;
   document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function autofillNewSectorFields(val) {
+  const clean = val.trim().replace(/[^a-zA-Z0-9]/g, '');
+  if (!clean) return;
+  const prefix = clean.slice(0, 4).toUpperCase();
+  const orgInput = document.getElementById("provSectorOrgId");
+  const facInput = document.getElementById("provSectorFacilityName");
+  if (orgInput && (!orgInput.value || orgInput.dataset.touched !== "true")) {
+    orgInput.value = `${prefix}-001`;
+  }
+  if (facInput && (!facInput.value || facInput.dataset.touched !== "true")) {
+    facInput.value = `${clean} Operations Hub`;
+  }
+}
+
+function saveProvisionedSector() {
+  const rawKey = document.getElementById("provSectorKey").value.trim();
+  const orgId = (document.getElementById("provSectorOrgId").value || "").trim().toUpperCase();
+  const facilityName = (document.getElementById("provSectorFacilityName").value || "").trim();
+  const adminUser = (document.getElementById("provSectorAdminUser").value || "").trim();
+  const adminPass = (document.getElementById("provSectorAdminPass").value || "").trim();
+  const icon = document.getElementById("provSectorIcon").value.trim() || "🏢";
+
+  if (!rawKey || !orgId || !facilityName || !adminUser || !adminPass) {
+    showToast("Please fill all required sector and credential fields!");
+    return;
+  }
+
+  const key = rawKey.charAt(0).toUpperCase() + rawKey.slice(1);
+
+  if (organizations[orgId]) {
+    showToast(`Organization ID "${orgId}" already exists! Please pick a unique ID.`);
+    return;
+  }
+
+  sectorMeta[key] = {
+    icon: icon,
+    defaultDepts: ["Operations", "Safety", "Logistics", "Management"]
+  };
+
+  organizations[orgId] = {
+    orgId: orgId,
+    sector: key,
+    name: facilityName,
+    address: `${facilityName}, Central Tech & Commercial Hub`,
+    adminUser: adminUser,
+    adminPass: adminPass,
+    icon: icon,
+    totalStaff: 45,
+    present: 42,
+    working: 38,
+    late: 2,
+    absent: 3,
+    chartTrend: [92, 94, 91, 95, 93, 94],
+    departments: ["Operations", "Safety", "Logistics", "Management"],
+    activities: [
+      { text: `Sector ${key} (${orgId}) provisioned by Super Admin`, time: "Just now · System Provisioning" }
+    ],
+    employees: [
+      {
+        id: `${orgId.split("-")[0]}-1001`,
+        name: "Lead Supervisor",
+        dept: "Operations",
+        role: "Station Lead",
+        shift: "General (08:30 - 17:30)",
+        login: "08:30",
+        logout: "—",
+        task: "Initial Setup & Operations",
+        status: "Present",
+        basePay: 85000,
+        otPay: 2500,
+        deductions: 9500,
+        payStatus: "Paid",
+        email: `lead@${orgId.toLowerCase()}.org`,
+        pan: "ABCDE5555X",
+        pfNo: `PF/${orgId}/1001`,
+        casualLeaves: 6,
+        sickLeaves: 4,
+        privilegeLeaves: 12,
+        compOff: 1
+      }
+    ],
+    tasks: [],
+    shifts: [
+      { name: "General Shift", hours: "08:30 - 17:30", required: 30, allocated: 30, status: "Optimal" }
+    ],
+    leaveRequests: [],
+    shiftSwapRequests: [],
+    payrollRequests: [],
+    chats: {}
+  };
+
+  closeUniversalModal();
+  renderLandingSectors();
+  if (currentTab === "super-overview") renderSuperOverview();
+  else if (currentTab === "super-sectors") renderSuperSectorsView();
+  updateBadges();
+
+  showToast(`Sector '${key}' and Organization '${orgId}' provisioned with admin login '${adminUser}'!`);
+}
+
+function openProvisionOrgModal(preselectedSector) {
+  const categories = getSectorCategories();
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
+        <h3 style="margin:6px 0 0">Add New Organization ID & Credentials</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <label>Target Sector Category</label>
+      <select id="newOrgSectorCat">
+        ${categories.map(c => `<option value="${c}" ${preselectedSector === c ? 'selected' : ''}>${sectorMeta[c]?.icon || '🏢'} ${c}</option>`).join("")}
+      </select>
+      <label>New Organization ID (Code)</label>
+      <input id="newOrgId" placeholder="e.g. HOSP-002, MFG-002" style="font-family:monospace;font-weight:700;text-transform:uppercase">
+      <label>Legal Entity / Facility Name</label>
+      <input id="newOrgName" placeholder="e.g. Apex Healthcare (South Wing)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Admin Username</label>
+          <input id="newOrgAdminUser" value="admin_south">
+        </div>
+        <div>
+          <label>Admin Password</label>
+          <input id="newOrgAdminPass" value="admin123">
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-purple" onclick="saveNewOrganization()">Provision Organization ID 🏢</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function saveNewOrganization() {
+  const sector = document.getElementById("newOrgSectorCat").value;
+  const rawOrgId = (document.getElementById("newOrgId").value || "").trim().toUpperCase();
+  const name = (document.getElementById("newOrgName").value || "").trim();
+  const adminUser = (document.getElementById("newOrgAdminUser").value || "").trim();
+  const adminPass = (document.getElementById("newOrgAdminPass").value || "").trim();
+
+  if (!rawOrgId || !name || !adminUser || !adminPass) {
+    showToast("Please fill all required fields");
+    return;
+  }
+
+  if (organizations[rawOrgId]) {
+    showToast(`Organization ID "${rawOrgId}" is already taken!`);
+    return;
+  }
+
+  const icon = sectorMeta[sector]?.icon || "🏢";
+  organizations[rawOrgId] = {
+    orgId: rawOrgId,
+    sector: sector,
+    name: name,
+    address: "Registered Enterprise Operational Hub",
+    adminUser: adminUser,
+    adminPass: adminPass,
+    icon: icon,
+    totalStaff: 48,
+    present: 45,
+    working: 40,
+    late: 3,
+    absent: 3,
+    chartTrend: [92, 95, 93, 96, 94, 95],
+    departments: ["Operations", "Safety", "Logistics"],
+    activities: [{ text: `Organization ID ${rawOrgId} provisioned under ${sector}`, time: "Just now" }],
+    employees: [{ id: `${rawOrgId.split("-")[0]}-101`, name: `Lead Officer`, dept: "Operations", role: "Branch Lead", shift: "General Operations (08:30 - 17:30)", login: "08:30", logout: "—", task: "Facility Setup", status: "Present", basePay: 95000, otPay: 3000, deductions: 11000, payStatus: "Paid", email: `lead@${rawOrgId.toLowerCase()}.org`, pan: "ABCDE8888X", pfNo: `PF/${rawOrgId}/101`, casualLeaves: 6, sickLeaves: 4, privilegeLeaves: 12, compOff: 1 }],
+    tasks: [],
+    shifts: [{ name: "General Shift", hours: "08:30 - 17:30", required: 30, allocated: 30, status: "Optimal" }],
+    leaveRequests: [],
+    shiftSwapRequests: [],
+    payrollRequests: [],
+    chats: {}
+  };
+
+  closeUniversalModal();
+  renderLandingSectors();
+  if (currentTab === "super-overview") renderSuperOverview();
+  else if (currentTab === "super-sectors") renderSuperSectorsView();
+  updateBadges();
+  showToast(`New Organization ID "${rawOrgId}" provisioned successfully!`);
 }
 
 function openAddEmployeeModal() {
@@ -4189,170 +5514,50 @@ function submitShiftSwapRequest() {
   showToast("Shift swap request logged into Approval Queue!");
 }
 
-function openProvisionOrgModal(preselectedSector) {
-  const categories = getSectorCategories();
-  const content = document.getElementById("universalModalContent");
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div>
-        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
-        <h3 style="margin:6px 0 0">Add New Organization ID & Credentials</h3>
-      </div>
-      <button class="action" onclick="closeUniversalModal()">✕</button>
-    </div>
-    <div>
-      <label>Target Sector Category</label>
-      <select id="newOrgSectorCat">
-        ${categories.map(c => `<option value="${c}" ${preselectedSector === c ? 'selected' : ''}>${sectorMeta[c]?.icon || '🏢'} ${c}</option>`).join("")}
-      </select>
-      <label>New Organization ID (Code)</label>
-      <input id="newOrgId" placeholder="e.g. HOSP-002, MFG-002" style="font-family:monospace;font-weight:700;text-transform:uppercase">
-      <label>Legal Entity / Facility Name</label>
-      <input id="newOrgName" placeholder="e.g. Apex Healthcare (South Wing)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <label>Admin Username</label>
-          <input id="newOrgAdminUser" value="admin_south">
-        </div>
-        <div>
-          <label>Admin Password</label>
-          <input id="newOrgAdminPass" value="admin123">
-        </div>
-      </div>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
-        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
-        <button class="btn btn-purple" onclick="saveNewOrganization()">Provision Organization ID 🏢</button>
-      </div>
-    </div>
-  `;
-  document.getElementById("universalModal").classList.remove("hidden");
+function filterDashEmployees() { renderDashEmployees(); }
+
+function filterDashStatus(s, btn) {
+  dashStatusFilter = s;
+  document.querySelectorAll("#view-dashboard .tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  renderDashEmployees();
 }
 
-function saveNewOrganization() {
-  const sector = document.getElementById("newOrgSectorCat").value;
-  const rawOrgId = (document.getElementById("newOrgId").value || "").trim().toUpperCase();
-  const name = (document.getElementById("newOrgName").value || "").trim();
-  const adminUser = (document.getElementById("newOrgAdminUser").value || "").trim();
-  const adminPass = (document.getElementById("newOrgAdminPass").value || "").trim();
+function toggleTaskStatus(taskId) {
+  const task = organizations[currentOrgId].tasks.find(t => t.id === taskId);
+  if (task) {
+    if (task.status === "In Progress") { task.status = "Completed"; task.progress = 100; }
+    else if (task.status === "Completed") { task.status = "Blocked"; task.progress = 30; }
+    else { task.status = "In Progress"; task.progress = 65; }
+    renderAssignmentsView();
+    showToast(`Task ${taskId} moved to ${task.status}`);
+  }
+}
 
-  if (!rawOrgId || !name || !adminUser || !adminPass) {
-    showToast("Please fill all required fields");
-    return;
+function resolveShiftSwap(swapId, approved) {
+  const org = organizations[currentOrgId];
+  const sw = (org.shiftSwapRequests || []).find(s => s.id === swapId);
+  if (!sw) return;
+
+  sw.status = approved ? "Approved" : "Declined";
+  if (approved) {
+    const emp1 = org.employees.find(e => e.id === sw.fromEmpId);
+    const emp2 = org.employees.find(e => e.id === sw.toEmpId);
+    if (emp1 && emp2) {
+      const temp = emp1.shift;
+      emp1.shift = emp2.shift;
+      emp2.shift = temp;
+    }
   }
 
-  if (organizations[rawOrgId]) {
-    showToast(`Organization ID "${rawOrgId}" is already taken!`);
-    return;
-  }
+  org.activities.unshift({
+    text: `Shift trade request #${swapId} was ${sw.status} by Operations`,
+    time: `Just now · Roster Management`
+  });
 
-  const icon = sectorMeta[sector]?.icon || "🏢";
-  organizations[rawOrgId] = {
-    orgId: rawOrgId,
-    sector: sector,
-    name: name,
-    address: "Registered Enterprise Operational Hub",
-    adminUser: adminUser,
-    adminPass: adminPass,
-    icon: icon,
-    totalStaff: 48,
-    present: 45,
-    working: 40,
-    late: 3,
-    absent: 3,
-    chartTrend: [92, 95, 93, 96, 94, 95],
-    departments: ["Operations", "Safety", "Logistics"],
-    activities: [{ text: `Organization ID ${rawOrgId} provisioned under ${sector}`, time: "Just now" }],
-    employees: [{ id: `${rawOrgId.split("-")[0]}-101`, name: `Lead Officer`, dept: "Operations", role: "Branch Lead", shift: "General Operations (08:30 - 17:30)", login: "08:30", logout: "—", task: "Facility Setup", status: "Present", basePay: 95000, otPay: 3000, deductions: 11000, payStatus: "Paid", email: `lead@${rawOrgId.toLowerCase()}.org`, pan: "ABCDE8888X", pfNo: `PF/${rawOrgId}/101`, casualLeaves: 6, sickLeaves: 4, privilegeLeaves: 12, compOff: 1 }],
-    tasks: [],
-    shifts: [{ name: "General Shift", hours: "08:30 - 17:30", required: 30, allocated: 30, status: "Optimal" }],
-    leaveRequests: [],
-    shiftSwapRequests: [],
-    payrollRequests: [],
-    chats: {}
-  };
-
-  closeUniversalModal();
-  renderLandingSectors();
-  if (currentTab === "super-overview") renderSuperOverview();
-  else if (currentTab === "super-sectors") renderSuperSectorsView();
+  renderShiftsView();
   updateBadges();
-  showToast(`New Organization ID "${rawOrgId}" provisioned successfully!`);
-}
-
-function openProvisionSectorModal() {
-  const content = document.getElementById("universalModalContent");
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div>
-        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
-        <h3 style="margin:6px 0 0">Add New Sector Category</h3>
-      </div>
-      <button class="action" onclick="closeUniversalModal()">✕</button>
-    </div>
-    <div>
-      <div style="display:grid;grid-template-columns:3fr 1fr;gap:12px">
-        <div>
-          <label>Sector Category Key</label>
-          <input id="provSectorKey" placeholder="e.g. Logistics, Aviation, Energy">
-        </div>
-        <div>
-          <label>Icon / Emoji</label>
-          <input id="provSectorIcon" value="🚀" style="text-align:center">
-        </div>
-      </div>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
-        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
-        <button class="btn btn-purple" onclick="saveProvisionedSector()">Provision Sector Category 🚀</button>
-      </div>
-    </div>
-  `;
-  document.getElementById("universalModal").classList.remove("hidden");
-}
-
-function saveProvisionedSector() {
-  const rawKey = document.getElementById("provSectorKey").value.trim();
-  if (!rawKey) {
-    showToast("Please enter a sector category key");
-    return;
-  }
-  const key = rawKey.charAt(0).toUpperCase() + rawKey.slice(1).replace(/[^a-zA-Z0-9]/g, "");
-  const icon = document.getElementById("provSectorIcon").value.trim() || "🏢";
-  sectorMeta[key] = { icon: icon, defaultDepts: ["Operations", "Safety"] };
-
-  closeUniversalModal();
-  renderLandingSectors();
-  showToast(`Sector Category '${key}' provisioned!`);
-}
-
-function closeUniversalModal() {
-  const modal = document.getElementById("universalModal");
-  if (modal) modal.classList.add("hidden");
-}
-
-function exportDataCSV(moduleName) {
-  showToast(`Generating ${moduleName} CSV dataset for export...`);
-}
-
-function showToast(msg) {
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-  toast.textContent = msg;
-  toast.classList.add("show");
-  clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3200);
-}
-
-function startLiveClock() {
-  setInterval(() => {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const widget = document.getElementById("liveClockWidget");
-    if (widget) widget.textContent = timeStr;
-    const largeClock = document.getElementById("largeClockDisplay");
-    if (largeClock) largeClock.textContent = timeStr;
-  }, 1000);
+  showToast(`Shift swap #${swapId} ${sw.status.toLowerCase()}`);
 }
 
 function drawChart() {
@@ -4392,6 +5597,50 @@ function drawChart() {
       }
     }
   });
+}
+
+function viewEmployeeProfile(id) {
+  const org = organizations[currentOrgId];
+  const e = (org.employees || []).find(x => x.id === id);
+  if (!e) return;
+  const content = document.getElementById("universalModalContent");
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">${e.name} (${e.id})</h3>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div style="font-size:13px;line-height:2">
+      <div><b>Department:</b> ${e.dept}</div>
+      <div><b>Designation:</b> ${e.role}</div>
+      <div><b>Shift:</b> ${e.shift}</div>
+      <div><b>Email:</b> ${e.email}</div>
+      <div><b>Attendance Status:</b> <span class="status ${e.status.toLowerCase()}">${e.status}</span></div>
+    </div>
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn btn-blue" onclick="closeUniversalModal()">Close Profile</button>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function closeUniversalModal() {
+  const modal = document.getElementById("universalModal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function exportDataCSV(moduleName) {
+  showToast(`Generating ${moduleName} CSV dataset for export...`);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3200);
 }
 
 function escapeHtml(str) {
