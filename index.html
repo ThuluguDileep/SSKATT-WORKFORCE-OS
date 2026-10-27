@@ -3926,19 +3926,28 @@ function adminAcceptResignation(resId) {
   const approvedLwd = document.getElementById("adminApprovedLwd").value || r.proposedLwd;
   const notes = (document.getElementById("adminResignDecisionNotes").value || "").trim() || "Resignation accepted as per contractual notice terms.";
 
-  r.status = "Accepted";
+  r.status = "Accepted (Pending Staff Confirmation)";
   r.officialLwd = approvedLwd;
   r.adminRemarks = notes;
 
+  // Notify employee via direct message channel as well
+  if (!org.chats) org.chats = {};
+  if (!org.chats[r.empId]) org.chats[r.empId] = [];
+  org.chats[r.empId].push({
+    sender: "admin",
+    text: `Your resignation review is complete. Proposed Official LWD: ${approvedLwd}. Admin remarks: "${notes}". Please visit your Resignation & Exit Center to either Confirm & Finalize or Withdraw your notice.`,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+
   org.activities.unshift({
-    text: `Resignation of ${r.empName} ACCEPTED by Sector Admin. Official LWD set to ${approvedLwd}`,
+    text: `Resignation of ${r.empName} reviewed by Admin. Terms sent to employee for final acceptance or withdrawal.`,
     time: `Just now · HR Separation`
   });
 
   closeUniversalModal();
   updateBadges();
   renderEmployeeDirectory();
-  showToast(`Resignation accepted for ${r.empName}. Last working day finalized as ${approvedLwd}!`);
+  showToast(`Resignation terms transmitted to ${r.empName} for final confirmation or withdrawal.`);
 }
 
 function adminScheduleRetentionChat(resId) {
@@ -4085,10 +4094,14 @@ function renderEmployeeResignationView() {
   // Active resignation exists
   if (topPill) {
     topPill.className = "pill";
-    if (myResign.status === "Accepted") {
+    if (myResign.status === "Finalized Exit") {
       topPill.style.background = "#fee2e2";
       topPill.style.color = "#b91c1c";
-      topPill.textContent = `Resignation Accepted · LWD: ${myResign.officialLwd}`;
+      topPill.textContent = `Exit Confirmed · Final LWD: ${myResign.officialLwd}`;
+    } else if (myResign.status === "Accepted (Pending Staff Confirmation)") {
+      topPill.style.background = "#fff4df";
+      topPill.style.color = "#a65a00";
+      topPill.textContent = `Admin Responded · Action Required by You`;
     } else if (myResign.status === "Discussion Scheduled") {
       topPill.style.background = "#eff6ff";
       topPill.style.color = "#1d4ed8";
@@ -4105,7 +4118,7 @@ function renderEmployeeResignationView() {
       <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:10px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
           <div>
-            <span class="status ${myResign.status === 'Accepted' ? 'absent' : (myResign.status === 'Retained / Withdrawn' ? 'present' : 'late')}" style="font-size:11px">
+            <span class="status ${myResign.status === 'Finalized Exit' ? 'absent' : (myResign.status === 'Retained / Withdrawn' ? 'present' : 'late')}" style="font-size:11px">
               ${myResign.status}
             </span>
             <div style="font-size:13px;font-weight:700;color:var(--navy);margin-top:4px">Notice Ref: ${myResign.id}</div>
@@ -4118,7 +4131,7 @@ function renderEmployeeResignationView() {
         <div style="font-size:12px;line-height:1.8;border-top:1px solid #e2e8f0;padding-top:10px">
           <div><b>Reason:</b> ${escapeHtml(myResign.reason)}</div>
           <div><b>Notice Period:</b> ${myResign.noticeDays} Calendar Days</div>
-          <div><b>Final Last Working Day:</b> <b style="color:var(--red);font-size:13px">${myResign.officialLwd || myResign.proposedLwd}</b></div>
+          <div><b>Official / Proposed Last Working Day:</b> <b style="color:var(--red);font-size:13px">${myResign.officialLwd || myResign.proposedLwd}</b></div>
           
           <div style="margin-top:10px;background:#fff;border:1px solid #cbd5e1;padding:10px;border-radius:8px">
             <b>Your Submitted Statement:</b>
@@ -4126,9 +4139,13 @@ function renderEmployeeResignationView() {
           </div>
 
           ${myResign.adminRemarks ? `
-            <div style="margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;padding:10px;border-radius:8px;color:#166534">
-              <b>Sector Administrator Decision Remarks:</b>
-              <div style="font-size:12px;margin-top:2px">${escapeHtml(myResign.adminRemarks)}</div>
+            <div style="margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;padding:12px;border-radius:8px;color:#166534">
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:14px">💬</span>
+                <b>Sector Administrator Answer & Terms:</b>
+              </div>
+              <div style="font-size:12px;margin-top:4px;color:#14532d;font-weight:500">${escapeHtml(myResign.adminRemarks)}</div>
+              <div style="font-size:11px;margin-top:4px;color:#15803d">Approved Final Working Day: <b>${myResign.officialLwd}</b></div>
             </div>
           ` : `
             <div style="margin-top:10px;color:var(--muted);font-style:italic">
@@ -4137,16 +4154,58 @@ function renderEmployeeResignationView() {
           `}
         </div>
 
-        ${myResign.status === "Pending Review" || myResign.status === "Discussion Scheduled" ? `
-          <div style="margin-top:14px;display:flex;justify-content:flex-end">
-            <button class="action" style="color:var(--blue);border-color:#bfdbfe" onclick="withdrawMyResignation('${myResign.id}')">
-              Withdraw Resignation & Retain Employment
-            </button>
+        <!-- EMPLOYEE INTERACTIVE ACTIONS: ACCEPT ADMIN TERMS OR WITHDRAW -->
+        ${myResign.status !== "Finalized Exit" && myResign.status !== "Retained / Withdrawn" ? `
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0">
+            <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px">
+              Your Decision on Admin Response:
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:12px">
+              Review the Sector Admin's response above. You may proceed with the separation by accepting the terms or choose to withdraw your resignation to continue employment.
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+              <button class="btn btn-blue" style="background:#16a34a;border:0" onclick="confirmAcceptAdminResignationTerms('${myResign.id}')">
+                ✓ Accept Terms & Finalize Separation
+              </button>
+              <button class="btn" style="color:#2563eb;border:1px solid #93c5fd;background:#eff6ff" onclick="withdrawMyResignation('${myResign.id}')">
+                🔄 Withdraw Resignation & Stay
+              </button>
+            </div>
           </div>
-        ` : ''}
+        ` : (myResign.status === "Finalized Exit" ? `
+          <div style="margin-top:14px;background:#fee2e2;border:1px solid #fca5a5;padding:10px;border-radius:8px;color:#991b1b;font-size:12px">
+            <b>Exit Formally Finalized.</b> You have accepted the administrative separation terms. Your official last day will be <b>${myResign.officialLwd}</b>.
+          </div>
+        ` : '')}
       </div>
     `;
   }
+}
+
+function confirmAcceptAdminResignationTerms(resId) {
+  const org = organizations[currentOrgId];
+  const r = (org.resignations || []).find(x => x.id === resId);
+  if (!r) return;
+
+  r.status = "Finalized Exit";
+
+  org.activities.unshift({
+    text: `${r.empName} accepted administrative resignation terms. Exit scheduled for ${r.officialLwd}`,
+    time: `Just now · Employee Confirmation`
+  });
+
+  // Direct confirmation message to Admin
+  if (!org.chats) org.chats = {};
+  if (!org.chats[r.empId]) org.chats[r.empId] = [];
+  org.chats[r.empId].push({
+    sender: "emp",
+    text: `I have reviewed and accepted the resignation terms. My last working day will be ${r.officialLwd}. Thank you for your support.`,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+
+  updateBadges();
+  renderEmployeeResignationView();
+  showToast(`Resignation terms accepted! Your last working day is locked as ${r.officialLwd}.`);
 }
 
 function withdrawMyResignation(resId) {
