@@ -97,16 +97,6 @@ button, input, select, textarea { font: inherit; }
   font-weight: 700;
   white-space: nowrap;
 }
-.pill-purple {
-  background: #f3e8ff;
-  color: #6b21a8;
-  border: 1px solid #d8b4fe;
-  border-radius: 20px;
-  padding: 5px 11px;
-  font-size: 11.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
 
 /* Mobile Toggle Button & Backdrop */
 .menu-toggle-btn {
@@ -150,17 +140,6 @@ button, input, select, textarea { font: inherit; }
   padding: 54px 6vw 48px;
   position: relative;
   overflow: hidden;
-}
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 440px;
-  height: 440px;
-  border: 1px solid rgba(255, 255, 255, .13);
-  border-radius: 50%;
-  right: -80px;
-  top: -160px;
-  pointer-events: none;
 }
 .hero h1 {
   font-size: 38px;
@@ -232,16 +211,6 @@ button, input, select, textarea { font: inherit; }
 .sector h3 { margin: 0 0 6px; font-size: 17px; color: var(--navy); }
 .sector p { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0 0 16px; flex-grow: 1; }
 .sector .access { font-size: 12.5px; color: var(--blue); font-weight: 700; margin-top: auto; }
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-.feature { padding: 20px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
-.feature b { display: block; margin-bottom: 6px; font-size: 14px; color: var(--navy); }
-.feature span { color: var(--muted); font-size: 12.5px; line-height: 1.5; }
 .footer { padding: 24px 6vw; background: #09162f; color: #9fb0cf; font-size: 12px; line-height: 1.6; }
 
 /* Modals */
@@ -265,7 +234,6 @@ button, input, select, textarea { font: inherit; }
   max-height: 92vh;
   overflow-y: auto;
 }
-.login-card h2, .dialog-card h3 { margin: 0 0 6px; font-size: 19px; color: var(--navy); }
 .login-card label, .dialog-card label { display: block; font-size: 11.5px; font-weight: 700; margin: 12px 0 5px; color: var(--navy); }
 .login-card input, .login-card select,
 .dialog-card input, .dialog-card select, .dialog-card textarea {
@@ -277,7 +245,6 @@ button, input, select, textarea { font: inherit; }
   background: #fff;
   font-size: 13px;
 }
-
 .demo-note { background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; border-radius: 10px; padding: 12px; margin-top: 14px; font-size: 11px; line-height: 1.55; }
 
 /* Dashboard Core Layout */
@@ -340,7 +307,7 @@ button, input, select, textarea { font: inherit; }
   color: #fff;
   font-weight: 600;
 }
-.side-item.active-purple, .side-item.active-purple:hover {
+.side-item.active-purple {
   background: var(--purple);
   color: #fff;
   font-weight: 600;
@@ -377,7 +344,6 @@ button, input, select, textarea { font: inherit; }
   font-weight: 800;
   font-size: 12.5px;
 }
-.avatar-purple { background: #f3e8ff; color: #7e22ce; }
 
 .kpis {
   display: grid;
@@ -445,9 +411,9 @@ button, input, select, textarea { font: inherit; }
   display: inline-block;
   white-space: nowrap;
 }
-.present, .completed, .paid, .resolved, .optimal { background: #e9f8ef; color: #16803d; }
-.late, .in-progress, .generated, .in-review, .pending-approval, .adequate { background: #fff4df; color: #a65a00; }
-.absent, .blocked, .rejected, .open-status { background: #ffeaea; color: #b42318; }
+.present, .completed, .paid { background: #e9f8ef; color: #16803d; }
+.late, .in-progress, .adequate { background: #fff4df; color: #a65a00; }
+.absent, .blocked { background: #ffeaea; color: #b42318; }
 
 .action {
   border: 1px solid #dbe1eb;
@@ -463,189 +429,10 @@ button, input, select, textarea { font: inherit; }
 .action:hover { background: #f8fafc; border-color: #cbd5e1; }
 .action-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
 .action-primary:hover { background: var(--blue-hover); }
-.action-purple { background: var(--purple); color: #fff; border-color: var(--purple); }
-.action-purple:hover { background: var(--purple-hover); }
 
 .chart-box { height: 230px; position: relative; width: 100%; min-width: 0; }
 
-#toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: #0f172a;
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 10px;
-  font-size: 12.5px;
-  z-index: 2000;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.25s ease;
-  pointer-events: none;
-}
-#toast.show { opacity: 1; transform: translateY(0); }
-
-/* Chatbot Floating Widget */
-.chatbot-trigger-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #7e22ce);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-size: 23px;
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
-  cursor: pointer;
-  z-index: 1000;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-}
-.chatbot-window {
-  position: fixed;
-  bottom: 88px;
-  right: 24px;
-  width: 390px;
-  height: 520px;
-  max-width: calc(100vw - 28px);
-  background: #fff;
-  border-radius: 16px;
-  border: 1px solid #dce4f0;
-  box-shadow: 0 16px 48px rgba(11, 23, 48, 0.2);
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
-  overflow: hidden;
-}
-.chatbot-head {
-  background: linear-gradient(135deg, #0b1730 0%, #1e3a8a 60%, #7e22ce 100%);
-  color: #fff;
-  padding: 13px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.chatbot-body {
-  flex: 1;
-  padding: 13px;
-  overflow-y: auto;
-  background: #f8fafc;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.chatbot-foot {
-  padding: 9px 11px;
-  background: #fff;
-  border-top: 1px solid #e2e8f0;
-  display: flex;
-  gap: 7px;
-}
-.chatbot-foot input {
-  flex: 1;
-  border: 1px solid #cbd5e1;
-  border-radius: 20px;
-  padding: 7px 13px;
-  font-size: 12px;
-  outline: none;
-}
-.chatbot-foot button {
-  background: var(--blue);
-  color: #fff;
-  border: 0;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-}
-
-.chat-bubble {
-  max-width: 82%;
-  padding: 8px 12px;
-  font-size: 12px;
-  line-height: 1.45;
-  border-radius: 12px;
-}
-.bubble-sent {
-  align-self: flex-end;
-  background: var(--blue);
-  color: #fff;
-  border-bottom-right-radius: 2px;
-}
-.bubble-recv {
-  align-self: flex-start;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  color: #1e293b;
-  border-bottom-left-radius: 2px;
-}
-
-/* Mobile Responsive */
-@media (max-width: 1024px) {
-  .grid2 { grid-template-columns: 1fr; }
-  .sidebar { width: 220px; }
-  .dash-main { margin-left: 220px; width: calc(100% - 220px); max-width: calc(100vw - 220px); padding: 20px; }
-}
-
 @media (max-width: 768px) {
-  #landing .topbar {
-    padding: 14px 16px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-  #landing .topbar-main-row {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .landing-badge {
-    display: none !important;
-  }
-  .btn-signin {
-    margin-left: auto;
-    padding: 8px 16px;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .menu-toggle-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .sidebar-close-btn {
-    display: inline-block;
-  }
-
-  #dashboard .topbar {
-    min-height: auto;
-    padding: 12px 16px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    max-width: 100vw;
-  }
-  #dashboard .topbar-main-row {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  #dashboard .top-actions {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding-top: 8px;
-    border-top: 1px solid #f1f5f9;
-  }
-
   .sidebar {
     width: 280px;
     position: fixed;
@@ -658,34 +445,12 @@ button, input, select, textarea { font: inherit; }
     transform: translateX(-100%);
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
   }
-  .sidebar.mobile-open {
-    transform: translateX(0);
-  }
-  .side-brand {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .dash-layout {
-    flex-direction: column;
-    width: 100%;
-    max-width: 100vw;
-  }
-  .dash-main {
-    margin-left: 0;
-    width: 100%;
-    max-width: 100vw;
-    padding: 16px 14px 60px;
-  }
-  .kpis {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .chatbot-window {
-    width: calc(100vw - 28px);
-    right: 14px;
-    bottom: 84px;
-  }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .menu-toggle-btn { display: inline-flex; }
+  .sidebar-close-btn { display: inline-block; }
+  .dash-main { margin-left: 0; width: 100%; max-width: 100vw; padding: 16px 14px 60px; }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .grid2 { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -700,8 +465,8 @@ button, input, select, textarea { font: inherit; }
         <small style="font-size:10px;color:#8792a6;margin-left:6px;letter-spacing:0.05em">WORKFORCE OS</small>
       </div>
       <div class="top-actions">
-        <span class="pill landing-badge">Enterprise Workforce Intelligence</span>
-        <button class="btn btn-signin" style="background:#0b1730;color:#fff" onclick="openLogin()">Sign in</button>
+        <span class="pill">Enterprise Workforce Intelligence</span>
+        <button class="btn btn-primary" style="background:#0b1730;color:#fff" onclick="openLogin()">Sign in</button>
       </div>
     </div>
   </header>
@@ -710,7 +475,7 @@ button, input, select, textarea { font: inherit; }
     <div style="position:relative;z-index:2">
       <div class="pill" style="display:inline-block;background:rgba(255,255,255,.12);color:#dce7fb;margin-bottom:8px">ONE PLATFORM • MULTIPLE SECTORS & ENTERPRISES</div>
       <h1>Workforce visibility, attendance & operations in one place.</h1>
-      <p>SSKATT is an enterprise workforce intelligence platform delivering secure sector-isolated telemetry, customizable shifts, digital payroll statements with one-click print and PDF export, multi-tenant organization identifiers, and real-time support escalation.</p>
+      <p>SSKATT is an enterprise workforce intelligence platform delivering secure sector-isolated telemetry, customizable shifts, digital payroll statements with one-click print and PDF export, and multi-tenant organization identifiers.</p>
       <div class="buttons">
         <button class="btn btn-primary" onclick="openLogin()">Access Organization Portal</button>
         <button class="btn btn-outline" onclick="document.getElementById('sectors').scrollIntoView({behavior:'smooth'})">Explore Sectors</button>
@@ -738,7 +503,7 @@ button, input, select, textarea { font: inherit; }
       <div>
         <div class="logo">SS<span>KATT</span></div>
         <h2 style="margin-top:12px">Sign in to Platform</h2>
-        <p style="color:var(--muted);font-size:13px;margin:0">Select your Sector Category and enter your Organization ID & credentials.</p>
+        <p style="color:var(--muted);font-size:13px;margin:0">Select your Sector Category and enter your credentials.</p>
       </div>
       <button class="action" onclick="closeLogin()">✕</button>
     </div>
@@ -747,22 +512,20 @@ button, input, select, textarea { font: inherit; }
     <select id="sectorSelect" onchange="updateDemo()"></select>
 
     <label>Organization ID</label>
-    <select id="orgSelect" onchange="handleOrgSelectChange()" style="margin-bottom:6px"></select>
-    <input id="org" value="HOSP-001" placeholder="e.g. HOSP-001 or custom Org ID">
+    <input id="org" value="HOSP-001" placeholder="e.g. HOSP-001">
 
     <label>Username / Employee ID</label>
-    <input id="username" value="admin" placeholder="e.g. admin or custom username">
+    <input id="username" value="admin" placeholder="admin">
 
     <label>Password</label>
     <input id="password" type="password" value="admin123" placeholder="Password">
 
-    <button id="btnSubmitLogin" class="btn btn-blue" style="width:100%;margin-top:18px;padding:12px" onclick="login()">Sign In Securely</button>
-
+    <button class="btn btn-blue" style="width:100%;margin-top:18px;padding:12px" onclick="login()">Sign In Securely</button>
     <div class="demo-note" id="demoNote"></div>
   </div>
 </div>
 
-<!-- UNIVERSAL POPUP MODAL -->
+<!-- UNIVERSAL MODAL -->
 <div id="universalModal" class="modal hidden">
   <div class="dialog-card" id="universalModalContent"></div>
 </div>
@@ -773,19 +536,15 @@ button, input, select, textarea { font: inherit; }
 
   <header class="topbar">
     <div class="topbar-main-row">
-      <div class="logo" onclick="handleLogoClick()">
+      <div class="logo" onclick="location.reload()">
         SS<span>KATT</span>
         <small style="font-size:10px;color:#8792a6;margin-left:6px;letter-spacing:0.05em">WORKFORCE OS</small>
       </div>
-      <button class="menu-toggle-btn" onclick="toggleMobileSidebar()" title="Toggle Navigation Menu">
-        ☰
-      </button>
+      <button class="menu-toggle-btn" onclick="toggleMobileSidebar()" title="Toggle Navigation Menu">☰</button>
     </div>
 
     <div class="top-actions">
       <div id="headerRoleBadgeArea"></div>
-      <button id="btnHeaderAskBot" class="btn btn-purple" style="font-size:11px;padding:6px 12px" onclick="toggleChatbot(true)">🤖 Sector AI Desk</button>
-
       <div class="profile">
         <div class="avatar" id="headerAvatar">AD</div>
         <div style="font-size:12px;line-height:1.2">
@@ -804,40 +563,16 @@ button, input, select, textarea { font: inherit; }
         <button class="sidebar-close-btn" onclick="toggleMobileSidebar(false)" title="Close Menu">✕</button>
       </div>
 
-      <!-- SUPER ADMIN NAVIGATION -->
-      <div id="superAdminNav" class="hidden">
-        <div class="side-item active-purple" data-tab="super-overview" onclick="switchTab('super-overview')">🌐 Fleet Overview</div>
-        <div class="side-item" data-tab="super-sectors" onclick="switchTab('super-sectors')">🏢 Organizations & Branches <span id="superSectorCountBadge" class="status present" style="margin-left:auto;font-size:9px">4 Orgs</span></div>
-        <div class="side-item" onclick="openProvisionSectorModal()">➕ Add New Sector</div>
-        <div class="side-item" data-tab="super-queries" onclick="switchTab('super-queries')">💬 Support & Escalations</div>
-        <div class="side-item" data-tab="super-retentions" onclick="switchTab('super-retentions')">🚨 Deletions & Retention Audit</div>
-        <div class="side-item" data-tab="super-security" onclick="switchTab('super-security')">🛡️ Global Security Policy</div>
-      </div>
-
       <!-- SECTOR ADMIN NAVIGATION -->
       <div id="adminSidebarNav">
         <div class="side-item active" data-tab="dashboard" onclick="switchTab('dashboard')">▦ Dashboard</div>
-        <div class="side-item" data-tab="employees" onclick="switchTab('employees')">♙ Employees <span id="adminResignBadge" class="status absent" style="margin-left:auto;font-size:9px">1 exit req</span></div>
+        <div class="side-item" data-tab="employees" onclick="switchTab('employees')">♙ Employees</div>
         <div class="side-item" data-tab="attendance" onclick="switchTab('attendance')">◷ Attendance & Leaves</div>
         <div class="side-item" data-tab="assignments" onclick="switchTab('assignments')">▤ Work assignments</div>
         <div class="side-item" data-tab="shifts" onclick="switchTab('shifts')">⇄ Shifts & schedules</div>
         <div class="side-item" data-tab="reports" onclick="switchTab('reports')">▥ Reports</div>
         <div class="side-item" data-tab="payslips" onclick="switchTab('payslips')">💳 Payslips</div>
-        <div class="side-item" data-tab="admin-chat" onclick="switchTab('admin-chat')">💬 Staff Direct Messages</div>
-        <div class="side-item" data-tab="support-bridge" onclick="switchTab('support-bridge')">⚡ Super Admin Bridge</div>
         <div class="side-item" data-tab="settings" onclick="switchTab('settings')">⚙ Organization settings</div>
-      </div>
-
-      <!-- EMPLOYEE NAVIGATION -->
-      <div id="empSidebarNav" class="hidden">
-        <div class="side-item active" data-tab="emp-overview" onclick="switchTab('emp-overview')">👤 My Space Overview</div>
-        <div class="side-item" data-tab="emp-clock" onclick="switchTab('emp-clock')">⏱️ Check-In & Attendance</div>
-        <div class="side-item" data-tab="emp-leaves" onclick="switchTab('emp-leaves')">🌴 Leave Center & Balances</div>
-        <div class="side-item" data-tab="emp-tasks" onclick="switchTab('emp-tasks')">📋 My Assigned Tasks</div>
-        <div class="side-item" data-tab="emp-shifts" onclick="switchTab('emp-shifts')">🗓️ My Shifts & Roster</div>
-        <div class="side-item" data-tab="emp-payslips" onclick="switchTab('emp-payslips')">💳 My Payslips & Print</div>
-        <div class="side-item" data-tab="emp-resignation" onclick="switchTab('emp-resignation')">📝 Resignation & Exit Center</div>
-        <div class="side-item" data-tab="emp-admin-chat" onclick="switchTab('emp-admin-chat')">💬 Message Sector Admin</div>
       </div>
 
       <div style="height:1px;background:#223553;margin:18px 8px"></div>
@@ -845,21 +580,20 @@ button, input, select, textarea { font: inherit; }
     </aside>
 
     <main class="dash-main">
-      <!-- 1. DASHBOARD VIEW -->
+      <!-- DASHBOARD VIEW -->
       <section id="view-dashboard" class="view-section">
         <div class="dash-head">
           <div>
             <h1 id="dashTitle">Operational Workforce Dashboard</h1>
             <div class="sub" id="dashSubtitle">Sector Status</div>
           </div>
-          <button class="btn btn-blue" onclick="openAssignTaskModal()">+ Assign Work Order</button>
         </div>
 
         <div class="kpis">
-          <div class="kpi"><div class="label">TOTAL EMPLOYEES</div><div class="value" id="kEmployees">248</div><div class="trend">In this organization</div></div>
-          <div class="kpi"><div class="label">PRESENT TODAY</div><div class="value" id="kPresent">221</div><div class="trend" id="kAttendanceRate">89.1% attendance</div></div>
-          <div class="kpi"><div class="label">CURRENTLY WORKING</div><div class="value" id="kWorking">187</div><div class="trend">Live on duty</div></div>
-          <div class="kpi"><div class="label">LATE ARRIVALS</div><div class="value" id="kLate">16</div><div style="font-size:11px;color:#a65a00;margin-top:6px;font-weight:600">Needs review</div></div>
+          <div class="kpi"><div class="label">TOTAL EMPLOYEES</div><div class="value" id="kEmployees">248</div></div>
+          <div class="kpi"><div class="label">PRESENT TODAY</div><div class="value" id="kPresent">221</div></div>
+          <div class="kpi"><div class="label">CURRENTLY WORKING</div><div class="value" id="kWorking">187</div></div>
+          <div class="kpi"><div class="label">LATE ARRIVALS</div><div class="value" id="kLate">16</div></div>
         </div>
 
         <div class="grid2">
@@ -867,134 +601,76 @@ button, input, select, textarea { font: inherit; }
             <h3>Active Workforce Status</h3>
             <div class="table-wrap">
               <table class="table">
-                <thead><tr><th>ID & NAME</th><th>DEPARTMENT</th><th>LOGIN</th><th>LOGOUT</th><th>CURRENT ASSIGNMENT</th><th>STATUS</th></tr></thead>
+                <thead><tr><th>ID & NAME</th><th>DEPARTMENT</th><th>LOGIN</th><th>LOGOUT</th><th>STATUS</th></tr></thead>
                 <tbody id="dashEmployeeRows"></tbody>
               </table>
             </div>
           </div>
-
           <div class="panel">
             <h3>Attendance Trend (Rolling)</h3>
-            <div class="chart-box">
-              <canvas id="attendanceChart"></canvas>
-            </div>
+            <div class="chart-box"><canvas id="attendanceChart"></canvas></div>
           </div>
         </div>
       </section>
 
-      <!-- 2. EMPLOYEES DIRECTORY -->
+      <!-- EMPLOYEES DIRECTORY -->
       <section id="view-employees" class="view-section hidden">
         <div class="dash-head">
           <div>
             <h1>Employee Directory</h1>
-            <div class="sub">Personnel profiles, assignments, custom IDs & role authorizations</div>
-          </div>
-          <button class="btn btn-blue" onclick="openAssignTaskModal()">+ Assign Work</button>
-        </div>
-
-        <div class="panel" style="margin-bottom:18px;border:1px solid #fecdd3;background:#fff5f5">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px">
-            <div>
-              <h3 style="margin:0;color:#991b1b">📝 Inbound Employee Resignations & Exit Requests</h3>
-              <div class="sub" style="color:#b91c1c">Formal separation notices submitted by staff members for administrative review</div>
-            </div>
-            <span class="status absent" id="adminResignCountBadge">1 Resignation Pending</span>
-          </div>
-          <div class="table-wrap">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>REF ID</th>
-                  <th>EMPLOYEE & ID</th>
-                  <th>SUBMITTED ON</th>
-                  <th>NOTICE PERIOD</th>
-                  <th>PROPOSED LAST DAY</th>
-                  <th>DEPARTURE REASON & LETTER</th>
-                  <th>STATUS</th>
-                  <th>ADMIN ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody id="adminResignationTableRows"></tbody>
-            </table>
+            <div class="sub">Personnel profiles, assignments & role authorizations</div>
           </div>
         </div>
-
         <div class="panel">
           <div class="table-wrap">
             <table class="table">
-              <thead>
-                <tr>
-                  <th>EMPLOYEE & ID</th>
-                  <th>DEPARTMENT</th>
-                  <th>DESIGNATION / ROLE</th>
-                  <th>SHIFT ROSTER</th>
-                  <th>STATUS</th>
-                  <th>ACTIONS</th>
-                </tr>
-              </thead>
+              <thead><tr><th>EMPLOYEE & ID</th><th>DEPARTMENT</th><th>DESIGNATION</th><th>SHIFT</th><th>STATUS</th></tr></thead>
               <tbody id="employeeDirectoryRows"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- 3. ATTENDANCE & LEAVES VIEW -->
+      <!-- ATTENDANCE -->
       <section id="view-attendance" class="view-section hidden">
         <div class="dash-head"><div><h1>Attendance & Leaves</h1><div class="sub">Biometric logs and duty records</div></div></div>
         <div class="panel">
           <div class="table-wrap">
             <table class="table">
-              <thead><tr><th>EMPLOYEE</th><th>VERIFIED LOCATION</th><th>CLOCK IN</th><th>CLOCK OUT</th><th>STATUS</th></tr></thead>
+              <thead><tr><th>EMPLOYEE</th><th>LOCATION</th><th>CLOCK IN</th><th>CLOCK OUT</th><th>STATUS</th></tr></thead>
               <tbody id="attendanceLogsRows"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- 4. WORK ASSIGNMENTS VIEW (RESTORED WITH TABLE & DISPATCH) -->
+      <!-- ASSIGNMENTS -->
       <section id="view-assignments" class="view-section hidden">
-        <div class="dash-head">
-          <div>
-            <h1>Work Assignments & Task Dispatch</h1>
-            <div class="sub">Dispatch tickets, zone allocations & monitor completion rates</div>
-          </div>
-          <button class="btn btn-blue" onclick="openAssignTaskModal()">+ Assign New Work Order</button>
-        </div>
-
+        <div class="dash-head"><div><h1>Work Assignments</h1><div class="sub">Dispatch tickets & zone allocations</div></div></div>
         <div class="panel">
           <div class="table-wrap">
             <table class="table">
-              <thead>
-                <tr>
-                  <th>TASK ID & TITLE</th>
-                  <th>ZONE</th>
-                  <th>ASSIGNEE</th>
-                  <th>PRIORITY</th>
-                  <th>PROGRESS</th>
-                  <th>STATUS</th>
-                  <th>ACTIONS</th>
-                </tr>
-              </thead>
+              <thead><tr><th>TASK ID & TITLE</th><th>ZONE</th><th>ASSIGNEE</th><th>STATUS</th></tr></thead>
               <tbody id="workAssignmentsTableRows"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- 5. SHIFTS & ROSTERS -->
+      <!-- SHIFTS -->
       <section id="view-shifts" class="view-section hidden">
         <div class="dash-head"><div><h1>Shifts & Roster</h1><div class="sub">Shift capacity and allocations</div></div></div>
         <div class="panel">
           <div class="table-wrap">
             <table class="table">
-              <thead><tr><th>WINDOW</th><th>HOURS</th><th>REQUIRED</th><th>ALLOCATED</th><th>STATUS</th></tr></thead>
+              <thead><tr><th>WINDOW</th><th>HOURS</th><th>REQUIRED</th><th>STATUS</th></tr></thead>
               <tbody id="shiftsRosterTableRows"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- 6. REPORTS -->
+      <!-- REPORTS -->
       <section id="view-reports" class="view-section hidden">
         <div class="dash-head"><div><h1>Reports & Compliance</h1><div class="sub">Department efficiency and analytics</div></div></div>
         <div class="panel">
@@ -1007,1209 +683,236 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
-      <!-- 7. PAYSLIPS -->
+      <!-- PAYSLIPS -->
       <section id="view-payslips" class="view-section hidden">
         <div class="dash-head"><div><h1>Compensation & Payslips</h1><div class="sub">Disbursements and certified vouchers</div></div></div>
         <div class="panel">
           <div class="table-wrap">
             <table class="table">
-              <thead><tr><th>EMPLOYEE</th><th>ROLE</th><th>BASIC PAY</th><th>NET DISBURSED</th><th>ACTIONS</th></tr></thead>
+              <thead><tr><th>EMPLOYEE</th><th>ROLE</th><th>BASIC PAY</th><th>STATUS</th></tr></thead>
               <tbody id="payslipsTableRows"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- 8. STAFF DIRECT CHAT -->
-      <section id="view-admin-chat" class="view-section hidden">
-        <div class="dash-head">
-          <div>
-            <h1>Staff Direct Messages & Inquiries</h1>
-            <div class="sub">Communicate directly with staff or reply to issues</div>
-          </div>
-        </div>
-        <div class="grid2">
-          <div class="panel" style="padding:14px">
-            <h3 style="margin-bottom:10px">Personnel Message Threads</h3>
-            <div id="adminChatEmployeeList" style="display:flex;flex-direction:column;gap:6px"></div>
-          </div>
-          <div class="panel" style="padding:16px;display:flex;flex-direction:column">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f1f4f8">
-              <div>
-                <b id="adminActiveChatEmpName">Select an employee</b>
-                <div style="font-size:11px;color:var(--muted)" id="adminActiveChatEmpRole">Direct messaging channel</div>
-              </div>
-            </div>
-            <div class="chat-container" style="height:320px;display:flex;flex-direction:column">
-              <div class="chat-messages" id="adminToEmpChatMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
-              <div style="padding:10px;background:#fff;border-top:1px solid #e2e8f0;display:flex;gap:8px">
-                <input id="adminToEmpChatInput" placeholder="Type response to employee..." style="flex:1;padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px" onkeydown="if(event.key==='Enter') sendAdminToEmpMessage()">
-                <button class="btn btn-blue" onclick="sendAdminToEmpMessage()">Send</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 9. SUPPORT BRIDGE -->
-      <section id="view-support-bridge" class="view-section hidden">
-        <div class="dash-head"><div><h1>Super Admin Support Bridge</h1><div class="sub">Direct communication channel</div></div></div>
-        <div class="panel"><p>Direct line to Super Administrator for hardware or platform governance alerts.</p></div>
-      </section>
-
-      <!-- 10. SETTINGS -->
+      <!-- SETTINGS -->
       <section id="view-settings" class="view-section hidden">
-        <div class="dash-head"><div><h1>Organization Settings</h1><div class="sub">Configure tolerances and identity</div></div></div>
-        <div class="grid2">
-          <div class="panel">
-            <h3>Enterprise Identity</h3>
-            <label>Legal Entity Name</label>
-            <input id="settingOrgNameInput" value="Facility Name">
-            <label>Organization Identifier (UID)</label>
-            <input id="settingOrgIdInput" value="ORG-001" disabled style="background:#f8fafc;font-family:monospace;font-weight:700">
-          </div>
-          <div class="panel">
-            <h3>Geo-Fencing & Precision</h3>
-            <label>Geo-Fence Radius (Meters)</label>
-            <input type="number" value="350">
-            <label>Tardiness Grace Buffer (Minutes)</label>
-            <input type="number" value="15">
-          </div>
-        </div>
-      </section>
-
-      <!-- SUPER ADMIN OVERVIEW -->
-      <section id="view-super-overview" class="view-section hidden">
-        <div class="dash-head">
-          <div><h1>⚡ Super Administrator Control Center</h1><div class="sub">Multi-sector governance</div></div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-purple" onclick="openProvisionSectorModal()">+ Add New Sector</button>
-          </div>
-        </div>
-        <div class="kpis">
-          <div class="kpi"><div class="label">ACTIVE ORG IDS</div><div class="value" id="kSuperOrgs" style="color:var(--purple)">4</div><div class="trend" id="kSuperSectorsNote">Across 4 Sectors</div></div>
-          <div class="kpi"><div class="label">TOTAL STAFF</div><div class="value" id="kSuperStaff">1,165</div><div class="trend">Global fleet</div></div>
-          <div class="kpi"><div class="label">PRESENT TODAY</div><div class="value" id="kSuperPresent" style="color:var(--green)">1,065</div><div class="trend">91.4% Rate</div></div>
-          <div class="kpi"><div class="label">ON DUTY NOW</div><div class="value">971</div><div class="trend">Biometric</div></div>
-        </div>
+        <div class="dash-head"><div><h1>Organization Settings</h1><div class="sub">Platform parameters & telemetry config</div></div></div>
         <div class="panel">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-            <h3 style="margin:0">Active Sector Domains & Branches</h3>
-            <button class="action action-purple" onclick="openProvisionSectorModal()">+ Provision Sector</button>
-          </div>
-          <div id="superFleetSectorCards" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:14px"></div>
+          <p>Organization telemetry is active. All sector logs are securely isolated under tenant ID.</p>
         </div>
       </section>
-
-      <!-- SUPER ADMIN SECTORS & ORGANIZATIONS -->
-      <section id="view-super-sectors" class="view-section hidden">
-        <div class="dash-head">
-          <div><h1>Registered Organizations & Credentials</h1></div>
-          <button class="btn btn-purple" onclick="openProvisionSectorModal()">+ Add New Sector</button>
-        </div>
-        <div class="panel">
-          <div class="table-wrap">
-            <table class="table">
-              <thead><tr><th>SECTOR</th><th>ORG ID</th><th>FACILITY</th><th>ADMIN USER</th><th>STAFF</th><th>ACTIONS</th></tr></thead>
-              <tbody id="superSectorTableRows"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="view-super-queries" class="view-section hidden"><div class="dash-head"><div><h1>Global Platform Escalation Desk</h1></div></div><div class="panel"><p>Review issues forwarded by sector teams.</p></div></section>
-      <section id="view-super-retentions" class="view-section hidden"><div class="dash-head"><div><h1>🚨 Employee Deletions & Retention Desk</h1></div></div><div class="panel"><p>Review deletions initiated across all sectors.</p></div></section>
-      <section id="view-super-security" class="view-section hidden"><div class="dash-head"><div><h1>Global Platform Security</h1></div></div><div class="panel"><p>Multi-Tenant Partitioned Data Isolation.</p></div></section>
-
-      <!-- EMPLOYEE VIEWS -->
-      <section id="view-emp-overview" class="view-section hidden"><div class="dash-head"><div><h1>Welcome, Staff Member</h1></div></div><div class="panel"><p>Employee Workspace.</p></div></section>
-      <section id="view-emp-clock" class="view-section hidden"><div class="dash-head"><div><h1>Attendance Punch & Live Check-In</h1></div></div><div class="panel" style="text-align:center"><div class="clock-display" id="liveClockWidget">08:44:00 AM</div><button class="btn btn-blue" onclick="showToast('Biometric attendance punched!')">Check In / Out</button></div></section>
-      <section id="view-emp-leaves" class="view-section hidden"><div class="dash-head"><div><h1>Leave Balances</h1></div></div><div class="panel"><p>18 Days Available.</p></div></section>
-      <section id="view-emp-tasks" class="view-section hidden"><div class="dash-head"><div><h1>My Tasks</h1></div></div><div class="panel"><p>Active Duty Assignment.</p></div></section>
-      <section id="view-emp-shifts" class="view-section hidden"><div class="dash-head"><div><h1>My Shifts</h1></div></div><div class="panel"><p>Morning Shift Roster.</p></div></section>
-      <section id="view-emp-payslips" class="view-section hidden"><div class="dash-head"><div><h1>My Payslips</h1></div></div><div class="panel"><p>Verified salary statements.</p></div></section>
-      <section id="view-emp-resignation" class="view-section hidden"><div class="dash-head"><div><h1>Resignation & Separation</h1></div></div><div class="panel"><p>Formal notice submission.</p></div></section>
-      <section id="view-emp-admin-chat" class="view-section hidden"><div class="dash-head"><div><h1>Chat with Admin</h1></div></div><div class="panel"><p>Direct communication channel.</p></div></section>
-      <section id="view-emp-support" class="view-section hidden"><div class="dash-head"><div><h1>Escalated Support Tickets</h1></div></div><div class="panel"><p>Tickets forwarded to Super Admin.</p></div></section>
     </main>
   </div>
 </div>
 
-<!-- 4. FLOATING AI ASSISTANT WIDGET (Hidden for Super Admin) -->
-<div id="aiSupportWidget" class="hidden">
-  <div id="chatbotWindow" class="chatbot-window hidden">
-    <div class="chatbot-head">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span id="chatBotHeaderIcon" style="font-size:20px">🤖</span>
-        <div>
-          <b id="chatBotHeaderTitle" style="font-size:13px">SSKATT AI Assistant</b>
-          <div id="chatBotHeaderSub" style="font-size:10px;opacity:0.85">Operations Intelligence</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <button onclick="resetSectorBotConversation()" title="Reset Chat" style="background:rgba(255,255,255,0.15);border:0;color:#fff;font-size:11px;padding:3px 7px;border-radius:6px;cursor:pointer">↺ Reset</button>
-        <button onclick="toggleChatbot(false)" style="background:transparent;border:0;color:#fff;font-size:16px;cursor:pointer">✕</button>
-      </div>
-    </div>
-    <div class="chatbot-body" id="chatbotMessages"></div>
-    <div class="chatbot-foot">
-      <input id="chatbotInput" type="text" placeholder="Ask AI bot or describe an issue..." onkeydown="handleChatbotInputKey(event)">
-      <button type="button" onclick="sendBotMessage()" title="Send">➤</button>
-    </div>
-  </div>
-  <button class="chatbot-trigger-btn" onclick="toggleChatbot()" title="Open AI Assistant">🤖</button>
-</div>
-
-<div id="toast">Operation completed successfully</div>
-
 <script>
-const API_BASE = window.location.origin.includes(':80') || window.location.origin.includes('localhost')
-  ? 'http://localhost:5000/api'
-  : '/api';
+// Mock Sectors Data
+const sectorsData = [
+  { id: 'healthcare', name: 'Healthcare & Hospitals', icon: '🏥', desc: 'Hospital telemetry, clinical rosters, emergency shifts & patient care tracking.' },
+  { id: 'manufacturing', name: 'Manufacturing & Plant Operations', icon: '🏭', desc: 'Assembly shifts, safety compliance, hazard audits & heavy machinery telemetry.' },
+  { id: 'corporate', name: 'Corporate & Tech Enterprise', icon: '🏢', desc: 'Hybrid attendance, access badges, meeting room allocation & department KPIs.' },
+  { id: 'logistics', name: 'Logistics & Fleet Operations', icon: '🚚', desc: 'Driver dispatch, route logging, transit hours & warehouse coordination.' }
+];
 
-const INITIAL_ORGANIZATIONS = {
-  "HOSP-001": {
-    orgId: "HOSP-001",
-    sector: "Hospital",
-    name: "Apex Healthcare & Research Institute (Main Branch)",
-    adminUser: "admin",
-    adminPass: "admin123",
-    icon: "🏥",
-    totalStaff: 248,
-    present: 221,
-    working: 187,
-    late: 16,
-    absent: 27,
-    departments: ["Emergency", "Nursing", "Diagnostics", "Pharmacy"],
-    employees: [
-      { id: "E-1024", name: "Dr. Ananya Rao", dept: "Emergency", role: "Chief Trauma Specialist", shift: "Morning A (08:00 - 16:30)", login: "08:54", logout: "—", task: "Trauma Ward Acute Care", status: "Present", basePay: 180000, otPay: 14500, deductions: 22000, email: "a.rao@apexhealth.org" },
-      { id: "E-1041", name: "Rahul Menon", dept: "Nursing", role: "Senior Staff Nurse", shift: "General (09:00 - 17:30)", login: "09:18", logout: "—", task: "Ward B Post-Op Monitoring", status: "Late", basePay: 65000, otPay: 4200, deductions: 6800, email: "r.menon@apexhealth.org" },
-      { id: "E-1088", name: "Priya Shah", dept: "Diagnostics", role: "Senior Radiologist", shift: "Morning B (08:30 - 17:00)", login: "08:41", logout: "17:32", task: "CT/MRI Diagnostic Queue", status: "Present", basePay: 140000, otPay: 8000, deductions: 16500, email: "p.shah@apexhealth.org" }
-    ],
-    tasks: [
-      { id: "TSK-H1", title: "Emergency Trauma Duty", zone: "Ward A / Trauma", assignee: "Dr. Ananya Rao", priority: "High", progress: 85, status: "In Progress" },
-      { id: "TSK-H2", title: "Dialysis Unit Calibration", zone: "Nephrology Wing", assignee: "Rahul Menon", priority: "Medium", progress: 100, status: "Completed" }
-    ],
-    shifts: [
-      { name: "Morning Shift (Ward Coverage)", hours: "07:00 - 15:30", required: 85, allocated: 88, status: "Optimal" },
-      { name: "General Administration & OPD", hours: "09:00 - 17:30", required: 90, allocated: 86, status: "Adequate" }
-    ],
-    resignations: [
-      {
-        id: "RSG-401",
-        empId: "E-1041",
-        empName: "Rahul Menon",
-        dept: "Nursing",
-        submittedDate: "2026-10-25",
-        noticeDays: 30,
-        proposedLwd: "2026-11-24",
-        officialLwd: "2026-11-24",
-        reason: "Relocation / Family Relocation",
-        letter: "Dear Management, I am tendering my resignation due to family relocation to my hometown.",
-        status: "Pending Review",
-        adminRemarks: ""
-      }
-    ],
-    chats: {
-      "E-1024": [
-        { sender: "emp", text: "Good morning Admin! Shift registered on roster.", time: "08:55 AM" },
-        { sender: "admin", text: "Verified Dr. Rao. Have a great shift.", time: "09:00 AM" }
-      ]
-    }
-  },
-  "MFG-001": {
-    orgId: "MFG-001",
-    sector: "Manufacturing",
-    name: "Precision Forgings & Industrial Plant",
-    adminUser: "admin",
-    adminPass: "admin123",
-    icon: "🏭",
-    totalStaff: 412,
-    present: 388,
-    working: 350,
-    late: 18,
-    absent: 24,
-    departments: ["Production", "Quality", "Tooling"],
-    employees: [
-      { id: "M-2041", name: "Ravi Kumar", dept: "Production", role: "CNC Lead Operator", shift: "Shift 1 (07:00 - 15:30)", login: "07:54", logout: "—", task: "Automated Line 02 Milling", status: "Present", basePay: 48000, otPay: 7600, deductions: 5100, email: "r.kumar@precisionmfg.com" }
-    ],
-    tasks: [],
-    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
-    resignations: [],
-    chats: {}
-  },
-  "CON-001": {
-    orgId: "CON-001",
-    sector: "Construction",
-    name: "Skyline Infra & Metro Construction",
-    adminUser: "admin",
-    adminPass: "admin123",
-    icon: "🏗️",
-    totalStaff: 310,
-    present: 274,
-    working: 260,
-    late: 21,
-    absent: 36,
-    departments: ["Civil", "Safety", "Electrical"],
-    employees: [
-      { id: "C-3011", name: "Arjun Reddy", dept: "Civil", role: "Site Resident Engineer", shift: "Site Day (08:00 - 17:00)", login: "08:06", logout: "—", task: "Tower B - Deck 8 Slab Pour", status: "Present", basePay: 82000, otPay: 9800, deductions: 9100, email: "a.reddy@skylineinfra.com" }
-    ],
-    tasks: [],
-    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
-    resignations: [],
-    chats: {}
-  },
-  "CORP-001": {
-    orgId: "CORP-001",
-    sector: "Corporate",
-    name: "Aether Technologies Global HQ",
-    adminUser: "admin",
-    adminPass: "admin123",
-    icon: "🏢",
-    totalStaff: 195,
-    present: 182,
-    working: 174,
-    late: 7,
-    absent: 13,
-    departments: ["Engineering", "Product", "Operations"],
-    employees: [
-      { id: "P-4012", name: "Neha Sharma", dept: "Engineering", role: "Principal Architect", shift: "Flexible (09:00 - 18:00)", login: "09:02", logout: "—", task: "Project Orion Cloud Infrastructure", status: "Present", basePay: 210000, otPay: 0, deductions: 28000, email: "n.sharma@aethertech.io" }
-    ],
-    tasks: [],
-    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
-    resignations: [],
-    chats: {}
-  }
-};
+// Mock Employees List
+const mockEmployees = [
+  { id: 'EMP-101', name: 'Dr. Sarah Jenkins', dept: 'Emergency Care', role: 'Chief Medical Officer', shift: 'Morning (06:00 - 14:00)', status: 'Present', login: '05:50 AM', logout: '-' },
+  { id: 'EMP-102', name: 'Marcus Vance', dept: 'ICU Unit', role: 'Critical Care Nurse', shift: 'Night (22:00 - 06:00)', status: 'Present', login: '21:45 PM', logout: '-' },
+  { id: 'EMP-103', name: 'Elena Rostova', dept: 'Radiology', role: 'Senior Technician', shift: 'Morning (08:00 - 16:00)', status: 'Late', login: '08:25 AM', logout: '-' },
+  { id: 'EMP-104', name: 'David Kim', dept: 'Hospital Administration', role: 'Operations Manager', shift: 'General (09:00 - 17:00)', status: 'Present', login: '08:55 AM', logout: '-' }
+];
 
-const SECTOR_METADATA = {
-  Hospital: { icon: "🏥", defaultDepts: ["Emergency", "Nursing", "Diagnostics", "Pharmacy"] },
-  Manufacturing: { icon: "🏭", defaultDepts: ["Production", "Quality", "Tooling"] },
-  Construction: { icon: "🏗️", defaultDepts: ["Civil", "Safety", "Electrical"] },
-  Corporate: { icon: "🏢", defaultDepts: ["Engineering", "Product", "Operations"] }
-};
-
-let organizations = JSON.parse(JSON.stringify(INITIAL_ORGANIZATIONS));
-let sectorMeta = JSON.parse(JSON.stringify(SECTOR_METADATA));
-let currentOrgId = "HOSP-001";
-let currentUserRole = "admin";
-let currentEmployeeId = "E-1024";
-let adminActiveChatEmpId = "E-1024";
-
-window.onload = function() {
-  populateSectorDropdown();
+window.addEventListener('DOMContentLoaded', () => {
   renderLandingSectors();
-  updateDemo();
-  startLiveClock();
-};
-
-function toggleMobileSidebar(forceState) {
-  const sidebar = document.getElementById("appSidebar");
-  const backdrop = document.getElementById("sidebarBackdrop");
-  if (!sidebar) return;
-
-  const willOpen = (typeof forceState === "boolean")
-    ? forceState
-    : !sidebar.classList.contains("mobile-open");
-
-  if (willOpen) {
-    sidebar.classList.add("mobile-open");
-    if (backdrop) backdrop.classList.add("active");
-  } else {
-    sidebar.classList.remove("mobile-open");
-    if (backdrop) backdrop.classList.remove("active");
-  }
-}
-
-function getSectorCategories() {
-  const cats = new Set();
-  for (const orgId in organizations) cats.add(organizations[orgId].sector);
-  for (const metaKey in sectorMeta) cats.add(metaKey);
-  return Array.from(cats);
-}
+  populateSectorSelect();
+});
 
 function renderLandingSectors() {
-  const grid = document.getElementById("landingSectorGrid");
-  if (!grid) return;
-  const categories = getSectorCategories();
-
-  grid.innerHTML = categories.map(cat => {
-    const orgs = Object.values(organizations).filter(o => o.sector === cat);
-    const meta = sectorMeta[cat] || { icon: "🏢" };
-    const firstOrgId = orgs[0]?.orgId || "";
-    return `
-      <div class="sector" onclick="openLogin('${cat}', '${firstOrgId}')">
-        <div class="sector-icon">${meta.icon}</div>
-        <h3>${cat}</h3>
-        <p>${orgs.length} Registered Enterprise Organization${orgs.length === 1 ? '' : 's'}.<br><b>${orgs[0]?.name || 'Operational Branch'}</b></p>
-        <div class="access">${cat} Portals →</div>
-      </div>
-    `;
-  }).join("");
+  const grid = document.getElementById('landingSectorGrid');
+  if(!grid) return;
+  grid.innerHTML = sectorsData.map(s => `
+    <div class="sector" onclick="selectSectorAndLogin('${s.id}')">
+      <div class="sector-icon">${s.icon}</div>
+      <h3>${s.name}</h3>
+      <p>${s.desc}</p>
+      <span class="access">Launch Portal →</span>
+    </div>
+  `).join('');
 }
 
-function populateSectorDropdown() {
-  const sel = document.getElementById("sectorSelect");
-  if (!sel) return;
-  const categories = getSectorCategories();
-  sel.innerHTML = categories.map(cat => {
-    const meta = sectorMeta[cat] || { icon: "🏢" };
-    return `<option value="${cat}">${meta.icon} ${cat}</option>`;
-  }).join("") + `<option value="Other">⚡ Other (Super Admin Root)</option>`;
+function populateSectorSelect() {
+  const sel = document.getElementById('sectorSelect');
+  if(!sel) return;
+  sel.innerHTML = sectorsData.map(s => `<option value="${s.id}">${s.icon} ${s.name}</option>`).join('');
+  updateDemo();
 }
 
-function openLogin(chosenSector, chosenOrgId) {
-  populateSectorDropdown();
-  if (chosenSector) document.getElementById("sectorSelect").value = chosenSector;
-  updateDemo(chosenOrgId);
-  document.getElementById("loginModal").classList.remove("hidden");
+function updateDemo() {
+  const note = document.getElementById('demoNote');
+  if(note) note.innerHTML = `<b>Demo Credentials:</b> Use username <code>admin</code> and password <code>admin123</code> to sign in.`;
+}
+
+function selectSectorAndLogin(sectorId) {
+  const sel = document.getElementById('sectorSelect');
+  if(sel) sel.value = sectorId;
+  openLogin();
+}
+
+function openLogin() {
+  document.getElementById('loginModal').classList.remove('hidden');
 }
 
 function closeLogin() {
-  document.getElementById("loginModal").classList.add("hidden");
+  document.getElementById('loginModal').classList.add('hidden');
 }
 
-function updateDemo(prefilledOrgId) {
-  const s = document.getElementById("sectorSelect")?.value || "Hospital";
-  const orgInput = document.getElementById("org");
-  const orgSel = document.getElementById("orgSelect");
-  const userInput = document.getElementById("username");
-  const passInput = document.getElementById("password");
-
-  if (s === "Other") {
-    if (orgSel) orgSel.style.display = "none";
-    if (orgInput) { orgInput.style.display = "block"; orgInput.value = "SUPER-ROOT"; }
-    userInput.value = "superadmin";
-    passInput.value = "superadmin123";
-    return;
-  }
-
-  const matchingOrgs = Object.values(organizations).filter(o => o.sector === s);
-  const activeOrg = (prefilledOrgId && organizations[prefilledOrgId]) ? organizations[prefilledOrgId] : (matchingOrgs[0] || organizations["HOSP-001"]);
-
-  if (orgSel) {
-    orgSel.style.display = "block";
-    orgSel.innerHTML = matchingOrgs.map(o => `<option value="${o.orgId}">${o.orgId} — ${o.name}</option>`).join("");
-    orgSel.value = activeOrg.orgId;
-  }
-  if (orgInput) orgInput.value = activeOrg.orgId;
-  userInput.value = activeOrg.adminUser;
-  passInput.value = activeOrg.adminPass;
-
-  const demoEmp = (activeOrg.employees && activeOrg.employees.length > 0) ? activeOrg.employees[0].id : "E-1024";
-  document.getElementById("demoNote").innerHTML = `
-    <b>Credentials for ${s} (${activeOrg.orgId}):</b><br>
-    • <b>Admin:</b> User: <code>${activeOrg.adminUser}</code> | Pass: <code>${activeOrg.adminPass}</code><br>
-    • <b>Staff ID:</b> User: <code>${demoEmp}</code> | Pass: <code>password123</code>
-  `;
-}
-
-function handleOrgSelectChange() {
-  const sel = document.getElementById("orgSelect");
-  const inp = document.getElementById("org");
-  if (sel && inp) {
-    inp.value = sel.value;
-    const orgObj = organizations[sel.value];
-    if (orgObj) {
-      document.getElementById("username").value = orgObj.adminUser;
-      document.getElementById("password").value = orgObj.adminPass;
-    }
-  }
-}
-
-async function login() {
-  const chosenSector = document.getElementById("sectorSelect")?.value || "Hospital";
-  const enteredOrgId = (document.getElementById("org").value || "").trim().toUpperCase();
-  const userInput = (document.getElementById("username").value || "").trim();
-  const passInput = (document.getElementById("password").value || "").trim();
-
-  if (!userInput) {
-    showToast("Please enter username or employee ID");
-    return;
-  }
-
-  if (userInput.toLowerCase() === "superadmin" || chosenSector === "Other") {
-    if (passInput !== "superadmin123") {
-      showToast("Invalid password for Super Admin!");
-      return;
-    }
-    currentUserRole = "superadmin";
-    completeLogin("super-overview", "Authenticated as Platform Super Administrator (Root)");
-    return;
-  }
-
-  const targetOrg = organizations[enteredOrgId] || Object.values(organizations).find(o => o.sector === chosenSector);
-  if (!targetOrg) {
-    showToast(`Organization ID ${enteredOrgId} does not exist`);
-    return;
-  }
-
-  currentOrgId = targetOrg.orgId;
-
-  if (userInput.toLowerCase() === targetOrg.adminUser.toLowerCase() || userInput.toLowerCase() === "admin") {
-    if (passInput !== targetOrg.adminPass && passInput !== "admin123") {
-      showToast("Invalid password for Sector Admin!");
-      return;
-    }
-    currentUserRole = "admin";
-    completeLogin("dashboard", `Signed in as ${targetOrg.sector} Admin (${targetOrg.orgId})`);
-    return;
-  }
-
-  const matchedEmp = (targetOrg.employees || []).find(e => e.id.toLowerCase() === userInput.toLowerCase() || e.name.toLowerCase() === userInput.toLowerCase());
-  if (matchedEmp) {
-    currentUserRole = "employee";
-    currentEmployeeId = matchedEmp.id;
-    completeLogin("emp-overview", `Welcome back, ${matchedEmp.name} (${matchedEmp.id})`);
-    return;
-  }
-
-  showToast(`Invalid credentials for Organization ID ${enteredOrgId}`);
-}
-
-function completeLogin(targetTab, toastMsg) {
-  document.getElementById("loginModal").classList.add("hidden");
-  document.getElementById("landing").classList.add("hidden");
-  document.getElementById("dashboard").classList.remove("hidden");
-
-  applyRoleNav();
-  switchTab(targetTab);
-  initSectorBotSession();
-  showToast(toastMsg);
-}
-
-function applyRoleNav() {
-  const superNav = document.getElementById("superAdminNav");
-  const adminNav = document.getElementById("adminSidebarNav");
-  const empNav = document.getElementById("empSidebarNav");
-  const badgeArea = document.getElementById("headerRoleBadgeArea");
-  const sideBrand = document.getElementById("sideBrandLabel");
-  const avatar = document.getElementById("headerAvatar");
-  const uName = document.getElementById("headerUserName");
-  const uRole = document.getElementById("headerUserRole");
-  const aiWidget = document.getElementById("aiSupportWidget");
-  const btnHeaderAskBot = document.getElementById("btnHeaderAskBot");
-
-  superNav.classList.add("hidden");
-  adminNav.classList.add("hidden");
-  empNav.classList.add("hidden");
-
-  const org = organizations[currentOrgId] || Object.values(organizations)[0];
-
-  if (currentUserRole === "superadmin") {
-    superNav.classList.remove("hidden");
-    sideBrand.textContent = "SUPER ADMIN CONSOLE";
-    badgeArea.innerHTML = `<span class="pill-purple">⚡ Platform Super Admin (Root)</span>`;
-    avatar.className = "avatar avatar-purple";
-    avatar.textContent = "SA";
-    uName.textContent = "Super Admin (Root)";
-    uRole.textContent = "Multi-Sector Controller";
-
-    if (aiWidget) aiWidget.classList.add("hidden");
-    if (btnHeaderAskBot) btnHeaderAskBot.classList.add("hidden");
-
-    renderSuperFleet();
-    renderSuperSectorsView();
-  } else if (currentUserRole === "admin") {
-    adminNav.classList.remove("hidden");
-    sideBrand.textContent = "CONTROL CENTER";
-    badgeArea.innerHTML = `<span class="pill">${org.icon || '🏢'} ${org.sector} (${org.orgId})</span>`;
-    avatar.className = "avatar";
-    avatar.textContent = "AD";
-    uName.textContent = `${org.sector} Admin (${org.adminUser})`;
-    uRole.textContent = `Org ID: ${org.orgId}`;
-
-    if (aiWidget) aiWidget.classList.remove("hidden");
-    if (btnHeaderAskBot) btnHeaderAskBot.classList.remove("hidden");
-
-    renderAllSectorAdminViews();
-  } else {
-    empNav.classList.remove("hidden");
-    sideBrand.textContent = "EMPLOYEE SELF-SERVICE";
-    badgeArea.innerHTML = `<span class="pill">${org.icon || '🏢'} ${org.sector} (${org.orgId})</span>`;
-    avatar.className = "avatar";
-    const emp = (org.employees || []).find(e => e.id === currentEmployeeId) || org.employees[0];
-    avatar.textContent = emp.name.split(" ").map(n => n[0]).join("").slice(0, 2);
-    uName.textContent = emp.name;
-    uRole.textContent = `${emp.id} · ${emp.dept}`;
-
-    if (aiWidget) aiWidget.classList.remove("hidden");
-    if (btnHeaderAskBot) btnHeaderAskBot.classList.remove("hidden");
-  }
-}
-
-function switchTab(tabName) {
-  document.querySelectorAll(".sidebar .side-item").forEach(item => {
-    item.classList.toggle("active", item.getAttribute("data-tab") === tabName);
-    item.classList.toggle("active-purple", currentUserRole === "superadmin" && item.getAttribute("data-tab") === tabName);
-  });
-
-  document.querySelectorAll(".view-section").forEach(view => {
-    view.classList.add("hidden");
-  });
-
-  const activeView = document.getElementById(`view-${tabName}`);
-  if (activeView) activeView.classList.remove("hidden");
-
-  if (currentUserRole === "admin") renderAllSectorAdminViews();
-  if (tabName === "assignments") renderWorkAssignments();
-  if (tabName === "admin-chat") renderAdminChatView();
-  if (tabName === "emp-admin-chat") renderEmpAdminChatView();
-
-  if (window.innerWidth <= 768) {
-    toggleMobileSidebar(false);
-  }
-}
-
-function renderAllSectorAdminViews() {
-  const org = organizations[currentOrgId];
-  if (!org) return;
-
-  document.getElementById("dashTitle").textContent = `${org.name}`;
-  document.getElementById("dashSubtitle").textContent = `Sector: ${org.sector} · Organization ID: ${org.orgId}`;
-  document.getElementById("kEmployees").textContent = org.totalStaff || (org.employees ? org.employees.length : 0);
-  document.getElementById("kPresent").textContent = org.present || 0;
-  document.getElementById("kWorking").textContent = org.working || 0;
-  document.getElementById("kLate").textContent = org.late || 0;
-  document.getElementById("kAttendanceRate").textContent = org.totalStaff ? `${Math.round((org.present / org.totalStaff) * 100)}% attendance` : '100% attendance';
-
-  renderDashEmployees();
-  renderEmployeeDirectory();
-  renderAttendanceLogs();
-  renderWorkAssignments();
-  renderShiftsRoster();
-  renderReportsView();
-  renderPayslips();
-  renderAdminResignationsQueue();
-  renderAdminChatView();
-  renderChart();
-}
-
-/* ==============================================================
-   WORK ASSIGNMENT ENGINE (Modal & Render)
-   ============================================================== */
-function renderWorkAssignments() {
-  const tbody = document.getElementById("workAssignmentsTableRows");
-  if (!tbody) return;
-  const org = organizations[currentOrgId] || {};
-  const tasks = org.tasks || [];
-
-  if (tasks.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px">No work orders dispatched yet. Click "+ Assign New Work Order" above.</td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = tasks.map(t => `
-    <tr>
-      <td><b>${escapeHtml(t.title)}</b><br><small style="color:var(--muted);font-family:monospace">${t.id}</small></td>
-      <td>${escapeHtml(t.zone)}</td>
-      <td><b>${escapeHtml(t.assignee)}</b></td>
-      <td><span class="status" style="${t.priority === 'High' ? 'background:#fee2e2;color:#b91c1c' : ''}">${t.priority}</span></td>
-      <td>${t.progress}%</td>
-      <td><span class="status in-progress">${t.status}</span></td>
-      <td>
-        <button class="action" onclick="openAssignTaskModal('${escapeJsString(t.assignee)}')">Reassign</button>
-      </td>
-    </tr>
-  `).join("");
-}
-
-function openAssignTaskModal(prefilledAssignee) {
-  const org = organizations[currentOrgId] || {};
-  const emps = org.employees || [];
-  const content = document.getElementById("universalModalContent");
-
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div>
-        <span class="pill" style="font-size:10px">${escapeHtml(org.sector || 'Sector')} Operations</span>
-        <h3 style="margin:4px 0 0">Assign Work Order</h3>
-      </div>
-      <button class="action" onclick="closeUniversalModal()">✕</button>
-    </div>
-    <div>
-      <label>Task Scope / Work Description *</label>
-      <input id="assignTaskTitle" placeholder="e.g. Critical Trauma Bay Oversight, Equipment Calibration">
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <label>Assign to Employee *</label>
-          <select id="assignTaskAssignee">
-            ${emps.map(e => `<option value="${escapeHtml(e.name)}" ${prefilledAssignee === e.name ? 'selected' : ''}>${escapeHtml(e.name)} (${e.id})</option>`).join("")}
-          </select>
-        </div>
-        <div>
-          <label>Duty Station / Bay Zone *</label>
-          <input id="assignTaskZone" value="${escapeHtml(emps[0]?.dept || 'Main')} Wing">
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <label>Priority Level</label>
-          <select id="assignTaskPriority">
-            <option value="High">High</option>
-            <option value="Medium" selected>Medium</option>
-            <option value="Normal">Normal</option>
-          </select>
-        </div>
-        <div>
-          <label>Initial Progress</label>
-          <select id="assignTaskProgress">
-            <option value="10">10% - Dispatched</option>
-            <option value="50">50% - In Progress</option>
-            <option value="100">100% - Completed</option>
-          </select>
-        </div>
-      </div>
-
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
-        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
-        <button class="btn btn-blue" onclick="saveDispatchedWorkOrder()">Dispatch & Assign Work 🚀</button>
-      </div>
-    </div>
-  `;
-  document.getElementById("universalModal").classList.remove("hidden");
-}
-
-function saveDispatchedWorkOrder() {
-  const org = organizations[currentOrgId];
-  const title = (document.getElementById("assignTaskTitle")?.value || "").trim();
-  const assignee = document.getElementById("assignTaskAssignee")?.value || "Unassigned";
-  const zone = (document.getElementById("assignTaskZone")?.value || "Main Facility").trim();
-  const priority = document.getElementById("assignTaskPriority")?.value || "Medium";
-  const progress = Number(document.getElementById("assignTaskProgress")?.value) || 10;
-
-  if (!title) {
-    showToast("Please provide a task scope description!");
-    return;
-  }
-
-  const prefix = (org.orgId || "TSK").split('-')[0];
-  const newTaskId = `TSK-${prefix}${Math.floor(10 + Math.random() * 90)}`;
-
-  if (!org.tasks) org.tasks = [];
-  org.tasks.unshift({
-    id: newTaskId,
-    title: title,
-    zone: zone,
-    assignee: assignee,
-    priority: priority,
-    progress: progress,
-    status: progress === 100 ? "Completed" : "In Progress"
-  });
-
-  closeUniversalModal();
-  renderWorkAssignments();
-  showToast(`Work order "${newTaskId}" assigned to ${assignee}!`);
-}
-
-/* ==============================================================
-   SUPER ADMIN SECTOR PROVISIONING
-   ============================================================== */
-function openProvisionSectorModal() {
-  const content = document.getElementById("universalModalContent");
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div>
-        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
-        <h3 style="margin:6px 0 0">Add New Sector Category & Full Access Branch</h3>
-      </div>
-      <button class="action" onclick="closeUniversalModal()">✕</button>
-    </div>
-    <div>
-      <div style="display:grid;grid-template-columns:3fr 1fr;gap:12px">
-        <div>
-          <label>Sector Category Name *</label>
-          <input id="provSectorName" placeholder="e.g. Logistics, Aviation, Energy">
-        </div>
-        <div>
-          <label>Emoji Icon</label>
-          <input id="provSectorIcon" value="🚀" style="text-align:center">
-        </div>
-      </div>
-
-      <label>Primary Organization ID (Code) *</label>
-      <input id="provSectorOrgId" placeholder="e.g. LOG-001, AVIA-001" style="font-family:monospace;font-weight:700;text-transform:uppercase">
-
-      <label>Legal Entity / Facility Name *</label>
-      <input id="provSectorOrgName" placeholder="e.g. Global Freight & Cargo Operations">
-
-      <label>Default Operating Departments (Comma Separated)</label>
-      <input id="provSectorDepts" value="Operations, Dispatch, Safety, Maintenance">
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <label>Sector Admin Username *</label>
-          <input id="provSectorAdminUser" value="admin">
-        </div>
-        <div>
-          <label>Sector Admin Password *</label>
-          <input id="provSectorAdminPass" value="admin123">
-        </div>
-      </div>
-
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
-        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
-        <button class="btn btn-purple" onclick="saveProvisionedSector()">Create Sector & Provision Full Access 🚀</button>
-      </div>
-    </div>
-  `;
-  document.getElementById("universalModal").classList.remove("hidden");
-}
-
-async function saveProvisionedSector() {
-  const nameEl = document.getElementById("provSectorName");
-  const iconEl = document.getElementById("provSectorIcon");
-  const orgIdEl = document.getElementById("provSectorOrgId");
-  const orgNameEl = document.getElementById("provSectorOrgName");
-  const deptsEl = document.getElementById("provSectorDepts");
-  const adminUserEl = document.getElementById("provSectorAdminUser");
-  const adminPassEl = document.getElementById("provSectorAdminPass");
-
-  const rawKey = (nameEl?.value || "").trim();
-  const icon = (iconEl?.value || "🚀").trim() || "🚀";
-  const orgId = (orgIdEl?.value || "").trim().toUpperCase();
-  const facilityName = (orgNameEl?.value || "").trim() || `${rawKey} Central Hub`;
-  const depts = (deptsEl?.value || "Operations, Safety, Dispatch").split(",").map(d => d.trim()).filter(Boolean);
-  const adminUser = (adminUserEl?.value || "admin").trim();
-  const adminPass = (adminPassEl?.value || "admin123").trim();
-
-  if (!rawKey || !orgId || !adminUser || !adminPass) {
-    showToast("Please fill in Sector Name, Org ID, Username, and Password!");
-    return;
-  }
-
-  const sectorName = rawKey.charAt(0).toUpperCase() + rawKey.slice(1);
-  if (organizations[orgId]) {
-    showToast(`Organization ID "${orgId}" already exists!`);
-    return;
-  }
-
-  closeUniversalModal();
-
-  const prefix = orgId.split('-')[0] || 'ORG';
-  const leadEmpId = `${prefix}-1024`;
-
-  sectorMeta[sectorName] = { icon: icon, defaultDepts: depts };
-  organizations[orgId] = {
-    orgId: orgId,
-    sector: sectorName,
-    name: facilityName,
-    adminUser: adminUser,
-    adminPass: adminPass,
-    icon: icon,
-    totalStaff: 48,
-    present: 44,
-    working: 40,
-    late: 4,
-    absent: 4,
-    departments: depts,
-    employees: [
-      {
-        id: leadEmpId,
-        name: `Lead Officer (${sectorName})`,
-        dept: depts[0] || 'Operations',
-        role: "Operations Specialist",
-        shift: "Morning (08:30 - 17:00)",
-        login: "08:35",
-        logout: "—",
-        task: "Sector Launch Operations",
-        status: "Present",
-        basePay: 82000,
-        otPay: 4000,
-        deductions: 9800,
-        email: `lead@${orgId.toLowerCase()}.org`
-      }
-    ],
-    tasks: [
-      {
-        id: `TSK-${prefix}1`,
-        title: "Perimeter Hardware Calibration",
-        zone: "Zone Alpha",
-        assignee: `Lead Officer (${sectorName})`,
-        priority: "High",
-        progress: 65,
-        status: "In Progress"
-      }
-    ],
-    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
-    resignations: [],
-    chats: {}
-  };
-
-  try { if (typeof renderLandingSectors === "function") renderLandingSectors(); } catch (e) {}
-  try { if (typeof populateSectorDropdown === "function") populateSectorDropdown(); } catch (e) {}
-  try { if (typeof renderSuperFleet === "function") renderSuperFleet(); } catch (e) {}
-  try { if (typeof renderSuperSectorsView === "function") renderSuperSectorsView(); } catch (e) {}
-
-  showToast(`Sector "${sectorName}" & Org "${orgId}" added successfully! 🎉`);
-}
-
-function renderSuperFleet() {
-  const container = document.getElementById("superFleetSectorCards");
-  if (!container) return;
-
-  const kSuperOrgs = document.getElementById("kSuperOrgs");
-  const kSuperSectorsNote = document.getElementById("kSuperSectorsNote");
-  const kSuperStaff = document.getElementById("kSuperStaff");
-  const kSuperPresent = document.getElementById("kSuperPresent");
-
-  let totalStaff = 0;
-  let totalPresent = 0;
-
-  container.innerHTML = Object.keys(organizations).map(orgId => {
-    const o = organizations[orgId];
-    totalStaff += o.totalStaff || 0;
-    totalPresent += o.present || 0;
-
-    return `
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:24px">${o.icon}</span>
-          <span style="font-family:monospace;font-size:11px;font-weight:800;background:#fff;border:1px solid #cbd5e1;padding:2px 8px;border-radius:4px;color:var(--purple)">${o.orgId}</span>
-        </div>
-        <b style="font-size:14px;color:var(--navy)">${o.sector}</b>
-        <div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px">${o.name}</div>
-        <button class="action action-purple" style="margin-top:10px;width:100%" onclick="enterOrgAsAdmin('${o.orgId}')">Login as Admin →</button>
-      </div>
-    `;
-  }).join("");
-
-  if (kSuperOrgs) kSuperOrgs.textContent = Object.keys(organizations).length;
-  if (kSuperSectorsNote) kSuperSectorsNote.textContent = `Across ${getSectorCategories().length} Sectors`;
-  if (kSuperStaff) kSuperStaff.textContent = totalStaff.toLocaleString();
-  if (kSuperPresent) kSuperPresent.textContent = totalPresent.toLocaleString();
-}
-
-function renderSuperSectorsView() {
-  const tbody = document.getElementById("superSectorTableRows");
-  if (!tbody) return;
-  tbody.innerHTML = Object.keys(organizations).map(orgId => {
-    const o = organizations[orgId];
-    return `
-      <tr>
-        <td><b>${o.icon || '🏢'} ${o.sector}</b></td>
-        <td><b style="font-family:monospace;color:var(--purple)">${o.orgId}</b></td>
-        <td>${o.name}</td>
-        <td><b>${o.adminUser}</b></td>
-        <td>${o.totalStaff} Personnel</td>
-        <td><button class="action action-purple" onclick="enterOrgAsAdmin('${o.orgId}')">Login as Admin</button></td>
-      </tr>
-    `;
-  }).join("");
-}
-
-function enterOrgAsAdmin(orgId) {
-  currentOrgId = orgId;
-  currentUserRole = "admin";
-  applyRoleNav();
-  switchTab("dashboard");
-  initSectorBotSession();
-  showToast(`Switched into ${organizations[orgId].sector} (${orgId}) as Admin`);
-}
-
-function renderDashEmployees() {
-  const tbody = document.getElementById("dashEmployeeRows");
-  if (!tbody) return;
-  const list = organizations[currentOrgId]?.employees || [];
-  tbody.innerHTML = list.map(e => `
-    <tr>
-      <td><b>${e.id}</b><br><span style="color:var(--muted)">${e.name}</span></td>
-      <td>${e.dept}</td>
-      <td>${e.login || '08:45'}</td>
-      <td>${e.logout || '—'}</td>
-      <td>${e.task || 'General Duty'}</td>
-      <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
-      <td><button class="action" onclick="showToast('Profile opened')">Profile</button></td>
-    </tr>
-  `).join("");
-}
-
-function renderEmployeeDirectory() {
-  const tbody = document.getElementById("employeeDirectoryRows");
-  if (!tbody) return;
-  const list = organizations[currentOrgId]?.employees || [];
-  tbody.innerHTML = list.map(e => `
-    <tr>
-      <td><b>${e.name}</b><br><small style="color:var(--blue);font-family:monospace;font-weight:700">ID: ${e.id}</small></td>
-      <td>${e.dept}</td>
-      <td><b>${e.role}</b></td>
-      <td>${e.shift}</td>
-      <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
-      <td>
-        <button class="action" onclick="openAssignTaskModal('${escapeJsString(e.name)}')">Assign</button>
-      </td>
-    </tr>
-  `).join("");
-}
-
-function renderAttendanceLogs() {
-  const tbody = document.getElementById("attendanceLogsRows");
-  if (!tbody) return;
-  const list = organizations[currentOrgId]?.employees || [];
-  tbody.innerHTML = list.map(e => `
-    <tr>
-      <td><b>${e.name}</b></td>
-      <td>Main Facility Perimeter</td>
-      <td>${e.login || '08:45'}</td>
-      <td>${e.logout || '—'}</td>
-      <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
-    </tr>
-  `).join("");
-}
-
-function renderShiftsRoster() {
-  const tbody = document.getElementById("shiftsRosterTableRows");
-  if (!tbody) return;
-  const shifts = organizations[currentOrgId]?.shifts || [];
-  tbody.innerHTML = shifts.map(s => `
-    <tr>
-      <td><b>${s.name}</b></td>
-      <td>${s.hours}</td>
-      <td>${s.required}</td>
-      <td>${s.allocated}</td>
-      <td><span class="status optimal">${s.status}</span></td>
-    </tr>
-  `).join("");
-}
-
-function renderReportsView() {
-  const tbody = document.getElementById("reportsDepartmentTableRows");
-  if (!tbody) return;
-  const depts = organizations[currentOrgId]?.departments || ['Operations'];
-  tbody.innerHTML = depts.map(d => `
-    <tr>
-      <td><b>${d} Unit</b></td>
-      <td>18 Officers</td>
-      <td><b style="color:var(--green)">95.4%</b></td>
-      <td><span class="status present">Certified</span></td>
-    </tr>
-  `).join("");
-}
-
-function renderPayslips() {
-  const tbody = document.getElementById("payslipsTableRows");
-  if (!tbody) return;
-  const list = organizations[currentOrgId]?.employees || [];
-  tbody.innerHTML = list.map(e => {
-    const net = (e.basePay + (e.otPay || 0) - e.deductions);
-    return `
-      <tr>
-        <td><b>${e.name}</b></td>
-        <td>${e.role}</td>
-        <td>₹ ${e.basePay.toLocaleString('en-IN')}</td>
-        <td><b>₹ ${net.toLocaleString('en-IN')}</b></td>
-        <td><button class="action action-primary" onclick="showToast('Payslip Sheet Opened')">View Sheet</button></td>
-      </tr>
-    `;
-  }).join("");
-}
-
-function renderChart() {
-  const ctx = document.getElementById("attendanceChart");
-  if (!ctx || window.attChart) return;
-
-  window.attChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: ["Day 1", "Day 5", "Day 10", "Day 15", "Day 20", "Day 24"],
-      datasets: [{
-        label: "Attendance %",
-        data: [91, 94, 90, 96, 93, 92],
-        borderColor: "#2563eb",
-        backgroundColor: "rgba(37, 99, 235, 0.08)",
-        borderWidth: 2,
-        tension: 0.35,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { min: 70, max: 100 } }
-    }
-  });
-}
-
-function renderAdminResignationsQueue() {
-  const org = organizations[currentOrgId];
-  const tbody = document.getElementById("adminResignationTableRows");
-  if (!tbody) return;
-  const resignations = org.resignations || [];
-
-  if (resignations.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:18px;color:var(--muted)">No staff resignation requests submitted</td></tr>`;
-    document.getElementById("adminResignCountBadge").textContent = "0 Pending";
-    return;
-  }
-
-  document.getElementById("adminResignCountBadge").textContent = `${resignations.length} Pending`;
-
-  tbody.innerHTML = resignations.map(r => `
-    <tr>
-      <td><b>${r.id}</b></td>
-      <td><b>${r.empName}</b><br><small style="color:var(--muted)">${r.empId} · ${r.dept}</small></td>
-      <td><small>${r.submittedDate}</small></td>
-      <td><b>${r.noticeDays} Days</b></td>
-      <td><b style="color:#b91c1c">${r.officialLwd || r.proposedLwd}</b></td>
-      <td style="max-width:240px"><b>${r.reason}</b></td>
-      <td><span class="status ${r.status === 'Accepted' ? 'absent' : 'late'}">${r.status}</span></td>
-      <td><button class="action" onclick="showToast('Reviewed')">Review & Decide</button></td>
-    </tr>
-  `).join("");
-}
-
-function renderAdminChatView() {
-  const org = organizations[currentOrgId];
-  const listEl = document.getElementById("adminChatEmployeeList");
-  if (!listEl) return;
-  const emps = org.employees || [];
-
-  listEl.innerHTML = emps.map(e => `
-    <div onclick="selectAdminChatEmployee('${e.id}')" style="padding:10px 12px;border-radius:8px;cursor:pointer;background:${adminActiveChatEmpId === e.id ? '#eef4ff' : '#fff'};border:1px solid ${adminActiveChatEmpId === e.id ? '#bfdbfe' : '#e2e8f0'}">
-      <b style="font-size:12px;color:var(--navy)">${e.name}</b>
-      <div style="font-size:11px;color:var(--muted)">${e.id} · ${e.dept}</div>
-    </div>
-  `).join("");
-
-  const activeEmp = emps.find(e => e.id === adminActiveChatEmpId) || emps[0];
-  if (activeEmp) {
-    document.getElementById("adminActiveChatEmpName").textContent = activeEmp.name;
-    document.getElementById("adminActiveChatEmpRole").textContent = `${activeEmp.id} · ${activeEmp.role}`;
-
-    if (!org.chats) org.chats = {};
-    if (!org.chats[activeEmp.id]) org.chats[activeEmp.id] = [];
-    const msgs = org.chats[activeEmp.id];
-    const box = document.getElementById("adminToEmpChatMessages");
-    if (msgs.length === 0) {
-      box.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:12px;margin:auto">No messages with ${activeEmp.name}. Send a message below.</div>`;
-    } else {
-      box.innerHTML = msgs.map(m => `
-        <div class="chat-bubble ${m.sender === 'admin' ? 'bubble-sent' : 'bubble-recv'}">
-          <div>${escapeHtml(m.text)}</div>
-          <div style="font-size:10px;opacity:0.75;margin-top:4px;text-align:right">${m.time}</div>
-        </div>
-      `).join("");
-      box.scrollTop = box.scrollHeight;
-    }
-  }
-}
-
-function selectAdminChatEmployee(empId) {
-  adminActiveChatEmpId = empId;
-  renderAdminChatView();
-}
-
-function sendAdminToEmpMessage() {
-  const inp = document.getElementById("adminToEmpChatInput");
-  const txt = inp.value.trim();
-  if (!txt) return;
-
-  const org = organizations[currentOrgId];
-  if (!org.chats) org.chats = {};
-  if (!org.chats[adminActiveChatEmpId]) org.chats[adminActiveChatEmpId] = [];
-
-  const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  org.chats[adminActiveChatEmpId].push({ sender: "admin", text: txt, time: timeStr });
-  inp.value = "";
-  renderAdminChatView();
-}
-
-function renderEmpAdminChatView() {
-  const org = organizations[currentOrgId];
-  const box = document.getElementById("empToAdminChatThread");
-  if (!box) return;
-
-  if (!org.chats) org.chats = {};
-  if (!org.chats[currentEmployeeId]) org.chats[currentEmployeeId] = [];
-  const msgs = org.chats[currentEmployeeId];
-
-  if (msgs.length === 0) {
-    box.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:12px;margin:auto">No messages exchanged yet with your Sector Administrator.</div>`;
-    return;
-  }
-  box.innerHTML = msgs.map(m => `
-    <div class="chat-bubble ${m.sender === 'emp' ? 'bubble-sent' : 'bubble-recv'}">
-      <div>${escapeHtml(m.text)}</div>
-      <div style="font-size:10px;opacity:0.75;margin-top:4px;text-align:right">${m.time}</div>
-    </div>
-  `).join("");
-  box.scrollTop = box.scrollHeight;
-}
-
-function startLiveClock() {
-  setInterval(() => {
-    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const w1 = document.getElementById("liveClockWidget");
-    const w2 = document.getElementById("largeClockDisplay");
-    if (w1) w1.textContent = timeStr;
-    if (w2) w2.textContent = timeStr;
-  }, 1000);
-}
-
-function toggleChatbot(forceState) {
-  if (currentUserRole === "superadmin") return;
-  const win = document.getElementById("chatbotWindow");
-  if (!win) return;
-  const isOpen = typeof forceState === "boolean" ? forceState : win.classList.contains("hidden");
-  win.classList.toggle("hidden", !isOpen);
-}
-
-function initSectorBotSession() {
-  if (currentUserRole === "superadmin") return;
-  const org = organizations[currentOrgId] || Object.values(organizations)[0];
-  const headerTitle = document.getElementById("chatBotHeaderTitle");
-  if (headerTitle) headerTitle.textContent = `${org.sector} Operations Bot`;
-}
-
-function sendBotMessage() {
-  const inp = document.getElementById("chatbotInput");
-  const box = document.getElementById("chatbotMessages");
-  if (!inp || !box || !inp.value.trim()) return;
-  box.innerHTML += `<div style="background:#2563eb;color:#fff;padding:8px 12px;border-radius:10px;align-self:flex-end;font-size:12px">${escapeHtml(inp.value)}</div>`;
-  inp.value = "";
-  setTimeout(() => {
-    box.innerHTML += `<div style="background:#fff;border:1px solid #e2e8f0;padding:8px 12px;border-radius:10px;font-size:12px">All sector operational checks normal.</div>`;
-    box.scrollTop = box.scrollHeight;
-  }, 400);
-}
-
-function handleChatbotInputKey(event) {
-  if (event.key === "Enter") sendBotMessage();
-}
-
-function closeUniversalModal() {
-  document.getElementById("universalModal").classList.add("hidden");
+function login() {
+  closeLogin();
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  switchTab('dashboard');
+  populateDashboardData();
 }
 
 function logout() {
-  document.getElementById("dashboard").classList.add("hidden");
-  document.getElementById("landing").classList.remove("hidden");
-  showToast("Logged out safely");
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('landing').classList.remove('hidden');
 }
 
-function handleLogoClick() {
-  location.reload();
+// Full Tab Switching Logic
+function switchTab(tabId) {
+  document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+  const target = document.getElementById('view-' + tabId);
+  if (target) target.classList.remove('hidden');
+
+  document.querySelectorAll('.side-item').forEach(item => item.classList.remove('active', 'active-purple'));
+  const activeItem = document.querySelector(`.side-item[data-tab="${tabId}"]`);
+  if (activeItem) activeItem.classList.add('active');
+
+  toggleMobileSidebar(false);
 }
 
-function showToast(msg) {
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 3200);
+// Mobile Drawer Toggle
+function toggleMobileSidebar(forceState) {
+  const sidebar = document.getElementById('appSidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (!sidebar) return;
+
+  const isOpen = forceState !== undefined ? forceState : !sidebar.classList.contains('mobile-open');
+  if (isOpen) {
+    sidebar.classList.add('mobile-open');
+    if (backdrop) backdrop.classList.add('active');
+  } else {
+    sidebar.classList.remove('mobile-open');
+    if (backdrop) backdrop.classList.remove('active');
+  }
 }
 
-function escapeHtml(str) {
-  if (!str) return "";
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
+// Data population for views
+function populateDashboardData() {
+  // Employees Table in Dashboard
+  const dashRows = document.getElementById('dashEmployeeRows');
+  if(dashRows) {
+    dashRows.innerHTML = mockEmployees.map(e => `
+      <tr>
+        <td><b>${e.name}</b><br><span style="color:var(--muted);font-size:10.5px">${e.id}</span></td>
+        <td>${e.dept}</td>
+        <td>${e.login}</td>
+        <td>${e.logout}</td>
+        <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
+      </tr>
+    `).join('');
+  }
 
-function escapeJsString(str) {
-  if (!str) return "";
-  return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
+  // Employee Directory View
+  const empRows = document.getElementById('employeeDirectoryRows');
+  if(empRows) {
+    empRows.innerHTML = mockEmployees.map(e => `
+      <tr>
+        <td><b>${e.name}</b><br><span style="color:var(--muted);font-size:10.5px">${e.id}</span></td>
+        <td>${e.dept}</td>
+        <td>${e.role}</td>
+        <td>${e.shift}</td>
+        <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Attendance View
+  const attRows = document.getElementById('attendanceLogsRows');
+  if(attRows) {
+    attRows.innerHTML = mockEmployees.map(e => `
+      <tr>
+        <td><b>${e.name}</b> (${e.id})</td>
+        <td>Main Campus Gate A</td>
+        <td>${e.login}</td>
+        <td>${e.logout}</td>
+        <td><span class="status present">Verified Biometric</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Assignments View
+  const assignRows = document.getElementById('workAssignmentsTableRows');
+  if(assignRows) {
+    assignRows.innerHTML = `
+      <tr><td><b>TSK-901</b> - Emergency Triage Audit</td><td>Zone A - ICU</td><td>Dr. Sarah Jenkins</td><td><span class="status in-progress">In Progress</span></td></tr>
+      <tr><td><b>TSK-902</b> - Sterile Equipment Restock</td><td>Zone B - Pharmacy</td><td>Elena Rostova</td><td><span class="status completed">Completed</span></td></tr>
+    `;
+  }
+
+  // Shifts View
+  const shiftRows = document.getElementById('shiftsRosterTableRows');
+  if(shiftRows) {
+    shiftRows.innerHTML = `
+      <tr><td>Morning Window</td><td>06:00 - 14:00</td><td>85 Staff</td><td><span class="status present">Fully Staffed</span></td></tr>
+      <tr><td>Evening Window</td><td>14:00 - 22:00</td><td>75 Staff</td><td><span class="status adequate">Adequate</span></td></tr>
+    `;
+  }
+
+  // Reports View
+  const repRows = document.getElementById('reportsDepartmentTableRows');
+  if(repRows) {
+    repRows.innerHTML = `
+      <tr><td>Emergency Care</td><td>42</td><td>94.2%</td><td><span class="status present">Optimal</span></td></tr>
+      <tr><td>ICU Unit</td><td>38</td><td>91.8%</td><td><span class="status present">Optimal</span></td></tr>
+    `;
+  }
+
+  // Payslips View
+  const payRows = document.getElementById('payslipsTableRows');
+  if(payRows) {
+    payRows.innerHTML = mockEmployees.map(e => `
+      <tr><td><b>${e.name}</b></td><td>${e.role}</td><td>$4,800.00</td><td><span class="status paid">Disbursed</span></td></tr>
+    `).join('');
+  }
+
+  // Initialize Chart.js
+  const ctx = document.getElementById('attendanceChart');
+  if(ctx && !window.myChart) {
+    window.myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Attendance Rate (%)',
+          data: [91, 89, 93, 92, 88, 85, 87],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.08)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { min: 80, max: 100 } }
+      }
+    });
+  }
 }
 </script>
 </body>
