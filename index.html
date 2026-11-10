@@ -280,26 +280,6 @@ button, input, select, textarea { font: inherit; }
 
 .demo-note { background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; border-radius: 10px; padding: 12px; margin-top: 14px; font-size: 11px; line-height: 1.55; }
 
-/* Clock Card */
-.clock-display {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  color: var(--navy);
-  font-variant-numeric: tabular-nums;
-}
-.clock-card {
-  background: linear-gradient(135deg, #0b1730 0%, #1e3a8a 100%);
-  color: #fff;
-  border-radius: 14px;
-  padding: 22px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
 /* Dashboard Core Layout */
 .dashboard {
   min-height: 100vh;
@@ -505,7 +485,104 @@ button, input, select, textarea { font: inherit; }
 }
 #toast.show { opacity: 1; transform: translateY(0); }
 
-/* Mobile Media Queries */
+/* Chatbot Floating Widget */
+.chatbot-trigger-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #7e22ce);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 23px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  cursor: pointer;
+  z-index: 1000;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+.chatbot-window {
+  position: fixed;
+  bottom: 88px;
+  right: 24px;
+  width: 390px;
+  height: 520px;
+  max-width: calc(100vw - 28px);
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #dce4f0;
+  box-shadow: 0 16px 48px rgba(11, 23, 48, 0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+}
+.chatbot-head {
+  background: linear-gradient(135deg, #0b1730 0%, #1e3a8a 60%, #7e22ce 100%);
+  color: #fff;
+  padding: 13px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chatbot-body {
+  flex: 1;
+  padding: 13px;
+  overflow-y: auto;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.chatbot-foot {
+  padding: 9px 11px;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 7px;
+}
+.chatbot-foot input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-size: 12px;
+  outline: none;
+}
+.chatbot-foot button {
+  background: var(--blue);
+  color: #fff;
+  border: 0;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.chat-bubble {
+  max-width: 82%;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  border-radius: 12px;
+}
+.bubble-sent {
+  align-self: flex-end;
+  background: var(--blue);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+.bubble-recv {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  border-bottom-left-radius: 2px;
+}
+
+/* Mobile Responsive */
 @media (max-width: 1024px) {
   .grid2 { grid-template-columns: 1fr; }
   .sidebar { width: 220px; }
@@ -604,12 +681,17 @@ button, input, select, textarea { font: inherit; }
   .kpis {
     grid-template-columns: repeat(2, 1fr);
   }
+  .chatbot-window {
+    width: calc(100vw - 28px);
+    right: 14px;
+    bottom: 84px;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- 1. PUBLIC LANDING PAGE -->
+<!-- 1. LANDING PAGE -->
 <div id="landing">
   <header class="topbar">
     <div class="topbar-main-row">
@@ -641,23 +723,7 @@ button, input, select, textarea { font: inherit; }
       <h2>Registered Sector Domains</h2>
       <p>Select your sector and enterprise Organization ID to access tailored operations and workforce records.</p>
     </div>
-
     <div class="sectors" id="landingSectorGrid"></div>
-
-    <div class="features">
-      <div class="feature">
-        <b>🏢 Multi-Organization Isolation</b>
-        <span>Each sector supports multiple independent Organization IDs with dedicated administrators, custom credentials, and segregated staff.</span>
-      </div>
-      <div class="feature">
-        <b>⚡ Super Admin Governance</b>
-        <span>Super Administrators can provision brand new sectors and branches, set custom login usernames & passwords, and manage platform tickets.</span>
-      </div>
-      <div class="feature">
-        <b>💳 Integrated Operations & Certified Payslips</b>
-        <span>Biometric attendance calculations, overtime auditing, leave balances, and professional downloadable salary vouchers with full breakdowns.</span>
-      </div>
-    </div>
   </div>
 
   <footer class="footer">
@@ -665,7 +731,7 @@ button, input, select, textarea { font: inherit; }
   </footer>
 </div>
 
-<!-- 2. UNIFIED SECURE LOGIN MODAL -->
+<!-- 2. LOGIN MODAL -->
 <div id="loginModal" class="modal hidden">
   <div class="login-card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start">
@@ -701,7 +767,7 @@ button, input, select, textarea { font: inherit; }
   <div class="dialog-card" id="universalModalContent"></div>
 </div>
 
-<!-- 3. AUTHENTICATED DASHBOARD APPLICATION -->
+<!-- 3. DASHBOARD APPLICATION -->
 <div id="dashboard" class="dashboard hidden">
   <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
 
@@ -718,6 +784,8 @@ button, input, select, textarea { font: inherit; }
 
     <div class="top-actions">
       <div id="headerRoleBadgeArea"></div>
+      <button id="btnHeaderAskBot" class="btn btn-purple" style="font-size:11px;padding:6px 12px" onclick="toggleChatbot(true)">🤖 Sector AI Desk</button>
+
       <div class="profile">
         <div class="avatar" id="headerAvatar">AD</div>
         <div style="font-size:12px;line-height:1.2">
@@ -725,7 +793,7 @@ button, input, select, textarea { font: inherit; }
           <span style="color:var(--muted)" id="headerUserRole">Sector Lead</span>
         </div>
       </div>
-      <button class="btn" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1" onclick="logout()">Logout</button>
+      <button class="btn" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;margin-left:auto" onclick="logout()">Logout</button>
     </div>
   </header>
 
@@ -741,8 +809,8 @@ button, input, select, textarea { font: inherit; }
         <div class="side-item active-purple" data-tab="super-overview" onclick="switchTab('super-overview')">🌐 Fleet Overview</div>
         <div class="side-item" data-tab="super-sectors" onclick="switchTab('super-sectors')">🏢 Organizations & Branches <span id="superSectorCountBadge" class="status present" style="margin-left:auto;font-size:9px">4 Orgs</span></div>
         <div class="side-item" onclick="openProvisionSectorModal()">➕ Add New Sector</div>
-        <div class="side-item" data-tab="super-queries" onclick="switchTab('super-queries')">💬 Support & Escalations <span id="superQueryBadge" class="status late" style="margin-left:auto;font-size:9px">2 New</span></div>
-        <div class="side-item" data-tab="super-retentions" onclick="switchTab('super-retentions')">🚨 Deletions & Retention Audit <span id="superDeletionBadge" class="status absent" style="margin-left:auto;font-size:9px">1 Alert</span></div>
+        <div class="side-item" data-tab="super-queries" onclick="switchTab('super-queries')">💬 Support & Escalations</div>
+        <div class="side-item" data-tab="super-retentions" onclick="switchTab('super-retentions')">🚨 Deletions & Retention Audit</div>
         <div class="side-item" data-tab="super-security" onclick="switchTab('super-security')">🛡️ Global Security Policy</div>
       </div>
 
@@ -756,6 +824,7 @@ button, input, select, textarea { font: inherit; }
         <div class="side-item" data-tab="reports" onclick="switchTab('reports')">▥ Reports</div>
         <div class="side-item" data-tab="payslips" onclick="switchTab('payslips')">💳 Payslips</div>
         <div class="side-item" data-tab="admin-chat" onclick="switchTab('admin-chat')">💬 Staff Direct Messages</div>
+        <div class="side-item" data-tab="support-bridge" onclick="switchTab('support-bridge')">⚡ Super Admin Bridge</div>
         <div class="side-item" data-tab="settings" onclick="switchTab('settings')">⚙ Organization settings</div>
       </div>
 
@@ -768,6 +837,7 @@ button, input, select, textarea { font: inherit; }
         <div class="side-item" data-tab="emp-shifts" onclick="switchTab('emp-shifts')">🗓️ My Shifts & Roster</div>
         <div class="side-item" data-tab="emp-payslips" onclick="switchTab('emp-payslips')">💳 My Payslips & Print</div>
         <div class="side-item" data-tab="emp-resignation" onclick="switchTab('emp-resignation')">📝 Resignation & Exit Center</div>
+        <div class="side-item" data-tab="emp-admin-chat" onclick="switchTab('emp-admin-chat')">💬 Message Sector Admin</div>
       </div>
 
       <div style="height:1px;background:#223553;margin:18px 8px"></div>
@@ -775,98 +845,14 @@ button, input, select, textarea { font: inherit; }
     </aside>
 
     <main class="dash-main">
-      <!-- SUPER ADMIN VIEWS -->
-      <section id="view-super-overview" class="view-section hidden">
-        <div class="dash-head">
-          <div>
-            <h1>⚡ Super Administrator Control Center</h1>
-            <div class="sub">Multi-sector governance, dynamic provisioning & global telemetry</div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-purple" onclick="openProvisionSectorModal()">+ Add New Sector</button>
-            <button class="btn btn-purple" style="background:#4c1d95" onclick="openProvisionOrgModal()">+ Add New Org ID</button>
-          </div>
-        </div>
-
-        <div class="kpis">
-          <div class="kpi"><div class="label">ACTIVE ORG IDS</div><div class="value" id="kSuperOrgs" style="color:var(--purple)">4</div><div class="trend" id="kSuperSectorsNote">Across 4 Sectors</div></div>
-          <div class="kpi"><div class="label">TOTAL STAFF</div><div class="value" id="kSuperStaff">1,165</div><div class="trend">Global fleet</div></div>
-          <div class="kpi"><div class="label">PRESENT TODAY</div><div class="value" id="kSuperPresent" style="color:var(--green)">1,065</div><div class="trend">91.4% Rate</div></div>
-          <div class="kpi"><div class="label">ON DUTY NOW</div><div class="value" id="kSuperWorking">971</div><div class="trend">Live biometric</div></div>
-        </div>
-
-        <div class="panel">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-            <h3 style="margin:0">Active Sector Domains & Branches</h3>
-            <button class="action action-purple" onclick="openProvisionSectorModal()">+ Provision Sector</button>
-          </div>
-          <div id="superFleetSectorCards" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:14px"></div>
-        </div>
-      </section>
-
-      <section id="view-super-sectors" class="view-section hidden">
-        <div class="dash-head">
-          <div>
-            <h1>Registered Organizations & Credentials</h1>
-            <div class="sub">All live enterprise tenants, sector mappings, and administrator logins</div>
-          </div>
-          <button class="btn btn-purple" onclick="openProvisionSectorModal()">+ Add New Sector</button>
-        </div>
-        <div class="panel">
-          <div class="table-wrap">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>SECTOR CATEGORY</th>
-                  <th>ORGANIZATION ID</th>
-                  <th>LEGAL FACILITY NAME</th>
-                  <th>ADMIN USERNAME</th>
-                  <th>STAFF HEADCOUNT</th>
-                  <th>ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody id="superSectorTableRows"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="view-super-queries" class="view-section hidden">
-        <div class="dash-head"><div><h1>Global Platform Escalation Desk</h1></div></div>
-        <div class="panel">
-          <div class="table-wrap">
-            <table class="table">
-              <thead><tr><th>TICKET ID</th><th>ORG ID</th><th>SUBMITTER</th><th>SUBJECT</th><th>PRIORITY</th><th>STATUS</th></tr></thead>
-              <tbody id="superQueriesTableRows"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="view-super-retentions" class="view-section hidden">
-        <div class="dash-head"><div><h1>🚨 Employee Deletions & Retention Desk</h1></div></div>
-        <div class="panel">
-          <div class="table-wrap">
-            <table class="table">
-              <thead><tr><th>AUDIT REF</th><th>ORG</th><th>EMPLOYEE</th><th>REASON</th><th>STATUS</th><th>ADMIN CONFIRMATION</th><th>ACTION</th></tr></thead>
-              <tbody id="superDeletionAuditRows"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="view-super-security" class="view-section hidden">
-        <div class="dash-head"><div><h1>Global Platform Security</h1></div></div>
-        <div class="panel"><p>Multi-tenant isolated data partitions.</p></div>
-      </section>
-
-      <!-- SECTOR ADMIN ALL-ACCESS VIEWS -->
+      <!-- 1. DASHBOARD VIEW -->
       <section id="view-dashboard" class="view-section">
         <div class="dash-head">
           <div>
             <h1 id="dashTitle">Operational Workforce Dashboard</h1>
             <div class="sub" id="dashSubtitle">Sector Status</div>
           </div>
+          <button class="btn btn-blue" onclick="openAssignTaskModal()">+ Assign Work Order</button>
         </div>
 
         <div class="kpis">
@@ -876,24 +862,34 @@ button, input, select, textarea { font: inherit; }
           <div class="kpi"><div class="label">LATE ARRIVALS</div><div class="value" id="kLate">16</div><div style="font-size:11px;color:#a65a00;margin-top:6px;font-weight:600">Needs review</div></div>
         </div>
 
-        <div class="panel">
-          <h3>Active Workforce Status</h3>
-          <div class="table-wrap">
-            <table class="table">
-              <thead><tr><th>ID & NAME</th><th>DEPARTMENT</th><th>LOGIN</th><th>LOGOUT</th><th>CURRENT ASSIGNMENT</th><th>STATUS</th></tr></thead>
-              <tbody id="dashEmployeeRows"></tbody>
-            </table>
+        <div class="grid2">
+          <div class="panel">
+            <h3>Active Workforce Status</h3>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>ID & NAME</th><th>DEPARTMENT</th><th>LOGIN</th><th>LOGOUT</th><th>CURRENT ASSIGNMENT</th><th>STATUS</th></tr></thead>
+                <tbody id="dashEmployeeRows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Attendance Trend (Rolling)</h3>
+            <div class="chart-box">
+              <canvas id="attendanceChart"></canvas>
+            </div>
           </div>
         </div>
       </section>
 
+      <!-- 2. EMPLOYEES DIRECTORY -->
       <section id="view-employees" class="view-section hidden">
         <div class="dash-head">
           <div>
             <h1>Employee Directory</h1>
             <div class="sub">Personnel profiles, assignments, custom IDs & role authorizations</div>
           </div>
-          <button class="btn btn-blue" onclick="openAddEmployeeModal()">+ Add New Employee (With ID)</button>
+          <button class="btn btn-blue" onclick="openAssignTaskModal()">+ Assign Work</button>
         </div>
 
         <div class="panel" style="margin-bottom:18px;border:1px solid #fecdd3;background:#fff5f5">
@@ -942,6 +938,7 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- 3. ATTENDANCE & LEAVES VIEW -->
       <section id="view-attendance" class="view-section hidden">
         <div class="dash-head"><div><h1>Attendance & Leaves</h1><div class="sub">Biometric logs and duty records</div></div></div>
         <div class="panel">
@@ -954,18 +951,37 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- 4. WORK ASSIGNMENTS VIEW (RESTORED WITH TABLE & DISPATCH) -->
       <section id="view-assignments" class="view-section hidden">
-        <div class="dash-head"><div><h1>Work Assignments</h1><div class="sub">Operational task dispatching</div></div></div>
+        <div class="dash-head">
+          <div>
+            <h1>Work Assignments & Task Dispatch</h1>
+            <div class="sub">Dispatch tickets, zone allocations & monitor completion rates</div>
+          </div>
+          <button class="btn btn-blue" onclick="openAssignTaskModal()">+ Assign New Work Order</button>
+        </div>
+
         <div class="panel">
           <div class="table-wrap">
             <table class="table">
-              <thead><tr><th>TASK</th><th>ZONE</th><th>ASSIGNEE</th><th>PRIORITY</th><th>PROGRESS</th><th>STATUS</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>TASK ID & TITLE</th>
+                  <th>ZONE</th>
+                  <th>ASSIGNEE</th>
+                  <th>PRIORITY</th>
+                  <th>PROGRESS</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
               <tbody id="workAssignmentsTableRows"></tbody>
             </table>
           </div>
         </div>
       </section>
 
+      <!-- 5. SHIFTS & ROSTERS -->
       <section id="view-shifts" class="view-section hidden">
         <div class="dash-head"><div><h1>Shifts & Roster</h1><div class="sub">Shift capacity and allocations</div></div></div>
         <div class="panel">
@@ -978,6 +994,7 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- 6. REPORTS -->
       <section id="view-reports" class="view-section hidden">
         <div class="dash-head"><div><h1>Reports & Compliance</h1><div class="sub">Department efficiency and analytics</div></div></div>
         <div class="panel">
@@ -990,6 +1007,7 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- 7. PAYSLIPS -->
       <section id="view-payslips" class="view-section hidden">
         <div class="dash-head"><div><h1>Compensation & Payslips</h1><div class="sub">Disbursements and certified vouchers</div></div></div>
         <div class="panel">
@@ -1002,6 +1020,7 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- 8. STAFF DIRECT CHAT -->
       <section id="view-admin-chat" class="view-section hidden">
         <div class="dash-head">
           <div>
@@ -1032,6 +1051,13 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
+      <!-- 9. SUPPORT BRIDGE -->
+      <section id="view-support-bridge" class="view-section hidden">
+        <div class="dash-head"><div><h1>Super Admin Support Bridge</h1><div class="sub">Direct communication channel</div></div></div>
+        <div class="panel"><p>Direct line to Super Administrator for hardware or platform governance alerts.</p></div>
+      </section>
+
+      <!-- 10. SETTINGS -->
       <section id="view-settings" class="view-section hidden">
         <div class="dash-head"><div><h1>Organization Settings</h1><div class="sub">Configure tolerances and identity</div></div></div>
         <div class="grid2">
@@ -1052,59 +1078,86 @@ button, input, select, textarea { font: inherit; }
         </div>
       </section>
 
-      <!-- EMPLOYEE SELF-SERVICE VIEWS -->
-      <section id="view-emp-overview" class="view-section hidden">
-        <div class="dash-head"><div><h1>Welcome, Staff Member</h1><div class="sub">Staff Workspace</div></div></div>
-        <div class="clock-card" style="margin-bottom:20px">
-          <div><div style="font-size:12px;opacity:0.8">OFFICIAL SECTOR TIME (IST)</div><div class="clock-display" id="largeClockDisplay" style="color:#fff">08:44:00 AM</div></div>
-          <span class="status present">Present</span>
+      <!-- SUPER ADMIN OVERVIEW -->
+      <section id="view-super-overview" class="view-section hidden">
+        <div class="dash-head">
+          <div><h1>⚡ Super Administrator Control Center</h1><div class="sub">Multi-sector governance</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-purple" onclick="openProvisionSectorModal()">+ Add New Sector</button>
+          </div>
         </div>
         <div class="kpis">
-          <div class="kpi"><div class="label">ATTENDANCE</div><div class="value" style="color:var(--green)">96.4%</div></div>
-          <div class="kpi"><div class="label">LEAVE BALANCE</div><div class="value">22 Days</div></div>
-          <div class="kpi"><div class="label">OVERTIME</div><div class="value">12.5 hrs</div></div>
+          <div class="kpi"><div class="label">ACTIVE ORG IDS</div><div class="value" id="kSuperOrgs" style="color:var(--purple)">4</div><div class="trend" id="kSuperSectorsNote">Across 4 Sectors</div></div>
+          <div class="kpi"><div class="label">TOTAL STAFF</div><div class="value" id="kSuperStaff">1,165</div><div class="trend">Global fleet</div></div>
+          <div class="kpi"><div class="label">PRESENT TODAY</div><div class="value" id="kSuperPresent" style="color:var(--green)">1,065</div><div class="trend">91.4% Rate</div></div>
+          <div class="kpi"><div class="label">ON DUTY NOW</div><div class="value">971</div><div class="trend">Biometric</div></div>
+        </div>
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <h3 style="margin:0">Active Sector Domains & Branches</h3>
+            <button class="action action-purple" onclick="openProvisionSectorModal()">+ Provision Sector</button>
+          </div>
+          <div id="superFleetSectorCards" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:14px"></div>
         </div>
       </section>
 
-      <section id="view-emp-clock" class="view-section hidden">
-        <div class="dash-head"><div><h1>Attendance Punch & Live Check-In</h1></div></div>
-        <div class="panel" style="text-align:center;max-width:500px;margin:auto">
-          <div class="clock-display" id="liveClockWidget">08:44:00 AM</div>
-          <button class="btn btn-blue" style="margin-top:14px;padding:12px 28px" onclick="showToast('Biometric attendance recorded!')">Check Out / Check In</button>
+      <!-- SUPER ADMIN SECTORS & ORGANIZATIONS -->
+      <section id="view-super-sectors" class="view-section hidden">
+        <div class="dash-head">
+          <div><h1>Registered Organizations & Credentials</h1></div>
+          <button class="btn btn-purple" onclick="openProvisionSectorModal()">+ Add New Sector</button>
+        </div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>SECTOR</th><th>ORG ID</th><th>FACILITY</th><th>ADMIN USER</th><th>STAFF</th><th>ACTIONS</th></tr></thead>
+              <tbody id="superSectorTableRows"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
-      <section id="view-emp-leaves" class="view-section hidden">
-        <div class="dash-head"><div><h1>Staff Leave Center</h1></div></div>
-        <div class="panel"><h3>Leave Balances: 22 Days Total Available</h3></div>
-      </section>
+      <section id="view-super-queries" class="view-section hidden"><div class="dash-head"><div><h1>Global Platform Escalation Desk</h1></div></div><div class="panel"><p>Review issues forwarded by sector teams.</p></div></section>
+      <section id="view-super-retentions" class="view-section hidden"><div class="dash-head"><div><h1>🚨 Employee Deletions & Retention Desk</h1></div></div><div class="panel"><p>Review deletions initiated across all sectors.</p></div></section>
+      <section id="view-super-security" class="view-section hidden"><div class="dash-head"><div><h1>Global Platform Security</h1></div></div><div class="panel"><p>Multi-Tenant Partitioned Data Isolation.</p></div></section>
 
-      <section id="view-emp-tasks" class="view-section hidden">
-        <div class="dash-head"><div><h1>My Assigned Tasks</h1></div></div>
-        <div class="panel"><b>TSK: Operations Protocol Maintenance</b></div>
-      </section>
-
-      <section id="view-emp-shifts" class="view-section hidden">
-        <div class="dash-head"><div><h1>My Shift Roster</h1></div></div>
-        <div class="panel"><p>Assigned Schedule: Standard Duty (08:30 - 17:00)</p></div>
-      </section>
-
-      <section id="view-emp-payslips" class="view-section hidden">
-        <div class="dash-head"><div><h1>My Compensation & Payslips</h1></div></div>
-        <div class="panel"><button class="btn btn-blue" onclick="viewDetailedPayslip(currentEmployeeId)">View Certified Statement</button></div>
-      </section>
-
-      <section id="view-emp-resignation" class="view-section hidden">
-        <div class="dash-head"><div><h1>Resignation & Separation Center</h1></div></div>
-        <div class="panel" style="max-width:600px">
-          <h3>Tender Notice of Resignation</h3>
-          <label>Reason</label><select><option>Better Career Opportunity</option><option>Relocation</option></select>
-          <label>Last Working Day</label><input type="date" value="2026-11-24">
-          <button class="btn btn-purple" style="margin-top:14px;background:#dc2626" onclick="showToast('Resignation notice tendered!')">Submit Resignation</button>
-        </div>
-      </section>
+      <!-- EMPLOYEE VIEWS -->
+      <section id="view-emp-overview" class="view-section hidden"><div class="dash-head"><div><h1>Welcome, Staff Member</h1></div></div><div class="panel"><p>Employee Workspace.</p></div></section>
+      <section id="view-emp-clock" class="view-section hidden"><div class="dash-head"><div><h1>Attendance Punch & Live Check-In</h1></div></div><div class="panel" style="text-align:center"><div class="clock-display" id="liveClockWidget">08:44:00 AM</div><button class="btn btn-blue" onclick="showToast('Biometric attendance punched!')">Check In / Out</button></div></section>
+      <section id="view-emp-leaves" class="view-section hidden"><div class="dash-head"><div><h1>Leave Balances</h1></div></div><div class="panel"><p>18 Days Available.</p></div></section>
+      <section id="view-emp-tasks" class="view-section hidden"><div class="dash-head"><div><h1>My Tasks</h1></div></div><div class="panel"><p>Active Duty Assignment.</p></div></section>
+      <section id="view-emp-shifts" class="view-section hidden"><div class="dash-head"><div><h1>My Shifts</h1></div></div><div class="panel"><p>Morning Shift Roster.</p></div></section>
+      <section id="view-emp-payslips" class="view-section hidden"><div class="dash-head"><div><h1>My Payslips</h1></div></div><div class="panel"><p>Verified salary statements.</p></div></section>
+      <section id="view-emp-resignation" class="view-section hidden"><div class="dash-head"><div><h1>Resignation & Separation</h1></div></div><div class="panel"><p>Formal notice submission.</p></div></section>
+      <section id="view-emp-admin-chat" class="view-section hidden"><div class="dash-head"><div><h1>Chat with Admin</h1></div></div><div class="panel"><p>Direct communication channel.</p></div></section>
+      <section id="view-emp-support" class="view-section hidden"><div class="dash-head"><div><h1>Escalated Support Tickets</h1></div></div><div class="panel"><p>Tickets forwarded to Super Admin.</p></div></section>
     </main>
   </div>
+</div>
+
+<!-- 4. FLOATING AI ASSISTANT WIDGET (Hidden for Super Admin) -->
+<div id="aiSupportWidget" class="hidden">
+  <div id="chatbotWindow" class="chatbot-window hidden">
+    <div class="chatbot-head">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="chatBotHeaderIcon" style="font-size:20px">🤖</span>
+        <div>
+          <b id="chatBotHeaderTitle" style="font-size:13px">SSKATT AI Assistant</b>
+          <div id="chatBotHeaderSub" style="font-size:10px;opacity:0.85">Operations Intelligence</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <button onclick="resetSectorBotConversation()" title="Reset Chat" style="background:rgba(255,255,255,0.15);border:0;color:#fff;font-size:11px;padding:3px 7px;border-radius:6px;cursor:pointer">↺ Reset</button>
+        <button onclick="toggleChatbot(false)" style="background:transparent;border:0;color:#fff;font-size:16px;cursor:pointer">✕</button>
+      </div>
+    </div>
+    <div class="chatbot-body" id="chatbotMessages"></div>
+    <div class="chatbot-foot">
+      <input id="chatbotInput" type="text" placeholder="Ask AI bot or describe an issue..." onkeydown="handleChatbotInputKey(event)">
+      <button type="button" onclick="sendBotMessage()" title="Send">➤</button>
+    </div>
+  </div>
+  <button class="chatbot-trigger-btn" onclick="toggleChatbot()" title="Open AI Assistant">🤖</button>
 </div>
 
 <div id="toast">Operation completed successfully</div>
@@ -1129,12 +1182,12 @@ const INITIAL_ORGANIZATIONS = {
     absent: 27,
     departments: ["Emergency", "Nursing", "Diagnostics", "Pharmacy"],
     employees: [
-      { id: "E-1024", name: "Dr. Ananya Rao", dept: "Emergency", role: "Chief Trauma Specialist", shift: "Morning A (08:00 - 16:30)", login: "08:54", logout: "—", task: "Trauma Ward Acute Care", status: "Present", basePay: 180000, otPay: 14500, deductions: 22000, email: "a.rao@apexhealth.org", casualLeaves: 6, sickLeaves: 4, privilegeLeaves: 12 },
-      { id: "E-1041", name: "Rahul Menon", dept: "Nursing", role: "Senior Staff Nurse", shift: "General (09:00 - 17:30)", login: "09:18", logout: "—", task: "Ward B Post-Op Monitoring", status: "Late", basePay: 65000, otPay: 4200, deductions: 6800, email: "r.menon@apexhealth.org", casualLeaves: 5, sickLeaves: 3, privilegeLeaves: 10 },
-      { id: "E-1088", name: "Priya Shah", dept: "Diagnostics", role: "Senior Radiologist", shift: "Morning B (08:30 - 17:00)", login: "08:41", logout: "17:32", task: "CT/MRI Diagnostic Queue", status: "Present", basePay: 140000, otPay: 8000, deductions: 16500, email: "p.shah@apexhealth.org", casualLeaves: 7, sickLeaves: 5, privilegeLeaves: 14 }
+      { id: "E-1024", name: "Dr. Ananya Rao", dept: "Emergency", role: "Chief Trauma Specialist", shift: "Morning A (08:00 - 16:30)", login: "08:54", logout: "—", task: "Trauma Ward Acute Care", status: "Present", basePay: 180000, otPay: 14500, deductions: 22000, email: "a.rao@apexhealth.org" },
+      { id: "E-1041", name: "Rahul Menon", dept: "Nursing", role: "Senior Staff Nurse", shift: "General (09:00 - 17:30)", login: "09:18", logout: "—", task: "Ward B Post-Op Monitoring", status: "Late", basePay: 65000, otPay: 4200, deductions: 6800, email: "r.menon@apexhealth.org" },
+      { id: "E-1088", name: "Priya Shah", dept: "Diagnostics", role: "Senior Radiologist", shift: "Morning B (08:30 - 17:00)", login: "08:41", logout: "17:32", task: "CT/MRI Diagnostic Queue", status: "Present", basePay: 140000, otPay: 8000, deductions: 16500, email: "p.shah@apexhealth.org" }
     ],
     tasks: [
-      { id: "TSK-H1", title: "Emergency Trauma Duty", zone: "Ward A", assignee: "Dr. Ananya Rao", priority: "High", progress: 85, status: "In Progress" },
+      { id: "TSK-H1", title: "Emergency Trauma Duty", zone: "Ward A / Trauma", assignee: "Dr. Ananya Rao", priority: "High", progress: 85, status: "In Progress" },
       { id: "TSK-H2", title: "Dialysis Unit Calibration", zone: "Nephrology Wing", assignee: "Rahul Menon", priority: "Medium", progress: 100, status: "Completed" }
     ],
     shifts: [
@@ -1178,10 +1231,10 @@ const INITIAL_ORGANIZATIONS = {
     absent: 24,
     departments: ["Production", "Quality", "Tooling"],
     employees: [
-      { id: "M-2041", name: "Ravi Kumar", dept: "Production", role: "CNC Lead Operator", shift: "Shift 1 (07:00 - 15:30)", login: "07:54", logout: "—", task: "Automated Line 02 Milling", status: "Present", basePay: 48000, otPay: 7600, deductions: 5100, email: "r.kumar@precisionmfg.com", casualLeaves: 5, sickLeaves: 4, privilegeLeaves: 10 }
+      { id: "M-2041", name: "Ravi Kumar", dept: "Production", role: "CNC Lead Operator", shift: "Shift 1 (07:00 - 15:30)", login: "07:54", logout: "—", task: "Automated Line 02 Milling", status: "Present", basePay: 48000, otPay: 7600, deductions: 5100, email: "r.kumar@precisionmfg.com" }
     ],
     tasks: [],
-    shifts: [{ name: "Production Shift 1", hours: "07:00 - 15:30", required: 150, allocated: 150, status: "Optimal" }],
+    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
     resignations: [],
     chats: {}
   },
@@ -1199,10 +1252,10 @@ const INITIAL_ORGANIZATIONS = {
     absent: 36,
     departments: ["Civil", "Safety", "Electrical"],
     employees: [
-      { id: "C-3011", name: "Arjun Reddy", dept: "Civil", role: "Site Resident Engineer", shift: "Site Day (08:00 - 17:00)", login: "08:06", logout: "—", task: "Tower B - Deck 8 Slab Pour", status: "Present", basePay: 82000, otPay: 9800, deductions: 9100, email: "a.reddy@skylineinfra.com", casualLeaves: 6, sickLeaves: 3, privilegeLeaves: 12 }
+      { id: "C-3011", name: "Arjun Reddy", dept: "Civil", role: "Site Resident Engineer", shift: "Site Day (08:00 - 17:00)", login: "08:06", logout: "—", task: "Tower B - Deck 8 Slab Pour", status: "Present", basePay: 82000, otPay: 9800, deductions: 9100, email: "a.reddy@skylineinfra.com" }
     ],
     tasks: [],
-    shifts: [{ name: "Civil Site Shift", hours: "08:00 - 17:00", required: 180, allocated: 180, status: "Optimal" }],
+    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
     resignations: [],
     chats: {}
   },
@@ -1220,10 +1273,10 @@ const INITIAL_ORGANIZATIONS = {
     absent: 13,
     departments: ["Engineering", "Product", "Operations"],
     employees: [
-      { id: "P-4012", name: "Neha Sharma", dept: "Engineering", role: "Principal Architect", shift: "Flexible (09:00 - 18:00)", login: "09:02", logout: "—", task: "Project Orion Cloud Infrastructure", status: "Present", basePay: 210000, otPay: 0, deductions: 28000, email: "n.sharma@aethertech.io", casualLeaves: 8, sickLeaves: 5, privilegeLeaves: 15 }
+      { id: "P-4012", name: "Neha Sharma", dept: "Engineering", role: "Principal Architect", shift: "Flexible (09:00 - 18:00)", login: "09:02", logout: "—", task: "Project Orion Cloud Infrastructure", status: "Present", basePay: 210000, otPay: 0, deductions: 28000, email: "n.sharma@aethertech.io" }
     ],
     tasks: [],
-    shifts: [{ name: "Corporate Core Hours", hours: "09:00 - 18:00", required: 120, allocated: 120, status: "Optimal" }],
+    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
     resignations: [],
     chats: {}
   }
@@ -1235,49 +1288,6 @@ const SECTOR_METADATA = {
   Construction: { icon: "🏗️", defaultDepts: ["Civil", "Safety", "Electrical"] },
   Corporate: { icon: "🏢", defaultDepts: ["Engineering", "Product", "Operations"] }
 };
-
-let deletionAudits = [
-  {
-    auditId: "DEL-8091",
-    orgId: "HOSP-001",
-    sector: "Hospital",
-    empName: "Suresh Pillai",
-    empId: "E-1033",
-    dept: "Administration",
-    reason: "Resignation - Relocated to another city",
-    notes: "Employee submitted formal notice on 15 Oct.",
-    timestamp: "2026-10-25 11:30 AM",
-    status: "Action Required",
-    adminResponse: "Pending Sector Admin Response"
-  }
-];
-
-let supportQueries = [
-  {
-    id: "QRY-1001",
-    orgId: "HOSP-001",
-    sector: "Hospital",
-    submitter: "Dr. Ananya Rao (Staff E-1024)",
-    role: "employee",
-    subject: "Biometric terminal sync lag in Trauma Bay 1",
-    details: "The biometric fingerprint sensor in Trauma Bay 1 experiences a 9-minute sync delay.",
-    category: "Hardware / RFID Exception",
-    priority: "High",
-    status: "In Review"
-  },
-  {
-    id: "QRY-1002",
-    orgId: "MFG-001",
-    sector: "Manufacturing",
-    submitter: "Manufacturing Sector Admin",
-    role: "admin",
-    subject: "Request custom 3rd night-shift rotation rule",
-    details: "We need an exception rule added to allow 12-hour CNC shifts for automated milling.",
-    category: "Policy / Shift Bounds",
-    priority: "Medium",
-    status: "Open"
-  }
-];
 
 let organizations = JSON.parse(JSON.stringify(INITIAL_ORGANIZATIONS));
 let sectorMeta = JSON.parse(JSON.stringify(SECTOR_METADATA));
@@ -1292,6 +1302,24 @@ window.onload = function() {
   updateDemo();
   startLiveClock();
 };
+
+function toggleMobileSidebar(forceState) {
+  const sidebar = document.getElementById("appSidebar");
+  const backdrop = document.getElementById("sidebarBackdrop");
+  if (!sidebar) return;
+
+  const willOpen = (typeof forceState === "boolean")
+    ? forceState
+    : !sidebar.classList.contains("mobile-open");
+
+  if (willOpen) {
+    sidebar.classList.add("mobile-open");
+    if (backdrop) backdrop.classList.add("active");
+  } else {
+    sidebar.classList.remove("mobile-open");
+    if (backdrop) backdrop.classList.remove("active");
+  }
+}
 
 function getSectorCategories() {
   const cats = new Set();
@@ -1368,7 +1396,7 @@ function updateDemo(prefilledOrgId) {
   userInput.value = activeOrg.adminUser;
   passInput.value = activeOrg.adminPass;
 
-  const demoEmp = (activeOrg.employees && activeOrg.employees.length > 0) ? activeOrg.employees[0].id : "E-1001";
+  const demoEmp = (activeOrg.employees && activeOrg.employees.length > 0) ? activeOrg.employees[0].id : "E-1024";
   document.getElementById("demoNote").innerHTML = `
     <b>Credentials for ${s} (${activeOrg.orgId}):</b><br>
     • <b>Admin:</b> User: <code>${activeOrg.adminUser}</code> | Pass: <code>${activeOrg.adminPass}</code><br>
@@ -1410,39 +1438,6 @@ async function login() {
     return;
   }
 
-  // Backend check
-  try {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sector: chosenSector,
-        orgId: enteredOrgId,
-        username: userInput,
-        password: passInput
-      })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      localStorage.setItem("sskatt_token", data.token);
-      currentUserRole = data.role;
-      if (data.role === "superadmin") {
-        completeLogin("super-overview", "Signed in as Super Admin");
-      } else if (data.role === "admin") {
-        currentOrgId = enteredOrgId;
-        completeLogin("dashboard", `Signed in as ${enteredOrgId} Sector Admin`);
-      } else {
-        currentOrgId = data.user.orgId;
-        currentEmployeeId = data.user.id;
-        completeLogin("emp-overview", `Welcome back, ${data.user.name}`);
-      }
-      return;
-    }
-  } catch (err) {
-    console.warn("Backend API offline, using local repository fallback", err);
-  }
-
-  // Local fallback
   const targetOrg = organizations[enteredOrgId] || Object.values(organizations).find(o => o.sector === chosenSector);
   if (!targetOrg) {
     showToast(`Organization ID ${enteredOrgId} does not exist`);
@@ -1479,6 +1474,7 @@ function completeLogin(targetTab, toastMsg) {
 
   applyRoleNav();
   switchTab(targetTab);
+  initSectorBotSession();
   showToast(toastMsg);
 }
 
@@ -1491,6 +1487,8 @@ function applyRoleNav() {
   const avatar = document.getElementById("headerAvatar");
   const uName = document.getElementById("headerUserName");
   const uRole = document.getElementById("headerUserRole");
+  const aiWidget = document.getElementById("aiSupportWidget");
+  const btnHeaderAskBot = document.getElementById("btnHeaderAskBot");
 
   superNav.classList.add("hidden");
   adminNav.classList.add("hidden");
@@ -1507,10 +1505,11 @@ function applyRoleNav() {
     uName.textContent = "Super Admin (Root)";
     uRole.textContent = "Multi-Sector Controller";
 
+    if (aiWidget) aiWidget.classList.add("hidden");
+    if (btnHeaderAskBot) btnHeaderAskBot.classList.add("hidden");
+
     renderSuperFleet();
     renderSuperSectorsView();
-    renderSuperQueriesView();
-    renderSuperRetentionsView();
   } else if (currentUserRole === "admin") {
     adminNav.classList.remove("hidden");
     sideBrand.textContent = "CONTROL CENTER";
@@ -1519,6 +1518,9 @@ function applyRoleNav() {
     avatar.textContent = "AD";
     uName.textContent = `${org.sector} Admin (${org.adminUser})`;
     uRole.textContent = `Org ID: ${org.orgId}`;
+
+    if (aiWidget) aiWidget.classList.remove("hidden");
+    if (btnHeaderAskBot) btnHeaderAskBot.classList.remove("hidden");
 
     renderAllSectorAdminViews();
   } else {
@@ -1531,7 +1533,8 @@ function applyRoleNav() {
     uName.textContent = emp.name;
     uRole.textContent = `${emp.id} · ${emp.dept}`;
 
-    renderEmpAdminChatView();
+    if (aiWidget) aiWidget.classList.remove("hidden");
+    if (btnHeaderAskBot) btnHeaderAskBot.classList.remove("hidden");
   }
 }
 
@@ -1549,9 +1552,9 @@ function switchTab(tabName) {
   if (activeView) activeView.classList.remove("hidden");
 
   if (currentUserRole === "admin") renderAllSectorAdminViews();
+  if (tabName === "assignments") renderWorkAssignments();
   if (tabName === "admin-chat") renderAdminChatView();
   if (tabName === "emp-admin-chat") renderEmpAdminChatView();
-  if (tabName === "super-queries") renderSuperQueriesView();
 
   if (window.innerWidth <= 768) {
     toggleMobileSidebar(false);
@@ -1570,11 +1573,6 @@ function renderAllSectorAdminViews() {
   document.getElementById("kLate").textContent = org.late || 0;
   document.getElementById("kAttendanceRate").textContent = org.totalStaff ? `${Math.round((org.present / org.totalStaff) * 100)}% attendance` : '100% attendance';
 
-  const nameInput = document.getElementById("settingOrgNameInput");
-  const idInput = document.getElementById("settingOrgIdInput");
-  if (nameInput) nameInput.value = org.name;
-  if (idInput) idInput.value = org.orgId;
-
   renderDashEmployees();
   renderEmployeeDirectory();
   renderAttendanceLogs();
@@ -1588,7 +1586,126 @@ function renderAllSectorAdminViews() {
 }
 
 /* ==============================================================
-   SUPER ADMIN: BULLET-PROOF DYNAMIC SECTOR PROVISIONING
+   WORK ASSIGNMENT ENGINE (Modal & Render)
+   ============================================================== */
+function renderWorkAssignments() {
+  const tbody = document.getElementById("workAssignmentsTableRows");
+  if (!tbody) return;
+  const org = organizations[currentOrgId] || {};
+  const tasks = org.tasks || [];
+
+  if (tasks.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px">No work orders dispatched yet. Click "+ Assign New Work Order" above.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = tasks.map(t => `
+    <tr>
+      <td><b>${escapeHtml(t.title)}</b><br><small style="color:var(--muted);font-family:monospace">${t.id}</small></td>
+      <td>${escapeHtml(t.zone)}</td>
+      <td><b>${escapeHtml(t.assignee)}</b></td>
+      <td><span class="status" style="${t.priority === 'High' ? 'background:#fee2e2;color:#b91c1c' : ''}">${t.priority}</span></td>
+      <td>${t.progress}%</td>
+      <td><span class="status in-progress">${t.status}</span></td>
+      <td>
+        <button class="action" onclick="openAssignTaskModal('${escapeJsString(t.assignee)}')">Reassign</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openAssignTaskModal(prefilledAssignee) {
+  const org = organizations[currentOrgId] || {};
+  const emps = org.employees || [];
+  const content = document.getElementById("universalModalContent");
+
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <span class="pill" style="font-size:10px">${escapeHtml(org.sector || 'Sector')} Operations</span>
+        <h3 style="margin:4px 0 0">Assign Work Order</h3>
+      </div>
+      <button class="action" onclick="closeUniversalModal()">✕</button>
+    </div>
+    <div>
+      <label>Task Scope / Work Description *</label>
+      <input id="assignTaskTitle" placeholder="e.g. Critical Trauma Bay Oversight, Equipment Calibration">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Assign to Employee *</label>
+          <select id="assignTaskAssignee">
+            ${emps.map(e => `<option value="${escapeHtml(e.name)}" ${prefilledAssignee === e.name ? 'selected' : ''}>${escapeHtml(e.name)} (${e.id})</option>`).join("")}
+          </select>
+        </div>
+        <div>
+          <label>Duty Station / Bay Zone *</label>
+          <input id="assignTaskZone" value="${escapeHtml(emps[0]?.dept || 'Main')} Wing">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Priority Level</label>
+          <select id="assignTaskPriority">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Normal">Normal</option>
+          </select>
+        </div>
+        <div>
+          <label>Initial Progress</label>
+          <select id="assignTaskProgress">
+            <option value="10">10% - Dispatched</option>
+            <option value="50">50% - In Progress</option>
+            <option value="100">100% - Completed</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
+        <button class="btn btn-blue" onclick="saveDispatchedWorkOrder()">Dispatch & Assign Work 🚀</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("universalModal").classList.remove("hidden");
+}
+
+function saveDispatchedWorkOrder() {
+  const org = organizations[currentOrgId];
+  const title = (document.getElementById("assignTaskTitle")?.value || "").trim();
+  const assignee = document.getElementById("assignTaskAssignee")?.value || "Unassigned";
+  const zone = (document.getElementById("assignTaskZone")?.value || "Main Facility").trim();
+  const priority = document.getElementById("assignTaskPriority")?.value || "Medium";
+  const progress = Number(document.getElementById("assignTaskProgress")?.value) || 10;
+
+  if (!title) {
+    showToast("Please provide a task scope description!");
+    return;
+  }
+
+  const prefix = (org.orgId || "TSK").split('-')[0];
+  const newTaskId = `TSK-${prefix}${Math.floor(10 + Math.random() * 90)}`;
+
+  if (!org.tasks) org.tasks = [];
+  org.tasks.unshift({
+    id: newTaskId,
+    title: title,
+    zone: zone,
+    assignee: assignee,
+    priority: priority,
+    progress: progress,
+    status: progress === 100 ? "Completed" : "In Progress"
+  });
+
+  closeUniversalModal();
+  renderWorkAssignments();
+  showToast(`Work order "${newTaskId}" assigned to ${assignee}!`);
+}
+
+/* ==============================================================
+   SUPER ADMIN SECTOR PROVISIONING
    ============================================================== */
 function openProvisionSectorModal() {
   const content = document.getElementById("universalModalContent");
@@ -1604,7 +1721,7 @@ function openProvisionSectorModal() {
       <div style="display:grid;grid-template-columns:3fr 1fr;gap:12px">
         <div>
           <label>Sector Category Name *</label>
-          <input id="provSectorName" placeholder="e.g. Logistics, Aviation, Energy" oninput="autofillNewSectorFields(this.value)">
+          <input id="provSectorName" placeholder="e.g. Logistics, Aviation, Energy">
         </div>
         <div>
           <label>Emoji Icon</label>
@@ -1641,16 +1758,6 @@ function openProvisionSectorModal() {
   document.getElementById("universalModal").classList.remove("hidden");
 }
 
-function autofillNewSectorFields(val) {
-  const clean = val.trim().replace(/[^a-zA-Z0-9]/g, '');
-  if (!clean) return;
-  const prefix = clean.slice(0, 4).toUpperCase();
-  const orgInput = document.getElementById("provSectorOrgId");
-  const facInput = document.getElementById("provSectorOrgName");
-  if (orgInput && !orgInput.value) orgInput.value = `${prefix}-001`;
-  if (facInput && !facInput.value) facInput.value = `${clean} Central Operational Hub`;
-}
-
 async function saveProvisionedSector() {
   const nameEl = document.getElementById("provSectorName");
   const iconEl = document.getElementById("provSectorIcon");
@@ -1660,21 +1767,13 @@ async function saveProvisionedSector() {
   const adminUserEl = document.getElementById("provSectorAdminUser");
   const adminPassEl = document.getElementById("provSectorAdminPass");
 
-  if (!nameEl || !orgIdEl || !adminUserEl || !adminPassEl) {
-    showToast("Form elements could not be found.");
-    return;
-  }
-
-  const rawKey = (nameEl.value || "").trim();
+  const rawKey = (nameEl?.value || "").trim();
   const icon = (iconEl?.value || "🚀").trim() || "🚀";
-  const orgId = (orgIdEl.value || "").trim().toUpperCase();
+  const orgId = (orgIdEl?.value || "").trim().toUpperCase();
   const facilityName = (orgNameEl?.value || "").trim() || `${rawKey} Central Hub`;
-  const depts = (deptsEl?.value || "Operations, Safety, Dispatch")
-    .split(",")
-    .map(d => d.trim())
-    .filter(Boolean);
-  const adminUser = (adminUserEl.value || "admin").trim();
-  const adminPass = (adminPassEl.value || "admin123").trim();
+  const depts = (deptsEl?.value || "Operations, Safety, Dispatch").split(",").map(d => d.trim()).filter(Boolean);
+  const adminUser = (adminUserEl?.value || "admin").trim();
+  const adminPass = (adminPassEl?.value || "admin123").trim();
 
   if (!rawKey || !orgId || !adminUser || !adminPass) {
     showToast("Please fill in Sector Name, Org ID, Username, and Password!");
@@ -1682,16 +1781,13 @@ async function saveProvisionedSector() {
   }
 
   const sectorName = rawKey.charAt(0).toUpperCase() + rawKey.slice(1);
-
   if (organizations[orgId]) {
-    showToast(`Organization ID "${orgId}" already exists! Choose another.`);
+    showToast(`Organization ID "${orgId}" already exists!`);
     return;
   }
 
-  // 1. Immediately close modal so UI never freezes
   closeUniversalModal();
 
-  // 2. Register complete full-featured state locally
   const prefix = orgId.split('-')[0] || 'ORG';
   const leadEmpId = `${prefix}-1024`;
 
@@ -1724,21 +1820,6 @@ async function saveProvisionedSector() {
         otPay: 4000,
         deductions: 9800,
         email: `lead@${orgId.toLowerCase()}.org`
-      },
-      {
-        id: `${prefix}-1042`,
-        name: "Ramesh Verma",
-        dept: depts[1] || 'Administration',
-        role: "Logistics Coordinator",
-        shift: "General (09:00 - 17:30)",
-        login: "09:16",
-        logout: "—",
-        task: "Inventory Inspection",
-        status: "Late",
-        basePay: 55000,
-        otPay: 2000,
-        deductions: 6600,
-        email: `r.verma@${orgId.toLowerCase()}.org`
       }
     ],
     tasks: [
@@ -1752,157 +1833,17 @@ async function saveProvisionedSector() {
         status: "In Progress"
       }
     ],
-    shifts: [
-      { name: "Morning Peak Window", hours: "07:30 - 16:00", required: 30, allocated: 32, status: "Optimal" },
-      { name: "General Administration", hours: "09:00 - 17:30", required: 20, allocated: 19, status: "Adequate" }
-    ],
-    resignations: [
-      {
-        id: `RSG-${prefix}1`,
-        empId: `${prefix}-1042`,
-        empName: "Ramesh Verma",
-        dept: depts[1] || 'Administration',
-        submittedDate: "2026-10-25",
-        noticeDays: 30,
-        proposedLwd: "2026-11-24",
-        officialLwd: "2026-11-24",
-        reason: "Higher Studies / Career Transition",
-        letter: "Dear Management, I am tendering my formal resignation for higher professional studies.",
-        status: "Pending Review",
-        adminRemarks: ""
-      }
-    ],
-    chats: {
-      [leadEmpId]: [
-        { sender: "emp", text: "Good morning Admin! Sector space activated and online.", time: "08:36 AM" },
-        { sender: "admin", text: "Welcome! All operational rosters and telemetry are operational.", time: "08:40 AM" }
-      ]
-    }
+    shifts: [{ name: "Standard Operational Window", hours: "08:00 - 17:00", required: 30, allocated: 30, status: "Optimal" }],
+    resignations: [],
+    chats: {}
   };
 
-  // 3. Re-render UI safely with null checks
   try { if (typeof renderLandingSectors === "function") renderLandingSectors(); } catch (e) {}
   try { if (typeof populateSectorDropdown === "function") populateSectorDropdown(); } catch (e) {}
   try { if (typeof renderSuperFleet === "function") renderSuperFleet(); } catch (e) {}
   try { if (typeof renderSuperSectorsView === "function") renderSuperSectorsView(); } catch (e) {}
 
   showToast(`Sector "${sectorName}" & Org "${orgId}" added successfully! 🎉`);
-
-  // 4. Background sync to backend API without blocking the screen
-  const token = localStorage.getItem("sskatt_token");
-  if (token) {
-    fetch(`${API_BASE}/sectors`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        sectorName,
-        icon,
-        departments: depts,
-        orgId,
-        orgName: facilityName,
-        adminUser,
-        adminPass
-      })
-    })
-    .then(async (res) => {
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        console.warn("Backend notice:", errData.error || res.statusText);
-      }
-    })
-    .catch((err) => {
-      console.warn("Backend unreachable; local sector created in memory:", err);
-    });
-  }
-}
-
-function openProvisionOrgModal() {
-  const categories = getSectorCategories();
-  const content = document.getElementById("universalModalContent");
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div>
-        <span class="pill-purple" style="font-size:10px">⚡ Super Admin Provisioning</span>
-        <h3 style="margin:6px 0 0">Add New Branch Organization ID</h3>
-      </div>
-      <button class="action" onclick="closeUniversalModal()">✕</button>
-    </div>
-    <div>
-      <label>Target Sector Category</label>
-      <select id="newOrgSectorCat">
-        ${categories.map(c => `<option value="${c}">${sectorMeta[c]?.icon || '🏢'} ${c}</option>`).join("")}
-      </select>
-      <label>New Organization ID (Code)</label>
-      <input id="newOrgId" placeholder="e.g. HOSP-002, MFG-002" style="font-family:monospace;font-weight:700;text-transform:uppercase">
-      <label>Legal Entity / Facility Name</label>
-      <input id="newOrgName" placeholder="e.g. Apex Healthcare (South Wing)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <label>Admin Username</label>
-          <input id="newOrgAdminUser" value="admin_branch">
-        </div>
-        <div>
-          <label>Admin Password</label>
-          <input id="newOrgAdminPass" value="admin123">
-        </div>
-      </div>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
-        <button class="btn" style="background:#f1f5f9;border:1px solid #cbd5e1" onclick="closeUniversalModal()">Cancel</button>
-        <button class="btn btn-purple" onclick="saveNewOrganization()">Provision Organization ID 🏢</button>
-      </div>
-    </div>
-  `;
-  document.getElementById("universalModal").classList.remove("hidden");
-}
-
-function saveNewOrganization() {
-  const sector = document.getElementById("newOrgSectorCat").value;
-  const rawOrgId = (document.getElementById("newOrgId").value || "").trim().toUpperCase();
-  const name = (document.getElementById("newOrgName").value || "").trim();
-  const adminUser = (document.getElementById("newOrgAdminUser").value || "").trim();
-  const adminPass = (document.getElementById("newOrgAdminPass").value || "").trim();
-
-  if (!rawOrgId || !name || !adminUser || !adminPass) {
-    showToast("Please fill all required fields");
-    return;
-  }
-
-  if (organizations[rawOrgId]) {
-    showToast(`Organization ID "${rawOrgId}" is already taken!`);
-    return;
-  }
-
-  const icon = sectorMeta[sector]?.icon || "🏢";
-  organizations[rawOrgId] = {
-    orgId: rawOrgId,
-    sector: sector,
-    name: name,
-    adminUser: adminUser,
-    adminPass: adminPass,
-    icon: icon,
-    totalStaff: 30,
-    present: 28,
-    working: 25,
-    late: 2,
-    absent: 2,
-    departments: ["Operations", "Safety", "Logistics"],
-    employees: [
-      { id: `${rawOrgId.split("-")[0]}-101`, name: "Branch Officer", dept: "Operations", role: "Branch Lead", shift: "General (08:30 - 17:30)", login: "08:30", logout: "—", status: "Present", basePay: 70000, deductions: 8400, casualLeaves: 6, sickLeaves: 4, privilegeLeaves: 12 }
-    ],
-    tasks: [],
-    shifts: [{ name: "Branch Operations", hours: "08:30 - 17:30", required: 20, allocated: 20, status: "Optimal" }],
-    resignations: [],
-    chats: {}
-  };
-
-  closeUniversalModal();
-  renderLandingSectors();
-  renderSuperFleet();
-  renderSuperSectorsView();
-  showToast(`Branch "${rawOrgId}" provisioned under ${sector}!`);
 }
 
 function renderSuperFleet() {
@@ -1948,7 +1889,7 @@ function renderSuperSectorsView() {
     const o = organizations[orgId];
     return `
       <tr>
-        <td><b>${o.icon} ${o.sector}</b></td>
+        <td><b>${o.icon || '🏢'} ${o.sector}</b></td>
         <td><b style="font-family:monospace;color:var(--purple)">${o.orgId}</b></td>
         <td>${o.name}</td>
         <td><b>${o.adminUser}</b></td>
@@ -1957,46 +1898,6 @@ function renderSuperSectorsView() {
       </tr>
     `;
   }).join("");
-
-  const countBadge = document.getElementById("superSectorCountBadge");
-  if (countBadge) countBadge.textContent = `${Object.keys(organizations).length} Orgs`;
-}
-
-function renderSuperQueriesView() {
-  const tbody = document.getElementById("superQueriesTableRows");
-  if (!tbody) return;
-
-  tbody.innerHTML = supportQueries.map(q => `
-    <tr>
-      <td><b>${q.id}</b></td>
-      <td><b>${q.orgId}</b> (${q.sector})</td>
-      <td>${escapeHtml(q.submitter)}</td>
-      <td style="max-width:240px">
-        <b>${escapeHtml(q.subject)}</b>
-        <div style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis">${escapeHtml(q.details)}</div>
-      </td>
-      <td>${q.category}</td>
-      <td><span class="status" style="${q.priority === 'High' ? 'background:#fee2e2;color:#b91c1c' : ''}">${q.priority}</span></td>
-      <td><span class="status ${q.status === 'In Review' ? 'late' : 'open-status'}">${q.status}</span></td>
-      <td><button class="action action-purple" onclick="showToast('Query managed')">Manage</button></td>
-    </tr>
-  `).join("");
-}
-
-function renderSuperRetentionsView() {
-  const tbody = document.getElementById("superDeletionAuditRows");
-  if (!tbody) return;
-  tbody.innerHTML = deletionAudits.map(a => `
-    <tr>
-      <td><b>${a.auditId}</b></td>
-      <td>${a.orgId}</td>
-      <td>${a.empName} (${a.empId})</td>
-      <td>${a.reason}</td>
-      <td><span class="status absent">${a.status}</span></td>
-      <td>${a.adminResponse}</td>
-      <td><button class="action action-purple" onclick="showToast('Employee retained')">Verify & Retain ⚡</button></td>
-    </tr>
-  `).join("");
 }
 
 function enterOrgAsAdmin(orgId) {
@@ -2004,6 +1905,7 @@ function enterOrgAsAdmin(orgId) {
   currentUserRole = "admin";
   applyRoleNav();
   switchTab("dashboard");
+  initSectorBotSession();
   showToast(`Switched into ${organizations[orgId].sector} (${orgId}) as Admin`);
 }
 
@@ -2019,6 +1921,7 @@ function renderDashEmployees() {
       <td>${e.logout || '—'}</td>
       <td>${e.task || 'General Duty'}</td>
       <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
+      <td><button class="action" onclick="showToast('Profile opened')">Profile</button></td>
     </tr>
   `).join("");
 }
@@ -2035,8 +1938,7 @@ function renderEmployeeDirectory() {
       <td>${e.shift}</td>
       <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
       <td>
-        <button class="action" onclick="showToast('Profile opened')">View</button>
-        <button class="action" style="color:var(--red);border-color:#fecaca" onclick="showToast('Delete requested')">Delete / Leave</button>
+        <button class="action" onclick="openAssignTaskModal('${escapeJsString(e.name)}')">Assign</button>
       </td>
     </tr>
   `).join("");
@@ -2048,31 +1950,11 @@ function renderAttendanceLogs() {
   const list = organizations[currentOrgId]?.employees || [];
   tbody.innerHTML = list.map(e => `
     <tr>
-      <td><b>${e.name}</b> (${e.id})</td>
+      <td><b>${e.name}</b></td>
       <td>Main Facility Perimeter</td>
       <td>${e.login || '08:45'}</td>
       <td>${e.logout || '—'}</td>
       <td><span class="status ${e.status.toLowerCase()}">${e.status}</span></td>
-    </tr>
-  `).join("");
-}
-
-function renderWorkAssignments() {
-  const tbody = document.getElementById("workAssignmentsTableRows");
-  if (!tbody) return;
-  const tasks = organizations[currentOrgId]?.tasks || [];
-  if (tasks.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:14px">No active assignments dispatched yet.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = tasks.map(t => `
-    <tr>
-      <td><b>${t.title}</b><br><small style="color:var(--muted)">${t.id}</small></td>
-      <td>${t.zone}</td>
-      <td>${t.assignee}</td>
-      <td><span class="status" style="${t.priority === 'High' ? 'background:#fee2e2;color:#b91c1c' : ''}">${t.priority}</span></td>
-      <td>${t.progress}%</td>
-      <td><span class="status in-progress">${t.status}</span></td>
     </tr>
   `).join("");
 }
@@ -2114,49 +1996,41 @@ function renderPayslips() {
     const net = (e.basePay + (e.otPay || 0) - e.deductions);
     return `
       <tr>
-        <td><b>${e.name}</b><br><small style="color:var(--muted)">${e.id}</small></td>
+        <td><b>${e.name}</b></td>
         <td>${e.role}</td>
         <td>₹ ${e.basePay.toLocaleString('en-IN')}</td>
         <td><b>₹ ${net.toLocaleString('en-IN')}</b></td>
-        <td><button class="action action-primary" onclick="viewDetailedPayslip('${e.id}')">View Sheet</button></td>
+        <td><button class="action action-primary" onclick="showToast('Payslip Sheet Opened')">View Sheet</button></td>
       </tr>
     `;
   }).join("");
 }
 
-function viewDetailedPayslip(empId) {
-  const org = organizations[currentOrgId];
-  const emp = (org.employees || []).find(e => e.id === empId) || org.employees[0];
-  const content = document.getElementById("universalModalContent");
-  const net = (emp.basePay + (emp.otPay || 0) - emp.deductions);
+function renderChart() {
+  const ctx = document.getElementById("attendanceChart");
+  if (!ctx || window.attChart) return;
 
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <h3 style="margin:0">Official Certified Payslip</h3>
-      <button class="action" onclick="closeUniversalModal()">✕</button>
-    </div>
-    <div class="payslip-sheet">
-      <div style="display:flex;justify-content:space-between;border-bottom:2px solid #0b1730;padding-bottom:10px">
-        <div>
-          <b>${org.name}</b>
-          <div style="color:var(--muted);font-size:11px">Sector: ${org.sector} · UID: ${org.orgId}</div>
-        </div>
-        <span class="status present">CERTIFIED SALARY VOUCHER</span>
-      </div>
-      <div class="payslip-meta-grid">
-        <div>Employee: <b>${emp.name}</b></div>
-        <div>Employee ID: <b>${emp.id}</b></div>
-        <div>Department: <b>${emp.dept}</b></div>
-        <div>Role: <b>${emp.role}</b></div>
-      </div>
-      <table class="table" style="margin-bottom:14px">
-        <tr><th>BASIC PAY</th><th>OVERTIME</th><th>DEDUCTIONS</th><th>NET DISBURSED</th></tr>
-        <tr><td>₹ ${emp.basePay.toLocaleString('en-IN')}</td><td>₹ ${(emp.otPay || 0).toLocaleString('en-IN')}</td><td>₹ ${emp.deductions.toLocaleString('en-IN')}</td><td><b style="color:var(--blue)">₹ ${net.toLocaleString('en-IN')}</b></td></tr>
-      </table>
-      <button class="btn btn-blue" style="width:100%" onclick="window.print()">🖨 Print / Save as PDF</button>
-    </div>
-  `;
-  document.getElementById("universalModal").classList.remove("hidden");
+  window.attChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["Day 1", "Day 5", "Day 10", "Day 15", "Day 20", "Day 24"],
+      datasets: [{
+        label: "Attendance %",
+        data: [91, 94, 90, 96, 93, 92],
+        borderColor: "#2563eb",
+        backgroundColor: "rgba(37, 99, 235, 0.08)",
+        borderWidth: 2,
+        tension: 0.35,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { min: 70, max: 100 } }
+    }
+  });
 }
 
 function renderAdminResignationsQueue() {
@@ -2181,60 +2055,10 @@ function renderAdminResignationsQueue() {
       <td><b>${r.noticeDays} Days</b></td>
       <td><b style="color:#b91c1c">${r.officialLwd || r.proposedLwd}</b></td>
       <td style="max-width:240px"><b>${r.reason}</b></td>
-      <td><span class="status ${r.status === 'Accepted' ? 'absent' : (r.status === 'Discussion Scheduled' ? 'optimal' : 'late')}">${r.status}</span></td>
-      <td><button class="action" onclick="openAdminReviewResignationModal('${r.id}')">Review & Decide</button></td>
+      <td><span class="status ${r.status === 'Accepted' ? 'absent' : 'late'}">${r.status}</span></td>
+      <td><button class="action" onclick="showToast('Reviewed')">Review & Decide</button></td>
     </tr>
   `).join("");
-}
-
-function openAdminReviewResignationModal(resId) {
-  const org = organizations[currentOrgId];
-  const r = (org.resignations || []).find(x => x.id === resId);
-  if (!r) return;
-
-  const content = document.getElementById("universalModalContent");
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <h3 style="margin:6px 0 0">Process Resignation: ${r.empName}</h3>
-      <button class="action" onclick="closeUniversalModal()">✕</button>
-    </div>
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:10px;font-size:12px;margin-bottom:12px">
-      <div><b>Employee:</b> ${r.empName} (${r.empId})</div>
-      <div><b>Proposed Last Working Day:</b> <b style="color:var(--red)">${r.proposedLwd}</b></div>
-      <div><b>Reason:</b> ${r.reason}</div>
-    </div>
-    <label>Approved Official Last Working Day (LWD)</label>
-    <input type="date" id="adminApprovedLwd" value="${r.officialLwd || r.proposedLwd}">
-    <label>Administrative Decision Remarks</label>
-    <textarea id="adminResignDecisionNotes" rows="3" placeholder="Enter decision notes...">${r.adminRemarks || ''}</textarea>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-      <button class="btn" style="background:#f1f5f9" onclick="closeUniversalModal()">Cancel</button>
-      <button class="btn" style="background:#0b1730;color:#fff" onclick="adminScheduleRetentionChat('${r.id}')">🤝 Propose Retention</button>
-      <button class="btn" style="background:#dc2626;color:#fff" onclick="adminAcceptResignation('${r.id}')">✓ Accept Resignation</button>
-    </div>
-  `;
-  document.getElementById("universalModal").classList.remove("hidden");
-}
-
-function adminAcceptResignation(resId) {
-  const org = organizations[currentOrgId];
-  const r = (org.resignations || []).find(x => x.id === resId);
-  if (!r) return;
-  r.status = "Accepted";
-  r.officialLwd = document.getElementById("adminApprovedLwd").value || r.proposedLwd;
-  closeUniversalModal();
-  renderAdminResignationsQueue();
-  showToast(`Resignation accepted for ${r.empName}`);
-}
-
-function adminScheduleRetentionChat(resId) {
-  const org = organizations[currentOrgId];
-  const r = (org.resignations || []).find(x => x.id === resId);
-  if (!r) return;
-  r.status = "Discussion Scheduled";
-  closeUniversalModal();
-  renderAdminResignationsQueue();
-  showToast(`Retention discussion scheduled with ${r.empName}`);
 }
 
 function renderAdminChatView() {
@@ -2315,33 +2139,6 @@ function renderEmpAdminChatView() {
   box.scrollTop = box.scrollHeight;
 }
 
-function renderChart() {
-  const ctx = document.getElementById("attendanceChart");
-  if (!ctx || window.attChart) return;
-
-  window.attChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: ["Day 1", "Day 5", "Day 10", "Day 15", "Day 20", "Day 24"],
-      datasets: [{
-        label: "Attendance %",
-        data: [91, 94, 90, 96, 93, 92],
-        borderColor: "#2563eb",
-        backgroundColor: "rgba(37, 99, 235, 0.08)",
-        borderWidth: 2,
-        tension: 0.35,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { min: 70, max: 100 } }
-    }
-  });
-}
-
 function startLiveClock() {
   setInterval(() => {
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -2350,6 +2147,37 @@ function startLiveClock() {
     if (w1) w1.textContent = timeStr;
     if (w2) w2.textContent = timeStr;
   }, 1000);
+}
+
+function toggleChatbot(forceState) {
+  if (currentUserRole === "superadmin") return;
+  const win = document.getElementById("chatbotWindow");
+  if (!win) return;
+  const isOpen = typeof forceState === "boolean" ? forceState : win.classList.contains("hidden");
+  win.classList.toggle("hidden", !isOpen);
+}
+
+function initSectorBotSession() {
+  if (currentUserRole === "superadmin") return;
+  const org = organizations[currentOrgId] || Object.values(organizations)[0];
+  const headerTitle = document.getElementById("chatBotHeaderTitle");
+  if (headerTitle) headerTitle.textContent = `${org.sector} Operations Bot`;
+}
+
+function sendBotMessage() {
+  const inp = document.getElementById("chatbotInput");
+  const box = document.getElementById("chatbotMessages");
+  if (!inp || !box || !inp.value.trim()) return;
+  box.innerHTML += `<div style="background:#2563eb;color:#fff;padding:8px 12px;border-radius:10px;align-self:flex-end;font-size:12px">${escapeHtml(inp.value)}</div>`;
+  inp.value = "";
+  setTimeout(() => {
+    box.innerHTML += `<div style="background:#fff;border:1px solid #e2e8f0;padding:8px 12px;border-radius:10px;font-size:12px">All sector operational checks normal.</div>`;
+    box.scrollTop = box.scrollHeight;
+  }, 400);
+}
+
+function handleChatbotInputKey(event) {
+  if (event.key === "Enter") sendBotMessage();
 }
 
 function closeUniversalModal() {
@@ -2376,12 +2204,7 @@ function showToast(msg) {
 
 function escapeHtml(str) {
   if (!str) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
 function escapeJsString(str) {
